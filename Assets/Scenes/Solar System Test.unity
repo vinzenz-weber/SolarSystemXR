@@ -152,7 +152,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlanetBody
   data: {fileID: 11400000, guid: 2677bb3dd6a144669a8a281540c75f6a, type: 2}
+  orbitMaterial: {fileID: 2100000, guid: 4f1c9696555b94beba4b4adca8e9cd53, type: 2}
   lineWidth: 0.01
+  orbitResolution: 360
 --- !u!135 &259542345
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -279,7 +281,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlanetBody
   data: {fileID: 11400000, guid: 2398d89013c7542eaac08080ba772688, type: 2}
+  orbitMaterial: {fileID: 2100000, guid: 4f1c9696555b94beba4b4adca8e9cd53, type: 2}
   lineWidth: 0.01
+  orbitResolution: 360
 --- !u!135 &260531070
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -669,6 +673,7 @@ MonoBehaviour:
   distanceScale: 1
   sizeScale: 0.01
   timeScale: 1
+  OrbitalLineWidth: 1
 --- !u!4 &823959921
 Transform:
   m_ObjectHideFlags: 0
@@ -717,7 +722,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlanetBody
   data: {fileID: 11400000, guid: e88332e919a484ca1be57db427735821, type: 2}
+  orbitMaterial: {fileID: 2100000, guid: 4f1c9696555b94beba4b4adca8e9cd53, type: 2}
   lineWidth: 0.01
+  orbitResolution: 360
 --- !u!135 &1198494981
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -844,7 +851,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlanetBody
   data: {fileID: 11400000, guid: 7103cd785bffe449f9588626014f69b2, type: 2}
+  orbitMaterial: {fileID: 2100000, guid: 4f1c9696555b94beba4b4adca8e9cd53, type: 2}
   lineWidth: 0.01
+  orbitResolution: 360
 --- !u!135 &1302879750
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -971,7 +980,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlanetBody
   data: {fileID: 11400000, guid: ed48686b5965f4bc295a462acaf9671d, type: 2}
+  orbitMaterial: {fileID: 2100000, guid: 4f1c9696555b94beba4b4adca8e9cd53, type: 2}
   lineWidth: 0.01
+  orbitResolution: 360
 --- !u!135 &1487244352
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1098,7 +1109,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlanetBody
   data: {fileID: 11400000, guid: 36b6496f0a7c441b782cae9d45df6106, type: 2}
+  orbitMaterial: {fileID: 2100000, guid: 4f1c9696555b94beba4b4adca8e9cd53, type: 2}
   lineWidth: 0.01
+  orbitResolution: 360
 --- !u!135 &1640127287
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1225,7 +1238,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlanetBody
   data: {fileID: 11400000, guid: 872722a0e2dfc46c3aa4c42c6cf9ab95, type: 2}
+  orbitMaterial: {fileID: 2100000, guid: 4f1c9696555b94beba4b4adca8e9cd53, type: 2}
   lineWidth: 0.01
+  orbitResolution: 360
 --- !u!135 &1934066195
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1352,7 +1367,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PlanetBody
   data: {fileID: 11400000, guid: c17e7951f2252428abd36f876bc30b08, type: 2}
+  orbitMaterial: {fileID: 2100000, guid: 4f1c9696555b94beba4b4adca8e9cd53, type: 2}
   lineWidth: 0.01
+  orbitResolution: 360
 --- !u!135 &2081470981
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -1450,6 +1467,7 @@ Transform:
 SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
+  - {fileID: 823959921}
   - {fileID: 732495563}
   - {fileID: 454971533}
   - {fileID: 1487244355}
@@ -1460,4 +1478,3 @@ SceneRoots:
   - {fileID: 1640127290}
   - {fileID: 1302879753}
   - {fileID: 260531073}
-  - {fileID: 823959921}
