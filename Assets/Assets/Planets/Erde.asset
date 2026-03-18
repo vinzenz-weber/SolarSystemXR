@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d54c3864a2f4741939c85e343999e317, type: 3}
+  m_Name: Erde
+  m_EditorClassIdentifier: Assembly-CSharp::PlanetData
+  planetName: Erde
+  diameter: 12742
+  semiMajorAxis: 1
+  eccentricity: 0.017
+  orbitalPeriod: 365.26
+  inclination: 0
+  planetLineColor: {r: 0, g: 0.13945818, b: 1, a: 0}
