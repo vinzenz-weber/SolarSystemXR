@@ -11,6 +11,8 @@ public class PlanetBody : MonoBehaviour
     [Header("Simulation")]
     private SolarSystemManager manager;
     private float currentTheta = 0;
+    private float lastDistanceScale = -1f;
+    private float lastSizeScale = -1f;
 
     [Header("Orbit Visualisierung")]
     public Material orbitMaterial;
@@ -32,7 +34,10 @@ public class PlanetBody : MonoBehaviour
         // Initialer Scale basierend auf Erddurchmesser (Vergleichswert)
         float scaledSize = (data.diameter / 12756f) * manager.sizeScale; 
         _transform.localScale = new Vector3(scaledSize, scaledSize, scaledSize);
-        
+
+        lastSizeScale = manager.sizeScale;
+        lastDistanceScale = manager.distanceScale;
+
         InitializeOrbitLineRenderer();
     }
     
@@ -91,6 +96,18 @@ public class PlanetBody : MonoBehaviour
     void Update() 
     {
         if (manager == null || data == null) return;
+
+        // Wenn sich die Skalierung im Manager während Play ändert, sofort anpassen
+        if (manager.distanceScale != lastDistanceScale) {
+            lastDistanceScale = manager.distanceScale;
+            DrawOrbitStatic();
+        }
+
+        if (manager.sizeScale != lastSizeScale) {
+            lastSizeScale = manager.sizeScale;
+            float scaledSize = (data.diameter / 12756f) * manager.sizeScale;
+            _transform.localScale = new Vector3(scaledSize, scaledSize, scaledSize);
+        }
 
         HandleMovement();
         HandleLineVisibility();
