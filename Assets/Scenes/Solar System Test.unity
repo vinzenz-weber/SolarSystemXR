@@ -673,7 +673,7 @@ MonoBehaviour:
   distanceScale: 1
   sizeScale: 0.01
   timeScale: 1
-  OrbitalLineWidth: 1
+  OrbitalLineWidth: 2
 --- !u!4 &823959921
 Transform:
   m_ObjectHideFlags: 0
