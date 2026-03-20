@@ -18,6 +18,8 @@ public class PlanetData : ScriptableObject
     public float orbitalPeriod; // Dauer eines Umlaufs in Tagen (z.B. 365.25)
     [Tooltip("in Degrees")]
     public float inclination;       // Bahnneigung in Grad
+    [Tooltip("in Days")]
+    public float rotationSpeed;
 
     [Header("Visualisierung")]
     public Color planetLineColor; // Farbe des Planeten
