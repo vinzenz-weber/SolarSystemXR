@@ -11,6 +11,7 @@ public class PlanetBody : MonoBehaviour
     
     [Header("Simulation")]
     private SolarSystemManager manager;
+    private GameManager gameManager; // NEU: Referenz auf den GameManager
     private float currentTheta = 0;
     private float lastDistanceScale = -1f;
     private float lastSizeScale = -1f;
@@ -28,6 +29,7 @@ public class PlanetBody : MonoBehaviour
     {
         _transform = transform;
         manager = FindObjectOfType<SolarSystemManager>();
+        gameManager = FindObjectOfType<GameManager>(); // NEU: Dynamisches Finden des Managers
         
         if (Camera.main != null)
             _mainCamTransform = Camera.main.transform;
@@ -92,7 +94,7 @@ public class PlanetBody : MonoBehaviour
     {
         if (manager == null || data == null) return;
 
-        // Echtzeit-Anpassung der Skalierung (Interaktion im MR-Raum)
+        // Skalierungen werden immer berechnet, falls sich das System beim Platzieren ändert
         if (manager.distanceScale != lastDistanceScale) {
             lastDistanceScale = manager.distanceScale;
             DrawOrbitStatic();
@@ -102,8 +104,13 @@ public class PlanetBody : MonoBehaviour
             UpdateScale();
         }
 
-        HandleRotation();
-        HandleMovement();
+        // NEU: Bewegung/Rotation nur zulassen, wenn GameManager im Exploration-State ist
+        if (gameManager != null && gameManager.currentState == GameManager.GameState.Exploration)
+        {
+            HandleRotation();
+            HandleMovement();
+        }
+
         HandleLineVisibility();
     }
 
