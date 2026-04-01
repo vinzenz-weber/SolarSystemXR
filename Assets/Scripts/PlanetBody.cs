@@ -1,161 +1,215 @@
 using UnityEngine;
 
-/// <summary>
-/// Steuert die Bewegung (Rotation/Orbit) und die visuelle Darstellung der Umlaufbahn in XR.
-/// Unterstützt sowohl Planeten (elliptisch) als auch die Sonne (statisch).
-/// </summary>
 [RequireComponent(typeof(MeshRenderer))]
-public class PlanetBody : MonoBehaviour 
+public class PlanetBody : MonoBehaviour
 {
     public PlanetData data;
-    
-    [Header("Simulation")]
+
+    [Header("Trail")]
+    [Tooltip("Anzahl gespeicherter Positionen. Mehr = längerer Schweif.")]
+    public int trailPoints = 200;
+    [Tooltip("Maximale Linienbreite des Trails in Metern.")]
+    public float trailWidth = 0.001f;
+    [Tooltip("HDR-Multiplikator für Bloom-Glow (>1 aktiviert Bloom).")]
+    public float glowIntensity = 4f;
+    [Tooltip("Optional: eigenes transparentes Material. Wird sonst automatisch erstellt.")]
+    public Material trailMaterial;
+
     private SolarSystemManager manager;
-    private GameManager gameManager; // NEU: Referenz auf den GameManager
-    private float currentTheta = 0;
-    private float lastDistanceScale = -1f;
-    private float lastSizeScale = -1f;
-
-    [Header("Orbit Visualisierung")]
-    public Material orbitMaterial;
-    public float lineWidth = 0.002f;
-    [Range(64, 512)] public int orbitResolution = 360;
-
-    private LineRenderer lineRenderer;
+    private float currentAngle = 0f;
+    private float degreesPerDay;
     private Transform _transform;
-    private Transform _mainCamTransform;
 
-    void Start() 
+    // Größen-Änderungs-Tracking
+    private float lastDistanceScale = -1f;
+    private float lastPlanetSizeScale = -1f;
+
+    // Trail-Ringpuffer
+    private LineRenderer lineRenderer;
+    private GameObject trailObj;
+    private Vector3[] trailBuffer;
+    private Vector3[] renderBuffer;   // vorab alloziert, kein Alloc pro Frame
+    private int writeIndex = 0;
+    private bool bufferFull = false;
+    private float angleStep;
+    private float lastRecordedAngle;
+
+    void Start()
     {
         _transform = transform;
         manager = FindObjectOfType<SolarSystemManager>();
-        gameManager = FindObjectOfType<GameManager>(); // NEU: Dynamisches Finden des Managers
-        
-        if (Camera.main != null)
-            _mainCamTransform = Camera.main.transform;
 
-        if (manager == null || data == null) return;
+        if (manager == null)
+        {
+            Debug.LogError($"[{name}] SolarSystemManager nicht gefunden!");
+            return;
+        }
+        if (data == null)
+        {
+            Debug.LogError($"[{name}] Kein PlanetData zugewiesen!");
+            return;
+        }
 
-        UpdateScale();
-        
-        // Orbit nur initialisieren, wenn es kein Zentralkörper ist (semiMajorAxis > 0)
+        degreesPerDay = 360f / data.orbitalPeriod;
+
+        ApplySize();
+        ApplyPosition();
+
         if (data.semiMajorAxis > 0)
-        {
-            InitializeOrbitLineRenderer();
-        }
-    }
-    
-    void InitializeOrbitLineRenderer() 
-    {
-        GameObject orbitObj = new GameObject("OrbitLine_" + data.name);
-        orbitObj.transform.SetParent(_transform.parent); 
-        orbitObj.transform.localPosition = Vector3.zero;
-        orbitObj.transform.localRotation = Quaternion.identity;
-        
-        lineRenderer = orbitObj.AddComponent<LineRenderer>();
-        lineRenderer.useWorldSpace = false; 
-        lineRenderer.loop = true;
-        lineRenderer.positionCount = orbitResolution;
-        
-        if (orbitMaterial != null)
-            lineRenderer.material = orbitMaterial;
-        else
-            lineRenderer.material = new Material(Shader.Find("Universal Render Pipeline/Unlit"));
-
-        lineRenderer.startColor = data.planetLineColor;
-        lineRenderer.endColor = data.planetLineColor;
-        lineRenderer.startWidth = lineWidth;
-        lineRenderer.endWidth = lineWidth;
-        
-        DrawOrbitStatic();
-    }
-    
-    void DrawOrbitStatic() 
-    {
-        if (lineRenderer == null) return;
-
-        float a = data.semiMajorAxis;
-        float e = data.eccentricity;
-        
-        for (int i = 0; i < orbitResolution; i++) 
-        {
-            float angle = (360f / orbitResolution) * i;
-            // Kepler-Ellipse in Polarkoordinaten
-            float r = (a * (1 - e * e)) / (1 + e * Mathf.Cos(angle * Mathf.Deg2Rad));
-            
-            float x = r * Mathf.Cos(angle * Mathf.Deg2Rad) * manager.distanceScale;
-            float z = r * Mathf.Sin(angle * Mathf.Deg2Rad) * manager.distanceScale;
-            
-            lineRenderer.SetPosition(i, new Vector3(x, 0, z));
-        }
+            InitializeTrail();
     }
 
-    void Update() 
+    void Update()
     {
         if (manager == null || data == null) return;
 
-        // Skalierungen werden immer berechnet, falls sich das System beim Platzieren ändert
-        if (manager.distanceScale != lastDistanceScale) {
-            lastDistanceScale = manager.distanceScale;
-            DrawOrbitStatic();
-        }
-
-        if (manager.sizeScale != lastSizeScale) {
-            UpdateScale();
-        }
-
-        // NEU: Bewegung/Rotation nur zulassen, wenn GameManager im Exploration-State ist
-        if (gameManager != null && gameManager.currentState == GameManager.GameState.Exploration)
+        if (data.semiMajorAxis <= 0)
         {
-            HandleRotation();
-            HandleMovement();
+            ApplySizeIfChanged();
+            return;
         }
 
-        HandleLineVisibility();
+        currentAngle += degreesPerDay * manager.timeScale * Time.deltaTime;
+
+        ApplyPosition();
+        ApplySizeIfChanged();
+        UpdateTrail();
+
+        if (data.rotationSpeed != 0f)
+            _transform.Rotate(Vector3.up, data.rotationSpeed * manager.timeScale * Time.deltaTime);
     }
 
-    private void UpdateScale()
+    void OnDestroy()
     {
-        lastSizeScale = manager.sizeScale;
-        // Skalierung relativ zur Erde (12756 km)
-        float scaledSize = (data.diameter / 12756f) * manager.sizeScale;
-        _transform.localScale = new Vector3(scaledSize, scaledSize, scaledSize);
+        if (trailObj != null)
+            Destroy(trailObj);
     }
 
-    private void HandleRotation()
+    // --- Größe ---
+
+    private void ApplySizeIfChanged()
     {
-        // Eigenrotation um die Y-Achse
-        _transform.Rotate(Vector3.up, data.rotationSpeed * manager.timeScale * Time.deltaTime);
+        if (manager.distanceScale == lastDistanceScale && manager.planetSizeScale == lastPlanetSizeScale)
+            return;
+
+        ApplySize();
     }
 
-    private void HandleMovement()
+    private void ApplySize()
     {
-        // Wenn semiMajorAxis 0 ist, ist es die Sonne -> Bewegung überspringen
+        lastDistanceScale = manager.distanceScale;
+        lastPlanetSizeScale = manager.planetSizeScale;
+
+        float size = data.semiMajorAxis <= 0
+            ? manager.SunDiameter
+            : data.diameter / 12756f * manager.planetSizeScale;
+
+        _transform.localScale = Vector3.one * size;
+    }
+
+    // --- Position ---
+
+    private void ApplyPosition()
+    {
         if (data.semiMajorAxis <= 0)
         {
             _transform.localPosition = Vector3.zero;
             return;
         }
 
-        float speed = (360f / data.orbitalPeriod) * manager.timeScale;
-        currentTheta += speed * Time.deltaTime;
+        float a   = data.semiMajorAxis;
+        float e   = data.eccentricity;
+        float rad = currentAngle * Mathf.Deg2Rad;
+        float r   = a * (1f - e * e) / (1f + e * Mathf.Cos(rad));
 
-        float a = data.semiMajorAxis;
-        float e = data.eccentricity;
-        float r = (a * (1 - e * e)) / (1 + e * Mathf.Cos(currentTheta * Mathf.Deg2Rad));
-
-        float x = r * Mathf.Cos(currentTheta * Mathf.Deg2Rad) * manager.distanceScale;
-        float z = r * Mathf.Sin(currentTheta * Mathf.Deg2Rad) * manager.distanceScale;
-
-        _transform.localPosition = new Vector3(x, 0, z);
+        _transform.localPosition = new Vector3(
+            r * Mathf.Cos(rad) * manager.distanceScale,
+            0f,
+            r * Mathf.Sin(rad) * manager.distanceScale
+        );
     }
 
-    private void HandleLineVisibility()
-    {
-        if (lineRenderer == null || _mainCamTransform == null) return;
+    // --- Trail ---
 
-        // Dynamische Linienbreite für VR/MR (Anti-Aliasing Effekt durch Distanz)
-        float dist = Vector3.Distance(_mainCamTransform.position, _transform.position);
-        lineRenderer.widthMultiplier = Mathf.Clamp(dist * 0.005f, manager.OrbitalLineWidth, manager.OrbitalLineWidth * 5f);
+    private void InitializeTrail()
+    {
+        angleStep = 360f / trailPoints;
+        lastRecordedAngle = currentAngle;
+
+        trailBuffer  = new Vector3[trailPoints];
+        renderBuffer = new Vector3[trailPoints];
+        for (int i = 0; i < trailPoints; i++)
+            trailBuffer[i] = _transform.localPosition;
+
+        trailObj = new("Trail_" + data.planetName);
+        trailObj.transform.SetParent(_transform.parent);
+        trailObj.transform.localPosition = Vector3.zero;
+        trailObj.transform.localRotation = Quaternion.identity;
+
+        lineRenderer = trailObj.AddComponent<LineRenderer>();
+        lineRenderer.useWorldSpace = false;
+        lineRenderer.positionCount  = trailPoints;
+        lineRenderer.loop           = false;
+
+        lineRenderer.widthCurve = new AnimationCurve(
+            new Keyframe(0f, 0f),
+            new Keyframe(1f, 1f)
+        );
+        lineRenderer.widthMultiplier = trailWidth;
+
+        Gradient gradient = new();
+        gradient.SetKeys(
+            new GradientColorKey[] { new(Color.white, 0f), new(Color.white, 1f) },
+            new GradientAlphaKey[] { new(0f, 0f), new(1f, 1f) }
+        );
+        lineRenderer.colorGradient = gradient;
+        lineRenderer.material = CreateTrailMaterial();
+    }
+
+    private Material CreateTrailMaterial()
+    {
+        Material mat = trailMaterial != null
+            ? new Material(trailMaterial)
+            : new Material(Shader.Find("Universal Render Pipeline/Unlit"));
+
+        mat.SetFloat("_Surface", 1f);
+        mat.SetInt("_SrcBlend", (int)UnityEngine.Rendering.BlendMode.SrcAlpha);
+        mat.SetInt("_DstBlend", (int)UnityEngine.Rendering.BlendMode.OneMinusSrcAlpha);
+        mat.SetInt("_ZWrite", 0);
+        mat.SetInt("_Cull", 0);
+        mat.EnableKeyword("_SURFACE_TYPE_TRANSPARENT");
+        mat.renderQueue = (int)UnityEngine.Rendering.RenderQueue.Transparent;
+
+        Color col = data.planetLineColor;
+        mat.SetColor("_BaseColor", new Color(
+            col.r * glowIntensity,
+            col.g * glowIntensity,
+            col.b * glowIntensity,
+            1f
+        ));
+
+        return mat;
+    }
+
+    private void UpdateTrail()
+    {
+        if (lineRenderer == null || trailBuffer == null) return;
+
+        if (Mathf.Abs(Mathf.DeltaAngle(lastRecordedAngle, currentAngle)) < angleStep)
+            return;
+
+        lastRecordedAngle = currentAngle;
+
+        trailBuffer[writeIndex] = _transform.localPosition;
+        writeIndex = (writeIndex + 1) % trailPoints;
+        if (writeIndex == 0) bufferFull = true;
+
+        int count = bufferFull ? trailPoints : writeIndex;
+        lineRenderer.positionCount = count;
+
+        for (int i = 0; i < count; i++)
+            renderBuffer[i] = trailBuffer[bufferFull ? (writeIndex + i) % trailPoints : i];
+
+        lineRenderer.SetPositions(renderBuffer);
     }
 }

@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(wc -l /d/Repositories/SolarSystemXR/Assets/Scripts/*.cs)",
+      "Bash(grep -E \"\\\\.\\(cs|md\\)$\")",
+      "Bash(ls -la \"d:/Repositories/SolarSystemXR/Library/PackageCache/com.unity.xr.meta-openxr@\"*/Documentation*/)"
+    ]
+  }
+}

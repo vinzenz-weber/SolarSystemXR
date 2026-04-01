@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class StartPhase : MonoBehaviour
@@ -7,7 +8,7 @@ public class StartPhase : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        
+        StartCoroutine(StartAfterTime());
     }
 
     // Update is called once per frame
@@ -16,9 +17,13 @@ public class StartPhase : MonoBehaviour
         
     }
 
-
-    public void StartButtonClicked()
+    IEnumerator StartAfterTime()
     {
+        yield return new WaitForSeconds(3);
+
         startButtonClicked = true;
+
     }
 }
+
+

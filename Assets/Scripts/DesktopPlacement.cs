@@ -3,70 +3,94 @@ using UnityEngine.InputSystem;
 
 public class DesktopPlacement : MonoBehaviour
 {
-    // === "Globale" Variablen (wie oben in einem Processing-Sketch) ===
+    [Header("Prefab")]
     public GameObject solarSystemPrefab;
     public LayerMask placementLayer;
 
-    private GameObject currentInstance;
-    private Camera mainCam;
-    
-    // Ein simpler Schalter, um die Platzierung zu sperren
-    public bool isLocked = false; 
+    [Header("Distanz → Skalierung")]
+    [Tooltip("Raycast-Distanz (m) bei der das kleinste System erscheint, z.B. Tisch.")]
+    public float minDistance = 0.3f;
+    [Tooltip("Raycast-Distanz (m) bei der das größte System erscheint, z.B. Boden/Raum.")]
+    public float maxDistance = 3.0f;
+    [Tooltip("distanceScale bei minDistance (Neptune ~18cm Radius).")]
+    public float minDistanceScale = 0.006f;
+    [Tooltip("distanceScale bei maxDistance (Neptune ~1.5m Radius).")]
+    public float maxDistanceScale = 0.05f;
 
-    // === Wird einmal am Start aufgerufen (wie void setup() in Processing) ===
+    [Header("Höhe")]
+    [Tooltip("Höhe des System-Zentrums über der Oberfläche, als Bruchteil des Neptune-Orbit-Radius.")]
+    public float heightRatio = 0.5f;
+
+    private GameObject currentInstance;
+    private SolarSystemManager solarSystemManager;
+    private Transform systemContainer;
+    private Camera mainCam;
+    private bool isLocked = false;
+
+    // Neptune semi-major axis in AU — bestimmt den Außenradius des Systems
+    private const float NeptuneAU = 30.07f;
+
     private void Start()
     {
         mainCam = Camera.main;
     }
 
-    // === Wird jeden Frame aufgerufen (wie void draw() in Processing) ===
     private void Update()
     {
-        // Wenn keine Maus oder Tastatur da ist, brich ab
         if (Mouse.current == null || Keyboard.current == null) return;
-        Debug.Log("Update in DesktopPlacement läuft...");
 
-        // Wenn das System fest platziert wurde, mach in diesem Skript nichts mehr
-        if (isLocked == true) return;
-
-        // 1. Rechtsklick: Platzieren oder Verschieben
-        if (Mouse.current.rightButton.wasPressedThisFrame)
-        {
+        // Rechtsklick: Platzieren oder Verschieben (nur wenn nicht gesperrt)
+        if (Mouse.current.rightButton.wasPressedThisFrame && !isLocked)
             PlaceSystem();
-        }
 
-        // 2. Leertaste: Platzierung fixieren
+        // Leertaste: Platzierung fixieren
         if (Keyboard.current.spaceKey.wasPressedThisFrame && currentInstance != null)
         {
             isLocked = true;
-            Debug.Log("Sonnensystem wurde fest platziert!");
-            // Hier könnte dein GameManager einfach prüfen: if(placementScript.isLocked) ...
+            Debug.Log("Sonnensystem fixiert.");
+        }
+
+        // R: Platzierung wieder freigeben
+        if (Keyboard.current.rKey.wasPressedThisFrame)
+        {
+            isLocked = false;
+            Debug.Log("Platzierung freigegeben — Rechtsklick zum Neu-Platzieren.");
         }
     }
 
-    // === Eigene Funktion für die Platzierungs-Logik ===
     private void PlaceSystem()
     {
-        // Lese die 2D-Mausposition auf dem Bildschirm aus
-        Vector2 mousePos = Mouse.current.position.ReadValue();
-        
-        // Wandle die 2D-Mausposition in einen 3D-Laserstrahl (Ray) aus der Kamera um
-        Ray ray = mainCam.ScreenPointToRay(mousePos);
-        RaycastHit hit;
+        Ray ray = mainCam.ScreenPointToRay(Mouse.current.position.ReadValue());
 
-        // Schieße den Strahl 100 Meter weit und prüfe, ob er den Boden (placementLayer) trifft
-        if (Physics.Raycast(ray, out hit, 100f, placementLayer))
+        if (!Physics.Raycast(ray, out RaycastHit hit, 100f, placementLayer))
+            return;
+
+        // Distanz → Skala interpolieren
+        float t = Mathf.InverseLerp(minDistance, maxDistance, hit.distance);
+        float newDistanceScale = Mathf.Lerp(minDistanceScale, maxDistanceScale, t);
+
+        // Höhe über der Oberfläche skaliert mit dem System
+        float yOffset = NeptuneAU * newDistanceScale * heightRatio;
+
+        if (currentInstance == null)
         {
-            // Wenn noch kein System da ist -> Erschaffen (Instantiate)
-            if (currentInstance == null)
+            currentInstance = Instantiate(solarSystemPrefab, hit.point, Quaternion.identity);
+            solarSystemManager = currentInstance.GetComponentInChildren<SolarSystemManager>();
+            if (solarSystemManager == null)
             {
-                currentInstance = Instantiate(solarSystemPrefab, hit.point, Quaternion.identity);
+                Debug.LogError("SolarSystemManager nicht im Prefab gefunden!");
+                Destroy(currentInstance);
+                currentInstance = null;
+                return;
             }
-            // Wenn schon eins da ist -> Einfach an die neue Stelle schieben
-            else
-            {
-                currentInstance.transform.position = hit.point;
-            }
+            systemContainer = solarSystemManager.transform;
         }
+        else
+        {
+            currentInstance.transform.position = hit.point;
+        }
+
+        solarSystemManager.distanceScale = newDistanceScale;
+        systemContainer.localPosition = new Vector3(0f, yOffset, 0f);
     }
 }

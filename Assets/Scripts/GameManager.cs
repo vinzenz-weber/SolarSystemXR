@@ -1,99 +1,118 @@
+using System.Collections;
 using UnityEngine;
-using TMPro;
+
+public enum SpielZustand
+{
+    START,
+    PLACEMENT,
+    EXPLORE
+}
 
 public class GameManager : MonoBehaviour
 {
-    // === "Globale" Variablen ===
+    public SpielZustand aktuellerZustand;
 
+    [Header("XR References")]
+    [Tooltip("OVRCameraRig → TrackingSpace → RightHandAnchor")]
+    public Transform rightControllerAnchor;
+    [Tooltip("OVRHand-Komponente der rechten Hand (für Hand Tracking)")]
+    public OVRHand rightHand;
 
-    public GameObject solarSystemPrefab; // Referenz auf unser Sonnensystem-Prefab
-    public TextMeshProUGUI debugState;
-    public GameObject startButtonUI;
+    [Header("Platzierungs-Einstellungen")]
+    public GameObject objektPrefab;
+    public float maxReichweite = 10f;
+    public LayerMask placementLayer;
 
+    private bool isPlaced = false;
+    private bool wasRightPinching = false;
 
-    // 1. Wir definieren unsere eigenen Zustände mit aussagekräftigen Namen
-    public enum GameState
+    void Start()
     {
-        Start,          // Z.B. für ein Hauptmenü oder Willkommens-UI
-        Placement,      // Das Sonnensystem wird im Raum/auf dem Tisch platziert
-        Exploration     // Das System ist platziert, man kann Planeten anschauen/steuern
+        ZustandWechseln(SpielZustand.START);
+        StartCoroutine(AutoStartAfterDelay());
     }
 
-    // 2. Wir legen eine Variable von diesem neuen Typ an
-    public GameState currentState = GameState.Start;
-
-
-    // Referenz auf unser Platzierungs-Skript
-    public DesktopPlacement placementScript;
-    public StartPhase startPhaseScript;
-
-    // === Setup ===
-    private void Start()
+    IEnumerator AutoStartAfterDelay()
     {
-        // Wir setzen den Startzustand explizit fest
-        currentState = GameState.Start;
-        solarSystemPrefab.SetActive(false); // Das Sonnensystem ist am Anfang unsichtbar
+        yield return new WaitForSeconds(1f);
+        ZustandWechseln(SpielZustand.PLACEMENT);
     }
 
-    // === Draw / Loop ===
-    private void Update()
+    void Update()
     {
-        // switch prüft den aktuellen Wert von "currentState" und springt 
-        // direkt in den passenden "case" (Fall) Block.
-        switch (currentState)
+        if (aktuellerZustand != SpielZustand.PLACEMENT) return;
+
+        if (PlaceInputDown())
+            ObjektPlatzieren();
+
+        if (isPlaced && ConfirmInputDown())
+            ZustandWechseln(SpielZustand.EXPLORE);
+    }
+
+    // Index-Trigger (Controller) oder Index-Pinch (Hand) — nur beim Drücken, nicht Halten
+    private bool PlaceInputDown()
+    {
+        if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.RTouch))
+            return true;
+
+        if (rightHand != null && rightHand.IsTracked)
         {
-            case GameState.Start:
-                debugState.text = "State: START";
-                HandleStartPhase();
-                break;
-
-            case GameState.Placement:
-                debugState.text = "State: PLACEMENT";
-                HandlePlacementPhase();
-                break;
-
-            case GameState.Exploration:
-                HandleExplorationPhase();
-                break;
+            bool isPinching = rightHand.GetFingerIsPinching(OVRHand.HandFinger.Index);
+            bool justPinched = isPinching && !wasRightPinching;
+            wasRightPinching = isPinching;
+            return justPinched;
         }
+
+        wasRightPinching = false;
+        return false;
     }
 
-    private void HandleStartPhase()
+    // A-Button (Controller) oder Mittelfinger-Pinch (Hand) zum Bestätigen
+    private bool ConfirmInputDown()
     {
-        placementScript.enabled = false;
-        startButtonUI.SetActive(true);
-        if (startPhaseScript != null && startPhaseScript.startButtonClicked == true)
-        {
-            currentState = GameState.Placement;
-            Debug.Log("[GameManager] Start-Button geklickt. Starte Phase: Placement!");
-            startPhaseScript.startButtonClicked = false; // Reset des Flags, damit es nicht ständig true bleibt
-            startButtonUI.SetActive(false);
-        }
+        if (OVRInput.GetDown(OVRInput.Button.One, OVRInput.Controller.RTouch))
+            return true;
+
+        if (rightHand != null && rightHand.IsTracked &&
+            rightHand.GetFingerIsPinching(OVRHand.HandFinger.Middle))
+            return true;
+
+        return false;
     }
 
-    // === Eigene Funktionen für die Phasen ===
-    private void HandlePlacementPhase()
+    private Ray GetInputRay()
     {
-        if (placementScript != null)
-        {
-            placementScript.enabled = true;
-        }
-        // Wir fragen das andere Skript: "Bist du schon gelockt?"
-        if (placementScript != null && placementScript.isLocked == true)
-        {
-            // Wenn ja: Wechsle den Zustand durch Zuweisung des Enums
-            currentState = GameState.Exploration;
+        // Hand Tracking: PointerPose zeigt in Zeigerichtung der Hand
+        if (rightHand != null && rightHand.IsTracked && rightHand.PointerPose != null)
+            return new Ray(rightHand.PointerPose.position, rightHand.PointerPose.forward);
 
-            // Schalte das Platzierungs-Skript ab
-            placementScript.enabled = false;
+        // Controller: Anchor-Transform
+        if (rightControllerAnchor != null)
+            return new Ray(rightControllerAnchor.position, rightControllerAnchor.forward);
 
-            Debug.Log("[GameManager] Placement abgeschlossen. Starte Phase: Exploration!");
-        }
+        // Fallback: Kamera-Mitte
+        return new Ray(Camera.main.transform.position, Camera.main.transform.forward);
     }
 
-    private void HandleExplorationPhase()
+    public void ZustandWechseln(SpielZustand neuerZustand)
     {
-        // Hier passiert später alles, was nach dem Platzieren kommt.
-        // UI einblenden, Zeit/Skalierung manipulieren etc.
+        aktuellerZustand = neuerZustand;
+        Debug.Log("Spielzustand: " + aktuellerZustand);
+    }
+
+    private void ObjektPlatzieren()
+    {
+        Ray ray = GetInputRay();
+
+        if (Physics.Raycast(ray, out RaycastHit hit, maxReichweite, placementLayer))
+        {
+            Instantiate(objektPrefab, hit.point, Quaternion.identity);
+            isPlaced = true;
+            Debug.Log("Objekt platziert bei: " + hit.point);
+        }
+        else
+        {
+            Debug.Log("Kein Treffer im Raycast.");
+        }
     }
 }
