@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: TestMat
-  m_Shader: {fileID: -6465566751694194690, guid: 183f477d1e1304c319c46235c8e970aa, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: 91e8dd0461ca74a3a9ce4cb719fba8ca, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -86,11 +86,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_62b27c33f97a4bb2acb115a84c5e989f_Texture_1_Texture2D:
-        m_Texture: {fileID: 2800000, guid: 87ad99ee8832d44c5aeeed28dc287cac, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_7869c9a8dccb4142942c9ef90ffdbe88_Texture_1_Texture2D:
-        m_Texture: {fileID: 2800000, guid: d849bf672182c474f8377caebdcea598, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
