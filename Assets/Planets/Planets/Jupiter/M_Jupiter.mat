@@ -37,11 +37,11 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Cloud_02_Texture:
-        m_Texture: {fileID: 2800000, guid: b8c1e08e681e098418be9f2e43c3cec0, type: 3}
+        m_Texture: {fileID: 2800000, guid: 7cc62866fc3d54b91aed5211575b84ab, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Cloud_03_Texture:
-        m_Texture: {fileID: 2800000, guid: b4b0eda328fe91543b4eee17992157a8, type: 3}
+        m_Texture: {fileID: 2800000, guid: 8abb6d59dc7d5b94390a7e4ba32b3b63, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
@@ -106,8 +106,8 @@ Material:
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
-    - _Cloud_01_Speed: 1
-    - _Cloud_02_Speed: 1
+    - _Cloud_01_Speed: 0.01
+    - _Cloud_02_Speed: -0.01
     - _Cloud_03_Speed: 1
     - _Cull: 2
     - _Cutoff: 0.5
@@ -115,7 +115,7 @@ Material:
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _DstBlendAlpha: 0
-    - _EmissionIntensity: 2
+    - _EmissionIntensity: 1.19
     - _EnvironmentDepthBias: 0
     - _EnvironmentReflections: 1
     - _Fresnel_Strength: 7
