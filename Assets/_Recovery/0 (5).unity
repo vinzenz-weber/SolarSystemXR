@@ -15485,6 +15485,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8922c428c5b453a4c9373a48c930ba53, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
+  gameManager: {fileID: 2043489789}
+  auswahlCanvas: {fileID: 561201808}
+  hauptPanel: {fileID: 70393803}
+  planetenPanel: {fileID: 39045829}
+  sonnensystemPrefab: {fileID: 2357532471370364167, guid: b77f85ed6e908454798a727a5db157bd, type: 3}
 --- !u!4 &2071787829
 Transform:
   m_ObjectHideFlags: 0

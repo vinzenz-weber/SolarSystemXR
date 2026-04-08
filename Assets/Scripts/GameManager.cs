@@ -38,8 +38,11 @@ public class GameManager : MonoBehaviour
     [Tooltip("Das komplette Sonnensystem (Assets/Prefabs/SolarSystem.prefab)")]
     public GameObject sonnensystemPrefab;
 
-    [Tooltip("Wie weit vor dem Spieler das Objekt erscheint (in Metern)")]
+    [Tooltip("Wie weit vor dem Spieler das 3D-Objekt erscheint (in Metern)")]
     public float spawnAbstand = 1.5f;
+
+    [Tooltip("Wie weit vor dem Spieler das UI-Menü erscheint (in Metern)")]
+    public float uiAbstand = 1.2f;
 
     // ─── Interne Variablen ────────────────────────────────────────────────
     private GameObject aktuellesObjekt;         // aktuell angezeigte Szene
@@ -59,6 +62,21 @@ public class GameManager : MonoBehaviour
     {
         // Canvas nur im AUSWAHL-Zustand sichtbar
         auswahlCanvas.SetActive(aktuellerZustand == SpielZustand.AUSWAHL);
+
+        // ☰ togglet zwischen Menü und Erkunden
+        if (MenueInputDown())
+        {
+            if (aktuellerZustand == SpielZustand.EXPLORE)
+                ZustandWechseln(SpielZustand.AUSWAHL);
+            else if (aktuellerZustand == SpielZustand.AUSWAHL)
+                ZustandWechseln(SpielZustand.EXPLORE);
+        }
+    }
+
+    // ☰ Menü-Button links — fängt Controller-Button und Wrist-Menu-Klick ab
+    private bool MenueInputDown()
+    {
+        return OVRInput.GetDown(OVRInput.Button.Start);
     }
 
     IEnumerator AutoStartNachDelay()
@@ -79,13 +97,24 @@ public class GameManager : MonoBehaviour
         // Einmalige Aktionen beim Wechsel in einen Zustand
         if (neuerZustand == SpielZustand.AUSWAHL)
         {
-            ZeigeHauptmenue();  // immer mit Hauptmenü starten
+            CanvasVorSpielerPositionieren();
+            ZeigeHauptmenue();
         }
     }
 
     // ══════════════════════════════════════════════════════════════════════
     // PANEL-STEUERUNG  (intern)
     // ══════════════════════════════════════════════════════════════════════
+
+    private void CanvasVorSpielerPositionieren()
+    {
+        Transform kamera = Camera.main.transform;
+
+        Vector3 position = kamera.position + kamera.forward * uiAbstand;
+        Quaternion rotation = Quaternion.LookRotation(position - kamera.position);
+
+        auswahlCanvas.transform.SetPositionAndRotation(position, rotation);
+    }
 
     private void ZeigeHauptmenue()
     {
