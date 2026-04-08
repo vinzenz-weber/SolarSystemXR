@@ -45,6 +45,18 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Cloud_01_Texture:
+        m_Texture: {fileID: 2800000, guid: d770051a6e008c942b3eacc2939328c2, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Cloud_02_Texture:
+        m_Texture: {fileID: 2800000, guid: b8c1e08e681e098418be9f2e43c3cec0, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Cloud_03_Texture:
+        m_Texture: {fileID: 2800000, guid: b4b0eda328fe91543b4eee17992157a8, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _DetailAlbedoMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
@@ -77,6 +89,10 @@ Material:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _Planet_Textur:
+        m_Texture: {fileID: 2800000, guid: 269d8c03b1cb343f6a21ee92ecd4c0ff, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_1dbbe4da68f8446c8a5bc6969a1d1a69_Texture_1_Texture2D:
         m_Texture: {fileID: 2800000, guid: 2fcb8563fded1435bbb0efa59cafddc6, type: 3}
         m_Scale: {x: 1, y: 1}
@@ -90,7 +106,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_7869c9a8dccb4142942c9ef90ffdbe88_Texture_1_Texture2D:
-        m_Texture: {fileID: 2800000, guid: d849bf672182c474f8377caebdcea598, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SampleTexture2D_80e1cbddbb2745ab862946fe725df06b_Texture_1_Texture2D:
@@ -143,7 +159,10 @@ Material:
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
-    - _CloudSpeed: 0.001
+    - _CloudSpeed: 10.82
+    - _Cloud_01_Speed: 1
+    - _Cloud_02_Speed: 1
+    - _Cloud_03_Speed: 1
     - _Cull: 2
     - _Cutoff: 0.5
     - _DetailAlbedoMapScale: 1
@@ -151,7 +170,9 @@ Material:
     - _DstBlend: 0
     - _DstBlendAlpha: 0
     - _EmissionIntensity: 2
+    - _EnvironmentDepthBias: 0
     - _EnvironmentReflections: 1
+    - _Fresnel_Strength: 7
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
