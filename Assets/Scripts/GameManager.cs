@@ -1,118 +1,151 @@
 using System.Collections;
 using UnityEngine;
 
+// Die Zustände des Spiels — ähnlich wie "modes" in Processing
 public enum SpielZustand
 {
     START,
-    PLACEMENT,
-    EXPLORE
+    AUSWAHL,    // Menü: Spieler wählt was angezeigt werden soll
+    EXPLORE,    // Inhalt wird angezeigt, Spieler kann erkunden
+    PLACEMENT   // Reserviert für später (manuelle Platzierung)
 }
 
 public class GameManager : MonoBehaviour
 {
+    // ─── Zustand ──────────────────────────────────────────────────────────
     public SpielZustand aktuellerZustand;
 
-    [Header("XR References")]
+    // ─── XR ───────────────────────────────────────────────────────────────
+    [Header("XR")]
     [Tooltip("OVRCameraRig → TrackingSpace → RightHandAnchor")]
     public Transform rightControllerAnchor;
-    [Tooltip("OVRHand-Komponente der rechten Hand (für Hand Tracking)")]
+    [Tooltip("OVRHand-Komponente der rechten Hand")]
     public OVRHand rightHand;
 
-    [Header("Platzierungs-Einstellungen")]
-    public GameObject objektPrefab;
-    public float maxReichweite = 10f;
-    public LayerMask placementLayer;
+    // ─── UI ───────────────────────────────────────────────────────────────
+    [Header("UI")]
+    [Tooltip("Das gesamte World-Space-Canvas")]
+    public GameObject auswahlCanvas;
 
-    private bool isPlaced = false;
-    private bool wasRightPinching = false;
+    [Tooltip("Hauptmenü: Sonnensystem / Planeten / ...")]
+    public GameObject hauptPanel;
+
+    [Tooltip("Planeten-Untermenü mit einem Button pro Planet")]
+    public GameObject planetenPanel;
+
+    // ─── Prefabs ──────────────────────────────────────────────────────────
+    [Header("Prefabs")]
+    [Tooltip("Das komplette Sonnensystem (Assets/Prefabs/SolarSystem.prefab)")]
+    public GameObject sonnensystemPrefab;
+
+    [Tooltip("Wie weit vor dem Spieler das Objekt erscheint (in Metern)")]
+    public float spawnAbstand = 1.5f;
+
+    // ─── Interne Variablen ────────────────────────────────────────────────
+    private GameObject aktuellesObjekt;         // aktuell angezeigte Szene
+    [HideInInspector] public PlanetData ausgewaehlterPlanet;
+
+    // ══════════════════════════════════════════════════════════════════════
+    // UNITY LIFECYCLE
+    // ══════════════════════════════════════════════════════════════════════
 
     void Start()
     {
         ZustandWechseln(SpielZustand.START);
-        StartCoroutine(AutoStartAfterDelay());
-    }
-
-    IEnumerator AutoStartAfterDelay()
-    {
-        yield return new WaitForSeconds(1f);
-        ZustandWechseln(SpielZustand.PLACEMENT);
+        StartCoroutine(AutoStartNachDelay());
     }
 
     void Update()
     {
-        if (aktuellerZustand != SpielZustand.PLACEMENT) return;
-
-        if (PlaceInputDown())
-            ObjektPlatzieren();
-
-        if (isPlaced && ConfirmInputDown())
-            ZustandWechseln(SpielZustand.EXPLORE);
+        // Canvas nur im AUSWAHL-Zustand sichtbar
+        auswahlCanvas.SetActive(aktuellerZustand == SpielZustand.AUSWAHL);
     }
 
-    // Index-Trigger (Controller) oder Index-Pinch (Hand) — nur beim Drücken, nicht Halten
-    private bool PlaceInputDown()
+    IEnumerator AutoStartNachDelay()
     {
-        if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.RTouch))
-            return true;
-
-        if (rightHand != null && rightHand.IsTracked)
-        {
-            bool isPinching = rightHand.GetFingerIsPinching(OVRHand.HandFinger.Index);
-            bool justPinched = isPinching && !wasRightPinching;
-            wasRightPinching = isPinching;
-            return justPinched;
-        }
-
-        wasRightPinching = false;
-        return false;
+        yield return new WaitForSeconds(1f);
+        ZustandWechseln(SpielZustand.AUSWAHL);
     }
 
-    // A-Button (Controller) oder Mittelfinger-Pinch (Hand) zum Bestätigen
-    private bool ConfirmInputDown()
-    {
-        if (OVRInput.GetDown(OVRInput.Button.One, OVRInput.Controller.RTouch))
-            return true;
-
-        if (rightHand != null && rightHand.IsTracked &&
-            rightHand.GetFingerIsPinching(OVRHand.HandFinger.Middle))
-            return true;
-
-        return false;
-    }
-
-    private Ray GetInputRay()
-    {
-        // Hand Tracking: PointerPose zeigt in Zeigerichtung der Hand
-        if (rightHand != null && rightHand.IsTracked && rightHand.PointerPose != null)
-            return new Ray(rightHand.PointerPose.position, rightHand.PointerPose.forward);
-
-        // Controller: Anchor-Transform
-        if (rightControllerAnchor != null)
-            return new Ray(rightControllerAnchor.position, rightControllerAnchor.forward);
-
-        // Fallback: Kamera-Mitte
-        return new Ray(Camera.main.transform.position, Camera.main.transform.forward);
-    }
+    // ══════════════════════════════════════════════════════════════════════
+    // ZUSTANDSWECHSEL
+    // ══════════════════════════════════════════════════════════════════════
 
     public void ZustandWechseln(SpielZustand neuerZustand)
     {
         aktuellerZustand = neuerZustand;
         Debug.Log("Spielzustand: " + aktuellerZustand);
+
+        // Einmalige Aktionen beim Wechsel in einen Zustand
+        if (neuerZustand == SpielZustand.AUSWAHL)
+        {
+            ZeigeHauptmenue();  // immer mit Hauptmenü starten
+        }
     }
 
-    private void ObjektPlatzieren()
-    {
-        Ray ray = GetInputRay();
+    // ══════════════════════════════════════════════════════════════════════
+    // PANEL-STEUERUNG  (intern)
+    // ══════════════════════════════════════════════════════════════════════
 
-        if (Physics.Raycast(ray, out RaycastHit hit, maxReichweite, placementLayer))
-        {
-            Instantiate(objektPrefab, hit.point, Quaternion.identity);
-            isPlaced = true;
-            Debug.Log("Objekt platziert bei: " + hit.point);
-        }
-        else
-        {
-            Debug.Log("Kein Treffer im Raycast.");
-        }
+    private void ZeigeHauptmenue()
+    {
+        hauptPanel.SetActive(true);
+        planetenPanel.SetActive(false);
+    }
+
+    private void ZeigePlanetenmenue()
+    {
+        hauptPanel.SetActive(false);
+        planetenPanel.SetActive(true);
+    }
+
+    // ══════════════════════════════════════════════════════════════════════
+    // BUTTON-CALLBACKS  (im Inspector unter OnClick() verdrahten)
+    // ══════════════════════════════════════════════════════════════════════
+
+    // Hauptmenü → "Sonnensystem"
+    public void AufSonnensystemKlicken()
+    {
+        ObjektAnzeigen(sonnensystemPrefab);
+    }
+
+    // Hauptmenü → "Planeten"
+    public void AufPlanetenMenuKlicken()
+    {
+        ZeigePlanetenmenue();
+    }
+
+    // Planeten-Untermenü → "Zurück"
+    public void AufZurueckKlicken()
+    {
+        ZeigeHauptmenue();
+    }
+
+    // Wird von PlanetButton aufgerufen
+    public void PlanetAuswaehlen(PlanetData planet, GameObject prefab)
+    {
+        ausgewaehlterPlanet = planet;
+        Debug.Log("Planet ausgewählt: " + planet.planetName);
+        ObjektAnzeigen(prefab);
+    }
+
+    // ══════════════════════════════════════════════════════════════════════
+    // OBJEKT SPAWNEN
+    // ══════════════════════════════════════════════════════════════════════
+
+    private void ObjektAnzeigen(GameObject prefab)
+    {
+        // Altes Objekt löschen
+        if (aktuellesObjekt != null)
+            Destroy(aktuellesObjekt);
+
+        // Position: spawnAbstand Meter vor der Kamera
+        Transform kamera = Camera.main.transform;
+        Vector3 position = kamera.position + kamera.forward * spawnAbstand;
+        Quaternion rotation = Quaternion.Euler(0, kamera.eulerAngles.y + 180f, 0);
+
+        aktuellesObjekt = Instantiate(prefab, position, rotation);
+
+        ZustandWechseln(SpielZustand.EXPLORE);
     }
 }

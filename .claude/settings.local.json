@@ -3,7 +3,10 @@
     "allow": [
       "Bash(wc -l /d/Repositories/SolarSystemXR/Assets/Scripts/*.cs)",
       "Bash(grep -E \"\\\\.\\(cs|md\\)$\")",
-      "Bash(ls -la \"d:/Repositories/SolarSystemXR/Library/PackageCache/com.unity.xr.meta-openxr@\"*/Documentation*/)"
+      "Bash(ls -la \"d:/Repositories/SolarSystemXR/Library/PackageCache/com.unity.xr.meta-openxr@\"*/Documentation*/)",
+      "Bash(xargs grep:*)",
+      "Bash(find \"d:\\\\Repositories\\\\SolarSystemXR\\\\Assets\\\\Scripts\" -type f -name \"*.cs\" -exec ls -lh {} \\\\;)",
+      "Bash(xargs ls:*)"
     ]
   }
 }
