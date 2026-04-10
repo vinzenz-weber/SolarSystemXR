@@ -9,43 +9,46 @@ EditorUserSettings:
       value: 18134705175a055722080a3115371d4a0d55006876786860616b0471b8b4676facb72ba5a52a362c3c0ee63201181433fe3e101bf3250b06144ca74c24f1190708e016c213c61a52f91c12cac80fd8edd298e1e4d1fde2cacddeacbcc1fee7eef0e3b6faa69af9ceaeaaec81a6d2c2c8c8c4b2e5dfd5ccd3f8cf
       flags: 0
     RecentlyUsedSceneGuid-0:
-      value: 5154000754015a025a085a7744770b48454e4a2c2f2c72332c284c63b1b36239
-      flags: 0
-    RecentlyUsedSceneGuid-1:
       value: 010704515d560f5f0e560d7a48770c1441154e7e757b72367b791f31b1b06268
       flags: 0
-    RecentlyUsedSceneGuid-2:
+    RecentlyUsedSceneGuid-1:
       value: 51030c570657080e5959587449770e11174f482e7b7b2435782a1936e3b5646c
       flags: 0
-    RecentlyUsedSceneGuid-3:
+    RecentlyUsedSceneGuid-2:
       value: 5505515151575e0c5e0d5a7b11775d484f161e7a7c2b70362b704435e6e36769
       flags: 0
-    RecentlyUsedSceneGuid-4:
+    RecentlyUsedSceneGuid-3:
       value: 5352550006010b5d5f560e264177064943154b727d7b7162757c4a6ab3b53739
       flags: 0
-    RecentlyUsedSceneGuid-5:
+    RecentlyUsedSceneGuid-4:
       value: 50070c07060c5f5d5d5a0a7013775c1443161a2b7c7d23612c7d1e62b0b7356e
       flags: 0
-    RecentlyUsedSceneGuid-6:
+    RecentlyUsedSceneGuid-5:
       value: 00540757065051595c080923407259444e151c797b2927362e2c4437e4b66d6e
       flags: 0
-    RecentlyUsedSceneGuid-7:
-      value: 5a5457055d565a0d5b595b771377594140161b7d2d7d726529791e65bbe1666c
-      flags: 0
-    RecentlyUsedSceneGuid-8:
+    RecentlyUsedSceneGuid-6:
       value: 0652575353000f0e5f5d597247215c44444f497f7d2a25337f7e4f35bbb93069
       flags: 0
-    RecentlyUsedSceneGuid-9:
+    RecentlyUsedSceneGuid-7:
       value: 5a50555503545d035b5c5e7042210d44404f1d2e292b206078281f64e6e56c6e
+      flags: 0
+    RecentlyUsedSceneGuid-8:
+      value: 5a5457055d565a0d5b595b771377594140161b7d2d7d726529791e65bbe1666c
+      flags: 0
+    RecentlyUsedSceneGuid-9:
+      value: 01570c0550530c03545a0a2611220744464e1e2f79297f69752b1e35e1b93660
       flags: 0
     UnityEditor.ShaderGraph.Blackboard:
       value: 18135939215a0a5004000b0e15254b524c030a3f2964643d120d1230e9e93a3fd6e826abbd2e2d293c4ead313b08042de6030a0afa240c0d020be94c4ba75e435d8715fa32c70d15d11612dacc11fee5d3c5d1fe9ab1b688908fecb0f9cfddf1eff4e7a1b1eae482f0fdaee1e1928b86d888ed909c968797a7cf
       flags: 0
     UnityEditor.ShaderGraph.FloatingWindowsLayout2:
-      value: 181344140043005e1a220d3b1f364b524c0c5a27130c293326201334cee5322ca0bd30e8eb293a707b0fd0180b3d0a36fc0d3d04e649500d1002ee0b5dbd1d2c27c00ad113cb1e10e41f1addc80993b984849aba88bbb78b8e8af1a5a1a7b6a9a7a4e9b9a797d4cfb8a6e4bea1d6c6c8eeccb1d7c9d28b9de9829f83f291dfeceadf9fd39bddc399c1cffadff0c0e9f4dfe3bdd4cff7cbfbd3ce81af7d
+      value: 181344140043005e1a220d3b1f364b524c0c5a27130c293326201334cee5322ca0bd30e8eb293a707b0fd0180b3d0a36fc0d3d04e649500d1002ee0b5dbd1d2c27c00ad113cb1e10e41f1addc80993b984819ab98bb8b48c8d8af0a7aca5b7aba2a7e9b9a797d4cfb8a6e4bea1d6c6c8eeccb1d7c9d28b9de39c8280ed8085878984d6828ad08d979b809fbeab8aa2e6c9bae68ed7ffcbf9cdd0ccfe22aaed3a343538f4eca5ab9d
       flags: 0
     UnityEditor.ShaderGraph.InspectorWindow:
-      value: 18135939215a0a5004000b0e15254b524c030a3f2964643d120d1230e9e93a3fd6e826abbd3c3e302a07a37e0901373ae01e0008f707250d171df81a53a541415f934e934c9d4948924d4d9a9d4b83b69994d9d5f0e4f5d1c4d0aee6f5fcc1fef3e2a0efe8f2af8ef9fcade2fc919795949ee395949f9d90f690dcec8ddac8d69b8c9e94c1c582888bdfeeddeed2bee6c9f3f1c1dbf6caf8cecacfe730e6f7353f3375a7
+      value: 18135939215a0a5004000b0e15254b524c030a3f2964643d120d1230e9e93a3fd6e826abbd3c3e302a07a37e0901373ae01e0008f707250d171df81a53a541415f934e934c9d4948924d4d9a9d4b83b69994d9d5f0e4f5d1c4d0aee6f5fcc1fef3e2a0efe8f2a88efae3bcbc90f1cedec488eddf8ede8b9def81879de88584858181d58788d0898381c1e294e0caf5f1c4eff7c5c6f6cdf8c8cec9ea35eafb7d7b
+      flags: 0
+    UnityEditor.ShaderGraph.ToggleSettings:
+      value: 18135d1527590858060c032302276919051e1a26296a7c243f3c187fa0e92708f0e220e0e22d09352a0bed30017c5b2be01f0c47b40219221f1ded0b12eb1f0127cc0bcc18c41a5e910d0edbc85193e0dadadbf8e8f9e8ced7dba5e0b6aaaca4dbfeabfef4eae1
       flags: 0
     lightmappingBakingProfile:
       value: 51
