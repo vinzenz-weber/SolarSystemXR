@@ -118,7 +118,7 @@ public class PlanetBody : MonoBehaviour
         }
 
         float a   = data.semiMajorAxis;
-        float e   = data.eccentricity;
+        float e   = data.eccentricity * manager.exzentrizitaetMultiplikator;
         float rad = currentAngle * Mathf.Deg2Rad;
         float r   = a * (1f - e * e) / (1f + e * Mathf.Cos(rad));
 

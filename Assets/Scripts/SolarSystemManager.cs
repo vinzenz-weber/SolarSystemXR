@@ -22,4 +22,9 @@ public class SolarSystemManager : MonoBehaviour
     [Header("Simulation")]
     [Tooltip("Simulationsgeschwindigkeit in Tagen pro Sekunde.")]
     public float timeScale = 1f;
+
+    [Header("Lernmodus")]
+    [Tooltip("Multiplikator für alle Exzentrizitäten. 1 = realistisch, >1 = übertriebene Ellipsen.")]
+    [Range(0f, 5f)]
+    public float exzentrizitaetMultiplikator = 1f;
 }

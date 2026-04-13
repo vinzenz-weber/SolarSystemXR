@@ -63,10 +63,11 @@ Enthält alles, was aus der DOKU entfernt wurde: verworfene Features, gescheiter
 
 | Befehl | Was passiert |
 |---|---|
-| **"Update DOKU"** | DOKU.md wird mit dem aktuellen Stand aktualisiert. |
+| **"Update DOKU"** | DOKU.md wird mit dem aktuellen Stand aktualisiert. Gleichzeitig wird ARCHIV.md automatisch ergänzt: alles was sich seit dem letzten Stand verändert hat (umgebaute Features, verworfene Ansätze, behobene Bugs mit nicht-offensichtlicher Ursache) wird unter "Iterationen & Änderungen" eingetragen. |
 | **"Feature X verworfen, Grund: Y"** | Feature wird aus DOKU.md gelöscht und mit Datum + Begründung ins ARCHIV.md verschoben. |
 | **"Feature X umgebaut"** | DOKU.md wird aktualisiert, die alte Version wird unter "Iterationen & Änderungen" ins ARCHIV.md eingetragen. |
 
 ### Wichtig
 - Beim Verschieben ins Archiv immer **Datum**, **Begründung** und **Erkenntnisse** festhalten.
 - DOKU.md soll immer nur den tatsächlichen Ist-Zustand zeigen – nichts Veraltetes.
+- ARCHIV.md dokumentiert nicht nur verworfenes, sondern auch **Lernmomente**: nicht-offensichtliche Unity-Verhaltensweisen, Bugs deren Ursache überraschend war, und Architekturentscheidungen die sich als falsch herausgestellt haben.

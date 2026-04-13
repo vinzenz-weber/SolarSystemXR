@@ -23,4 +23,12 @@ public class PlanetData : ScriptableObject
 
     [Header("Visualisierung")]
     public Color planetLineColor; // Farbe des Planeten
+
+    [Header("Informationen")]
+    [Tooltip("Kurze Beschreibung des Planeten, erscheint im Detail-Panel.")]
+    [TextArea(2, 4)]
+    public string beschreibung;
+
+    [Tooltip("3–5 kurze Stichpunkte (z.B. Durchmesser, Atmosphäre, Besonderheiten).")]
+    public string[] fakten;
 }

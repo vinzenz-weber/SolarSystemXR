@@ -6,7 +6,8 @@
       "Bash(ls -la \"d:/Repositories/SolarSystemXR/Library/PackageCache/com.unity.xr.meta-openxr@\"*/Documentation*/)",
       "Bash(xargs grep:*)",
       "Bash(find \"d:\\\\Repositories\\\\SolarSystemXR\\\\Assets\\\\Scripts\" -type f -name \"*.cs\" -exec ls -lh {} \\\\;)",
-      "Bash(xargs ls:*)"
+      "Bash(xargs ls:*)",
+      "Bash(ls -lh /d/Repositories/SolarSystemXR/Assets/Scenes/*.unity)"
     ]
   }
 }

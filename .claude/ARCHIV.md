@@ -25,7 +25,7 @@
 
 ## Iterationen & Änderungen
 
-### GameManager: State Machine komplett umgebaut
+### GameManager: State Machine komplett umgebaut (erste Iteration)
 
 - **Datum:** 2026-04-12
 - **Vorher:** `START → PLACEMENT → EXPLORE`
@@ -37,6 +37,20 @@
   - User wählt was angezeigt werden soll (Sonnensystem oder einzelner Planet)
   - EXPLORE zeigt das gewählte Objekt vor dem User; Menü-Button togglet zurück zu AUSWAHL
 - **Grund:** Die Priorität hat sich verschoben: zuerst ein funktionierendes Inhaltssystem (Menü + Planeten-Detailansichten), danach AR-Platzierung. Das Menü ermöglicht mehr Inhalt bevor die Platzierungs-Infrastruktur fertig ist.
+
+### GameManager: State Machine auf Prototyp-Vollumfang erweitert (zweite Iteration)
+
+- **Datum:** 2026-04-13
+- **Vorher:** `START → AUSWAHL → EXPLORE`
+  - `EXPLORE` war ein einzelner Zustand für beide Ansichten (Sonnensystem und Einzel-Planet)
+  - PLACEMENT war reserviert aber nicht implementiert
+  - Kein Passthrough-Toggle, keine separaten Panels pro Modus
+- **Nachher:** `START → AUSWAHL → PLACEMENT → SONNENSYSTEM / PLANET_SCHWEBEND / PLANET_IMMERSIV`
+  - `EXPLORE` durch drei spezialisierte Zustände ersetzt: `SONNENSYSTEM`, `PLANET_SCHWEBEND`, `PLANET_IMMERSIV`
+  - `PLACEMENT` vollständig implementiert via `PlatzierungManager.cs` (Ring-Indikator, Abstandsanpassung, Trigger-Bestätigung)
+  - Passthrough-Toggle (`PassthroughEinschalten`/`PassthroughAusschalten`) über `OVRPassthroughLayer`
+  - Jeder Zustand aktiviert sein eigenes UI-Panel (`sonnensystemPanel`, `planetDetailPanel`, `immersivPanel`)
+- **Grund:** Mit der Anforderung „so schnell wie möglich einen vollständigen Prototyp" wurden alle 5 Kernfeatures gleichzeitig implementiert. Der generische EXPLORE-Zustand war zu grob — die drei Ansichten haben grundlegend verschiedene UI, Input-Logik und Passthrough-Verhalten.
 
 ### GameManager: START-Transition
 
@@ -94,6 +108,18 @@
 - **Nachher:** Canvas als Kind der Kamera erzeugt (`SetParent(camTransform)`), `localPosition` mit festem Offset — folgt automatisch ohne LateUpdate-Logik
 - **Anmerkung:** DebugDisplay insgesamt inzwischen entfernt
 - **Grund:** `MissingReferenceException` auf `_canvasTransform` in LateUpdate. Unity-Transform-Referenz war nach dem Erstellen unter bestimmten Bedingungen ungültig. Als Kind der Kamera entfällt das Problem komplett.
+
+### InfoPanel: Script-Placement auf Canvas (erster Ansatz)
+
+- **Datum:** 2026-04-13
+- **Vorher:** `InfoPanel.cs` lag direkt auf dem World-Space-Canvas-GameObject
+  - `Start()` rief `gameObject.SetActive(false)` auf um den Canvas auszublenden
+  - `Update()` lief scheinbar normal — bis der Canvas ausgeblendet wurde
+- **Problem:** `gameObject.SetActive(false)` deaktiviert das gesamte GameObject inklusive aller darauf liegenden Scripts. Damit stoppt `Update()` dauerhaft — der Raycast lief nie mehr.
+- **Nachher:** `InfoPanel.cs` liegt auf einem persistenten leeren GameObject „InfoSystem" (nicht auf dem Canvas)
+  - `public GameObject panelCanvas` als separates Referenzfeld
+  - Show/Hide über `panelCanvas.SetActive()` — das InfoSystem-Objekt selbst bleibt immer aktiv
+- **Erkenntnisse:** In Unity gilt: ein Script dessen `Update()` dauerhaft laufen muss (z.B. Raycast-Logik), darf nie auf einem GameObject liegen das zur Laufzeit via `SetActive(false)` ausgeblendet wird. Singleton-Scripts die etwas steuern sind fast immer besser auf einem separaten persistenten Elternobjekt aufgehoben.
 
 ---
 
