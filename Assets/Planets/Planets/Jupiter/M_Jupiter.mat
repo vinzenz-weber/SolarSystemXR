@@ -105,6 +105,10 @@ Material:
     - _AddPrecomputedVelocity: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
+    - _At_Col_Strength: 47.54
+    - _Atmos_finetune: 2.3
+    - _Atmos_max: 1
+    - _Atmos_min: 44.41
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
@@ -115,42 +119,56 @@ Material:
     - _Cloud_03_Speed: 1
     - _Cull: 2
     - _Cutoff: 0.5
+    - _DarkSide: 0.003
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _DstBlendAlpha: 0
-    - _EmissionIntensity: 13.4
+    - _EmissionIntensity: 3
     - _EnvironmentDepthBias: 0
     - _EnvironmentReflections: 1
-    - _FresnelLerp1: 0.1
-    - _FresnelLerp2: 9.62
-    - _Fresnel_Strength: 13.88
+    - _FresnelLerp1: 1.9
+    - _FresnelLerp2: -2.48
+    - _Fresnel_Strength: 1.02
+    - _Fresnel_a: 2.85
+    - _Fresnel_b: 12.49
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
+    - _Licht_MIttig_Strenth: 7
+    - _Licht_Mittig: 0
+    - _Licht_Mittig_Lerp: 0
     - _Metallic: 0
     - _OcclusionStrength: 1
     - _Parallax: 0.005
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
+    - _Rim: 1.35
+    - _RimLight: 0
+    - _Rimlight_Lerp: 0
+    - _Rimlight_Strength: 0
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
     - _Surface: 0
+    - _Verlauf: 0.369
     - _Wolkentiefe: 0
     - _WorkflowMode: 1
     - _XRMotionVectorsPass: 1
     - _ZWrite: 1
     m_Colors:
+    - _Atmosphere_COlor: {r: 1, g: 1, b: 1, a: 1}
+    - _Atmosphere_Inner: {r: 1, g: 0.6783518, b: 0, a: 1}
+    - _Atmosphere_Outer: {r: 0, g: 0.49019623, b: 1, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Finetuning_cloud: {r: 3.3, g: 106.02, b: -0.35, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _SunPosition: {r: 0.017, g: 1.3050001, b: 0.3813, a: 0}
+    - _SunPosition: {r: 5114, g: 1837, b: -6295, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &7112582739997512599

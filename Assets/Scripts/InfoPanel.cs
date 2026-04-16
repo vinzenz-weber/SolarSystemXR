@@ -14,6 +14,9 @@ using UnityEngine.UI;
 // 3. World-Space Canvas "InfoPanel" erstellen (mit TitelText, InhaltText, Schließen-Button)
 // 4. Den Canvas in das Feld "panelCanvas" ziehen
 // 5. Canvas initial auf SetActive(false) setzen
+// 6. Die RayInteractor-GameObjects aus OVRInteractionComprehensive in
+//    rightRayOrigin und leftRayOrigin ziehen (damit der Raycast mit dem
+//    Meta-Standard-Ray übereinstimmt)
 public class InfoPanel : MonoBehaviour
 {
     public static InfoPanel Instance { get; private set; }
@@ -27,6 +30,13 @@ public class InfoPanel : MonoBehaviour
     public TMP_Text inhaltText;
     [Tooltip("Schließen-Button (optional)")]
     public Button schliessenButton;
+
+    [Header("Ray-Origins")]
+    [Tooltip("Transform des RayInteractor-GameObjects des rechten Controllers (aus OVRInteractionComprehensive). " +
+             "Damit stimmt der Raycast exakt mit dem sichtbaren Meta-Ray überein.")]
+    public Transform rightRayOrigin;
+    [Tooltip("Transform des RayInteractor-GameObjects des linken Controllers (aus OVRInteractionComprehensive).")]
+    public Transform leftRayOrigin;
 
     [Header("Interaktion")]
     [Tooltip("Maximale Raycast-Distanz in Metern")]
@@ -75,7 +85,12 @@ public class InfoPanel : MonoBehaviour
 
         RaycastAufInfoPunkte();
 
-        if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger))
+        // Index-Trigger (rechts ODER links) → InfoPunkt öffnen / Panel schließen
+        bool triggerGedrueckt =
+            OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.RTouch) ||
+            OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.LTouch);
+
+        if (triggerGedrueckt)
         {
             if (_aktuellerPunkt != null)
                 Zeige(_aktuellerPunkt);
@@ -111,19 +126,23 @@ public class InfoPanel : MonoBehaviour
 
     private void RaycastAufInfoPunkte()
     {
-        Transform controller = GameManager.Instance.HoleControllerTransform();
-        Ray strahl = new Ray(controller.position, controller.forward);
-
-        // Debug-Linie im Scene-View (nur im Editor sichtbar)
-        Debug.DrawRay(controller.position, controller.forward * maxRaycastDistanz, Color.cyan);
-
         InfoPunkt neuerPunkt = null;
 
-        // QueryTriggerInteraction.Collide: Raycast trifft auch Trigger-Collider
-        if (Physics.Raycast(strahl, out RaycastHit treffer, maxRaycastDistanz,
-                            infoPunktLayer, QueryTriggerInteraction.Collide))
+        // Ray-Origins bestimmen: RayInteractor-Transforms wenn gesetzt,
+        // sonst Fallback auf Controller-Anchors aus dem GameManager
+        Transform[] origins = HoleRayOrigins();
+
+        foreach (Transform origin in origins)
         {
-            treffer.collider.TryGetComponent(out neuerPunkt);
+            Ray strahl = new Ray(origin.position, origin.forward);
+
+            // QueryTriggerInteraction.Collide: Raycast trifft auch Trigger-Collider
+            if (Physics.Raycast(strahl, out RaycastHit treffer, maxRaycastDistanz,
+                                infoPunktLayer, QueryTriggerInteraction.Collide))
+            {
+                treffer.collider.TryGetComponent(out neuerPunkt);
+                if (neuerPunkt != null) break; // erster Treffer reicht
+            }
         }
 
         if (neuerPunkt != _aktuellerPunkt)
@@ -132,6 +151,22 @@ public class InfoPanel : MonoBehaviour
             _aktuellerPunkt = neuerPunkt;
             if (_aktuellerPunkt != null) _aktuellerPunkt.Hervorheben(true);
         }
+    }
+
+    // Gibt die Ray-Origins zurück: bevorzugt die RayInteractor-Transforms,
+    // fällt auf die Controller-Anchors aus dem GameManager zurück
+    private Transform[] HoleRayOrigins()
+    {
+        var liste = new System.Collections.Generic.List<Transform>();
+
+        if (rightRayOrigin != null) liste.Add(rightRayOrigin);
+        if (leftRayOrigin  != null) liste.Add(leftRayOrigin);
+
+        // Fallback: Controller-Anchors aus GameManager (z.B. im Editor ohne OVR-Setup)
+        if (liste.Count == 0)
+            liste.AddRange(GameManager.Instance.HoleAlleControllerTransforms());
+
+        return liste.ToArray();
     }
 
     // ══════════════════════════════════════════════════════════════════════

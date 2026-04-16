@@ -36,6 +36,50 @@ Der Entwickler hat einen Processing-Hintergrund und bisher wenige Unity-Projekte
 
 ---
 
+## Planeten & Skalierbarkeit
+
+### Umfang
+
+Das Sonnensystem umfasst **8 Planeten** (Merkur, Venus, Erde, Mars, Jupiter, Saturn, Uranus, Neptun). Pluto kann optional als 9. Objekt ergänzt werden, ist aber kein Pflichtbestandteil.
+
+### Entwicklungsstrategie: Erst ein Planet, dann alle
+
+Alle Systeme (UI, InfoPanel, Interaktion, Orbits, etc.) werden zunächst **mit einem einzigen Planeten** entwickelt und vollständig zum Laufen gebracht. Erst danach werden die restlichen Planeten mit Daten und Texturen befüllt.
+
+**Ziel:** Plug-and-Play für jeden weiteren Planeten – minimaler Aufwand beim Hinzufügen neuer Objekte.
+
+### Konsequenzen für den Code
+
+- Planetenspezifische Daten (Name, Radius, Umlaufzeit, Infotexte, etc.) gehören **in ein `ScriptableObject`**, nicht hardcodiert ins Script.
+- Systeme wie UI, InfoPanel oder Orbits sollen generisch auf das jeweilige Planet-Objekt reagieren – kein Planet-spezifischer Code in allgemeinen Systemen.
+- Wenn ein neues Feature implementiert wird: **Immer fragen, ob es über ein ScriptableObject oder eine generische Komponente lösbar ist**, bevor eine planeten-spezifische Lösung gebaut wird.
+
+---
+
+## Bestehende Systeme bevorzugen
+
+**Bevor neuer Code geschrieben wird**, wird immer zuerst geprüft, ob ein bereits implementiertes System verwendet oder erweitert werden kann.
+
+### Regel
+
+Wenn ein neues Feature angefragt wird, gilt folgende Reihenfolge:
+
+1. **Bestehendes System nutzen** – passt ein vorhandenes Script oder eine Komponente bereits, wird dieses verwendet.
+2. **Bestehendes System erweitern** – kann das vorhandene System mit minimalem Aufwand angepasst werden, wird es erweitert statt neu gebaut.
+3. **Neues System bauen** – nur wenn die ersten beiden Optionen nicht sinnvoll umsetzbar sind.
+
+### Warum
+
+Mehrere parallel existierende Systeme, die ähnliche Aufgaben erfüllen, führen zu Konflikten, unerwartetem Verhalten und erhöhtem Wartungsaufwand. Das Projekt soll als kohärentes Ganzes funktionieren, nicht als Ansammlung isolierter Lösungen.
+
+### In der Praxis
+
+- Vor jedem neuen Feature werden die relevanten bestehenden Scripts gelesen und verstanden.
+- Wenn eine Erweiterung eines bestehenden Scripts sinnvoller ist als ein neues Script, wird das explizit kommuniziert und vorgeschlagen.
+- Neue Scripts werden nur angelegt, wenn eine klare, eigenständige Verantwortlichkeit vorliegt, die kein bestehendes System sinnvoll übernehmen kann.
+
+---
+
 ## Performance & Optimierung
 
 Fokus auf Optimierung – die App soll visuell gut aussehen und gleichzeitig flüssig auf der Quest 3 im Standalone-Modus laufen.
@@ -71,3 +115,22 @@ Enthält alles, was aus der DOKU entfernt wurde: verworfene Features, gescheiter
 - Beim Verschieben ins Archiv immer **Datum**, **Begründung** und **Erkenntnisse** festhalten.
 - DOKU.md soll immer nur den tatsächlichen Ist-Zustand zeigen – nichts Veraltetes.
 - ARCHIV.md dokumentiert nicht nur verworfenes, sondern auch **Lernmomente**: nicht-offensichtliche Unity-Verhaltensweisen, Bugs deren Ursache überraschend war, und Architekturentscheidungen die sich als falsch herausgestellt haben.
+
+---
+
+## Selbstständige CLAUDE.md-Pflege
+
+Claude aktualisiert diese Datei **eigenständig und proaktiv**, ohne explizite Aufforderung, wenn im Laufe der Arbeit Informationen auftauchen, die den Entwicklungsprozess vereinfachen oder zukünftige Entscheidungen erleichtern.
+
+### Was wird ergänzt
+
+- Projektspezifische Konventionen, die sich im Verlauf herausbilden (z.B. wie Prefabs strukturiert sind, wie Events verdrahtet werden)
+- Architekturentscheidungen, die einmal getroffen wurden und konsistent bleiben sollen
+- Wiederkehrende Muster oder Unity-Verhaltensweisen, die für dieses Projekt relevant sind
+- Klarstellungen zu bestehenden Abschnitten, wenn sich diese in der Praxis als unvollständig herausstellen
+
+### Was nicht ergänzt wird
+
+- Kurzlebige, task-spezifische Infos – die gehören ins Memory oder in DOKU/ARCHIV
+- Code-Snippets oder fertige Implementierungen
+- Redundantes, das sich aus dem Code selbst ergibt

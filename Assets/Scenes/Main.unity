@@ -3790,6 +3790,8 @@ MonoBehaviour:
   titelText: {fileID: 290836938}
   inhaltText: {fileID: 81059209}
   schliessenButton: {fileID: 1339336630}
+  rightRayOrigin: {fileID: 694731782}
+  leftRayOrigin: {fileID: 2076726075}
   maxRaycastDistanz: 5
   infoPunktLayer:
     serializedVersion: 2
@@ -7783,6 +7785,11 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!4 &694731782 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7648305833078134581, guid: 0a7d2469f24041c4284c66706f84c45e, type: 3}
+  m_PrefabInstance: {fileID: 1487927102}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &699942260
 GameObject:
   m_ObjectHideFlags: 0
@@ -21205,6 +21212,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameManager
   aktuellerZustand: 0
   rightControllerAnchor: {fileID: 1153303111}
+  leftControllerAnchor: {fileID: 276353091}
   rightHand: {fileID: 1150832621}
   passthroughLayer: {fileID: 96467169}
   auswahlCanvas: {fileID: 561201808}
@@ -21360,6 +21368,11 @@ Transform:
   m_Children: []
   m_Father: {fileID: 1890826857}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &2076726075 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6033742252131765593, guid: 0a7d2469f24041c4284c66706f84c45e, type: 3}
+  m_PrefabInstance: {fileID: 1487927102}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &2080440928
 GameObject:
   m_ObjectHideFlags: 0

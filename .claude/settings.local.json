@@ -7,7 +7,8 @@
       "Bash(xargs grep:*)",
       "Bash(find \"d:\\\\Repositories\\\\SolarSystemXR\\\\Assets\\\\Scripts\" -type f -name \"*.cs\" -exec ls -lh {} \\\\;)",
       "Bash(xargs ls:*)",
-      "Bash(ls -lh /d/Repositories/SolarSystemXR/Assets/Scenes/*.unity)"
+      "Bash(ls -lh /d/Repositories/SolarSystemXR/Assets/Scenes/*.unity)",
+      "Bash(find /d/Repositories/SolarSystemXR/Assets/Scripts -type f -name \"*.cs\" -exec basename {} \\\\;)"
     ]
   }
 }

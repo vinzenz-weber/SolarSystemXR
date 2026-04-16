@@ -47,25 +47,37 @@ public class PlatzierungManager : MonoBehaviour
 
         if (!_istAktiv) return;
 
-        Transform zeigeTransform = GameManager.Instance.HoleControllerTransform();
+        // Aktiven Controller bestimmen: welcher Thumbstick stärker ausgelenkt ist, gibt die Richtung vor
+        float rightY = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick).y;
+        float leftY  = OVRInput.Get(OVRInput.Axis2D.SecondaryThumbstick).y;
 
-        // Rechter Thumbstick Y → Abstand vergrößern / verkleinern
-        float thumbstickY = OVRInput.Get(OVRInput.Axis2D.PrimaryThumbstick).y;
+        Transform zeigeTransform;
+        if (Mathf.Abs(leftY) > Mathf.Abs(rightY) && GameManager.Instance.leftControllerAnchor != null)
+            zeigeTransform = GameManager.Instance.leftControllerAnchor;
+        else
+            zeigeTransform = GameManager.Instance.HoleControllerTransform();
+
+        // Thumbstick Y (beide Controller) → Abstand vergrößern / verkleinern
+        float thumbstickY = Mathf.Abs(rightY) >= Mathf.Abs(leftY) ? rightY : leftY;
         _aktuellerAbstand = Mathf.Clamp(
             _aktuellerAbstand + thumbstickY * abstandsGeschwindigkeit * Time.deltaTime,
             minAbstand,
             maxAbstand
         );
 
-        // Indikator-Position: Strahl vom Controller aus in Zeigerichtung
+        // Indikator-Position: Strahl vom aktiven Controller aus in Zeigerichtung
         Vector3 zielPosition = zeigeTransform.position + zeigeTransform.forward * _aktuellerAbstand;
         _indikator.transform.position = zielPosition;
 
         // Indikator soll immer nach oben zeigen (kein Kippen)
         _indikator.transform.rotation = Quaternion.identity;
 
-        // Index-Trigger → Platzierung bestätigen
-        if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger))
+        // Index-Trigger (rechts ODER links) → Platzierung bestätigen
+        bool triggerGedrueckt =
+            OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger,   OVRInput.Controller.RTouch) ||
+            OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger,   OVRInput.Controller.LTouch);
+
+        if (triggerGedrueckt)
         {
             PlatzierungBestaetigen(zielPosition);
         }

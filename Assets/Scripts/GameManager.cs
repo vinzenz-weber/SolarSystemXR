@@ -25,6 +25,8 @@ public class GameManager : MonoBehaviour
     [Header("XR")]
     [Tooltip("OVRCameraRig → TrackingSpace → RightHandAnchor")]
     public Transform rightControllerAnchor;
+    [Tooltip("OVRCameraRig → TrackingSpace → LeftHandAnchor")]
+    public Transform leftControllerAnchor;
     [Tooltip("OVRHand-Komponente der rechten Hand")]
     public OVRHand rightHand;
 
@@ -214,6 +216,16 @@ public class GameManager : MonoBehaviour
         if (rightControllerAnchor != null)
             return rightControllerAnchor;
         return Camera.main.transform;
+    }
+
+    // Gibt alle verfügbaren Controller zurück (für Dual-Hand-Raycast und -Input)
+    public Transform[] HoleAlleControllerTransforms()
+    {
+        var liste = new System.Collections.Generic.List<Transform>();
+        if (rightControllerAnchor != null) liste.Add(rightControllerAnchor);
+        if (leftControllerAnchor  != null) liste.Add(leftControllerAnchor);
+        if (liste.Count == 0)              liste.Add(Camera.main.transform);
+        return liste.ToArray();
     }
 
     // ══════════════════════════════════════════════════════════════════════

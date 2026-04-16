@@ -14,7 +14,8 @@ public class SpielerBewegung : MonoBehaviour
     // --- Interne Variablen (nur für das Skript) ---
     private CharacterController controller;
     private float vertikaleKameraRotation = 0f;
-    private float schwerkraft = -9.81f;
+    // public damit PlanetUmgebungsZone die Schwerkraft von außen ändern kann
+    public float schwerkraft = -9.81f;
     private float fallGeschwindigkeit = 0f;
 
     // Start entspricht setup() in Processing

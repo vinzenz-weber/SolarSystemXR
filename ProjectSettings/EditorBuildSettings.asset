@@ -5,12 +5,12 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/Main.unity
     guid: 9ecc8c366775c4f16ac7a545d0c69a24
   - enabled: 1
-    path: Assets/Scenes/AR_TestScerne.unity
-    guid: 0cafc4bf28bd14995b381372857915ca
+    path: Assets/Scenes/Raumstation.unity
+    guid: 60e432432d00f154aacaa74fed06b3fe
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
     com.unity.xr.arfoundation.simulation_settings: {fileID: 11400000, guid: 0567747bbab5044bb93360a339475f7a, type: 2}

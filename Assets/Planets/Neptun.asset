@@ -18,4 +18,11 @@ MonoBehaviour:
   eccentricity: 0.009
   orbitalPeriod: 60190
   inclination: 1.8
+  schwerkraft: 11.15
+  atmosphaereFarbe: {r: 0.1, g: 0.2, b: 0.8, a: 0.6}
+  nebelDichte: 0.5
+  hatWind: 1
+  windStaerke: 28
+  windTurbulenz: 0.95
+  windPartikelFarbe: {r: 0.2, g: 0.4, b: 0.9, a: 1}
   planetLineColor: {r: 0, g: 0.52716243, b: 0.5943396, a: 0}

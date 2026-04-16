@@ -1,6 +1,6 @@
 # Dokumentation: Sonnensystem XR
 
-> **Letzte Aktualisierung:** 2026-04-13
+> **Letzte Aktualisierung:** 2026-04-15
 
 ---
 
@@ -44,12 +44,19 @@
 
 ### Planet Shader & SunPasser
 
-- **Status:** Fertig
-- **Beschreibung:** Eigene Planeten-Materialien mit dynamischer Beleuchtung durch die Sonne. Sonnenposition wird per Script in Echtzeit an alle Planeten-Materialien übergeben.
-- **Umsetzung:** `SunPasser.cs`
+- **Status:** In Entwicklung
+- **Beschreibung:** Eigene Planeten-Materialien mit dynamischer Beleuchtung durch die Sonne und Atmosphären-Effekt. Sonnenposition wird per Script in Echtzeit an alle Planeten-Materialien übergeben.
+- **Umsetzung:** `SunPasser.cs` + `M_Planet.shadergraph`
   - `[ExecuteAlways]` — läuft im Editor und im Play Mode (Editor-Preview möglich)
   - Setzt `_SunPosition` Shader-Property direkt auf allen zugewiesenen Material-Instanzen
   - Kein SRP-Batching-Bruch, da auf `shared Material`-Instanzen geschrieben wird
+- **Shader-Features (M_Planet.shadergraph):**
+  - Unlit-Shader mit eigener Lichtberechnung via `_SunPosition`
+  - 3 animierte Wolken-Layer (`_Cloud_01/02/03`) mit individuellen Geschwindigkeiten (gegenläufig möglich)
+  - Fresnel-basierter Atmosphären-Effekt: Farbverlauf zwischen `_AtmosphereInnerColor` und `_AtmosphereOuterColor` via Lerp
+  - `_AtmosphereBias` (Power-Node) steuert die Kurve des Übergangs (< 1 = Inner breiter, > 1 = Outer nur am Rand)
+  - Atmosphäre wird mit Sun-Mask multipliziert → nur auf der sonnenzugewandten Seite sichtbar
+  - Atmosphäre wird per `Add` auf Planet-Color gelegt (kein `Multiply` → keine Abdunklung der Textur)
 - **Anmerkung:** Shader-Durchbruch war ein wichtiger Meilenstein (Commit: "PLANET MATERIAL GEHT ENDLICH!!!!")
 
 ### Cloud-Animation (Erde)

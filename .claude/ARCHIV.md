@@ -25,6 +25,14 @@
 
 ## Iterationen & Änderungen
 
+### Planet Shader: Gradient-Node für Atmosphären-Farbverlauf
+
+- **Datum:** 2026-04-15
+- **Vorher:** Atmosphären-Farbverlauf sollte über einen `Gradient`-Node in ShaderGraph realisiert werden — ein einzelnes Property das im Blackboard als Farbverlauf definiert wird.
+- **Problem:** Unity's `Gradient`-Property-Typ wird im Material-Inspector nicht angezeigt. Er ist nicht als serialisiertes Material-Property unterstützt und damit im Inspector nicht einstellbar — nur direkt im ShaderGraph editierbar.
+- **Nachher:** Zwei separate `Color`-Properties (`_AtmosphereInnerColor`, `_AtmosphereOuterColor`) + `Lerp`-Node. Der Fresnel-Wert steuert den `T`-Input des Lerp. Zusätzlich ein `Float`-Property `_AtmosphereBias` (Power-Node vor dem Lerp-T-Input) für Feintuning der Kurve.
+- **Erkenntnisse:** ShaderGraph-`Gradient`-Properties sind Editor-only und können nicht im Material-Inspector exponiert werden. Für Inspector-sichtbare Farbverläufe: entweder mehrere Color-Properties + Lerp, oder einen Farbverlauf als Textur (256×1 px) backen und als `Texture2D`-Property einbinden.
+
 ### GameManager: State Machine komplett umgebaut (erste Iteration)
 
 - **Datum:** 2026-04-12
