@@ -50,7 +50,7 @@ public class PlanetDetailUI : MonoBehaviour
     // PANEL BEFÜLLEN
     // ══════════════════════════════════════════════════════════════════════
 
-    private void BefuellePanel(PlanetData planet)
+    internal void BefuellePanel(PlanetData planet)
     {
         // Planetenname
         if (nameText != null)
@@ -119,6 +119,22 @@ public class PlanetDetailUI : MonoBehaviour
         Vector3 position = planetPos + rechts * seitenAbstand;
 
         // Panel schaut zur Kamera
+        Quaternion rotation = Quaternion.LookRotation(-richtungZurKamera);
+        transform.SetPositionAndRotation(position, rotation);
+    }
+
+    // Wird von ArPlanetInstanz aufgerufen — positioniert das Panel neben dem AR-Planeten.
+    public void ZeigeFuerArPlanet(PlanetData planet, Vector3 planetPosition, float planetRadius)
+    {
+        BefuellePanel(planet);
+
+        if (Camera.main == null) return;
+
+        Vector3 richtungZurKamera = (Camera.main.transform.position - planetPosition).normalized;
+        Vector3 rechts = Vector3.Cross(Vector3.up, richtungZurKamera).normalized;
+        float seitenAbstand = planetRadius + 0.25f;
+
+        Vector3 position = planetPosition + rechts * seitenAbstand;
         Quaternion rotation = Quaternion.LookRotation(-richtungZurKamera);
         transform.SetPositionAndRotation(position, rotation);
     }

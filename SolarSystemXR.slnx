@@ -1,8 +1,8 @@
 ﻿<Solution>
   <Project Path="Unity.XR.OpenXR.csproj" />
   <Project Path="Unity.XR.OpenXR.Editor.Tests.csproj" />
-  <Project Path="UnityEngine.XR.OpenXR.CodeSamples.Editor.Tests.csproj" />
   <Project Path="Assembly-CSharp.csproj" />
+  <Project Path="UnityEngine.XR.OpenXR.CodeSamples.Editor.Tests.csproj" />
   <Project Path="Unity.XR.OpenXR.Editor.csproj" />
   <Project Path="Unity.XR.OpenXR.Features.MetaQuestSupport.Editor.csproj" />
   <Project Path="Unity.XR.OpenXR.Ubuntu.Tests.csproj" />

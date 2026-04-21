@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 // Die Zustände des Spiels — ähnlich wie "modes" in Processing
 public enum SpielZustand
@@ -61,9 +62,20 @@ public class GameManager : MonoBehaviour
     [Tooltip("Wie weit vor dem Spieler das UI-Menü erscheint (in Metern)")]
     public float uiAbstand = 1.2f;
 
+    // ─── Raumstation ──────────────────────────────────────────────────────
+    [Header("Raumstation")]
+    [Tooltip("Exakter Name der Raumstation-Szene (muss in Build Settings stehen)")]
+    public string raumstationSzeneName = "Raumstation";
+    [Tooltip("Root-Transform des Spielers (OVRPlayerController — das GO mit CharacterController, NICHT OVRCameraRig)")]
+    public Transform spielerRoot;
+    [Tooltip("ImmersivePlanetView-Komponente — wird im Raumstation-Modus deaktiviert")]
+    public ImmersivePlanetView immersivePlanetView;
+
     // ─── Interne Variablen ────────────────────────────────────────────────
     private GameObject _aktuellesObjekt;
+    private bool _raumstationAktiv = false;
     [HideInInspector] public PlanetData ausgewaehlterPlanet;
+    [HideInInspector] public GameObject ausgewaehltesPrefab;
 
     // ══════════════════════════════════════════════════════════════════════
     // UNITY LIFECYCLE
@@ -89,9 +101,15 @@ public class GameManager : MonoBehaviour
         // ☰ Menü-Button: wechselt zwischen Menü und aktuellem Inhalt
         if (MenueInputDown())
         {
+            if (aktuellerZustand == SpielZustand.PLANET_IMMERSIV)
+            {
+                // Im Raumstation-Modus nur Mini-Menü ein-/ausblenden — KEIN Hauptmenü
+                RaumstationController.Instance?.MiniMenuToggle();
+                return;
+            }
+
             if (aktuellerZustand == SpielZustand.SONNENSYSTEM  ||
                 aktuellerZustand == SpielZustand.PLANET_SCHWEBEND ||
-                aktuellerZustand == SpielZustand.PLANET_IMMERSIV  ||
                 aktuellerZustand == SpielZustand.PLACEMENT)
             {
                 ZustandWechseln(SpielZustand.AUSWAHL);
@@ -130,6 +148,10 @@ public class GameManager : MonoBehaviour
 
         switch (neuerZustand)
         {
+            case SpielZustand.START:
+                ArPlanetManager.Instance?.AlleEntfernen();
+                break;
+
             case SpielZustand.AUSWAHL:
                 PassthroughEinschalten();
                 CanvasVorSpielerPositionieren();
@@ -139,25 +161,26 @@ public class GameManager : MonoBehaviour
 
             case SpielZustand.PLACEMENT:
                 PassthroughEinschalten();
+                ArPlanetManager.Instance?.AlleEntfernen();
                 // PlatzierungManager.cs reagiert auf diesen Zustand und übernimmt
                 break;
 
             case SpielZustand.SONNENSYSTEM:
                 PassthroughEinschalten();
+                ArPlanetManager.Instance?.AlleEntfernen();
                 if (sonnensystemPanel != null)
                     sonnensystemPanel.SetActive(true);
                 break;
 
             case SpielZustand.PLANET_SCHWEBEND:
                 PassthroughEinschalten();
-                if (planetDetailPanel != null)
-                    planetDetailPanel.SetActive(true);
+                // Kein Panel automatisch — ArPlanetInstanz übernimmt via Gaze-Erkennung
                 break;
 
             case SpielZustand.PLANET_IMMERSIV:
                 PassthroughAusschalten();   // Dunkler Weltraum statt Passthrough
-                if (immersivPanel != null)
-                    immersivPanel.SetActive(true);
+                // Mini-Menü lebt in der Raumstation-Szene — immersivPanel bleibt versteckt
+                StartCoroutine(RaumstationLaden());
                 break;
         }
     }
@@ -254,8 +277,12 @@ public class GameManager : MonoBehaviour
     public void PlanetAuswaehlen(PlanetData planet, GameObject prefab)
     {
         ausgewaehlterPlanet = planet;
+        ausgewaehltesPrefab = prefab;  // Prefab-Referenz für RaumstationController speichern
         Debug.Log("Planet ausgewählt: " + planet.planetName);
-        PlanetObjektAnzeigen(prefab);
+
+        // ArPlanetManager übernimmt Skalierung, Spawn und Verwaltung
+        ArPlanetManager.Instance?.PlanetSpawnen(planet, prefab);
+
         ZustandWechseln(SpielZustand.PLANET_SCHWEBEND);
     }
 
@@ -268,8 +295,16 @@ public class GameManager : MonoBehaviour
     // Zurück von immersiv zur schwebenden Ansicht
     public void ZurueckZuSchwebend()
     {
+        if (_raumstationAktiv)
+            StartCoroutine(RaumstationEntladen());
         ZustandWechseln(SpielZustand.PLANET_SCHWEBEND);
     }
+
+    // Gibt zurück ob die Raumstation-Szene gerade geladen ist
+    public bool IstRaumstationAktiv() => _raumstationAktiv;
+
+    // Gibt das zuletzt gewählte Planeten-Prefab zurück (für RaumstationController)
+    public GameObject GetAusgewaehltesPrefab() => ausgewaehltesPrefab;
 
     // Wird von PlatzierungManager aufgerufen, wenn die Platzierung bestätigt wurde
     public void SonnensystemPlatziert(GameObject sonnensystem)
@@ -282,20 +317,40 @@ public class GameManager : MonoBehaviour
     public GameObject GetAktuellesObjekt() => _aktuellesObjekt;
 
     // ══════════════════════════════════════════════════════════════════════
-    // OBJEKT SPAWNEN (intern)
+    // RAUMSTATION – SZENE LADEN / ENTLADEN
     // ══════════════════════════════════════════════════════════════════════
 
-    private void PlanetObjektAnzeigen(GameObject prefab)
+    // Lädt die Raumstation-Szene additiv (beide Szenen laufen gleichzeitig).
+    // ImmersivePlanetView wird deaktiviert, der schwebende Planet versteckt.
+    // RaumstationController.Start() übernimmt nach dem Laden.
+    private IEnumerator RaumstationLaden()
     {
-        // Altes Objekt löschen (falls vorhanden)
-        if (_aktuellesObjekt != null)
-            Destroy(_aktuellesObjekt);
+        _raumstationAktiv = true;
 
-        // Position: spawnAbstand Meter vor der Kamera
-        Transform kamera = Camera.main.transform;
-        Vector3 position    = kamera.position + kamera.forward * spawnAbstand;
-        Quaternion rotation = Quaternion.Euler(0, kamera.eulerAngles.y + 180f, 0);
+        // ImmersivePlanetView sofort im gleichen Frame deaktivieren,
+        // damit sie nicht versucht den Planet zu skalieren
+        if (immersivePlanetView != null) immersivePlanetView.enabled = false;
 
-        _aktuellesObjekt = Instantiate(prefab, position, rotation);
+        // Schwebenden Planeten verstecken (RaumstationController zeigt eigene Version)
+        if (_aktuellesObjekt != null) _aktuellesObjekt.SetActive(false);
+
+        yield return SceneManager.LoadSceneAsync(raumstationSzeneName, LoadSceneMode.Additive);
+        Debug.Log("[GameManager] Raumstation geladen.");
     }
+
+    // Entlädt die Raumstation-Szene und stellt den vorherigen Zustand wieder her.
+    // RaumstationController.OnDestroy() teleportiert den Spieler zurück, bevor die Szene entladen wird.
+    private IEnumerator RaumstationEntladen()
+    {
+        yield return SceneManager.UnloadSceneAsync(raumstationSzeneName);
+
+        _raumstationAktiv = false;
+
+        // Schwebenden Planeten und ImmersivePlanetView wiederherstellen
+        if (_aktuellesObjekt != null) _aktuellesObjekt.SetActive(true);
+        if (immersivePlanetView != null) immersivePlanetView.enabled = true;
+
+        Debug.Log("[GameManager] Raumstation entladen.");
+    }
+
 }

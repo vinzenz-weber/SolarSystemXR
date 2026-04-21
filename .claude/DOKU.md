@@ -1,6 +1,6 @@
 # Dokumentation: Sonnensystem XR
 
-> **Letzte Aktualisierung:** 2026-04-15
+> **Letzte Aktualisierung:** 2026-04-21
 
 ---
 
@@ -78,8 +78,10 @@
   - `PLACEMENT`: AR-Platzierung; PlatzierungManager übernimmt, Sonnensystem-Spawn nach Bestätigung
   - `SONNENSYSTEM`: Sonnensystem steht; SonnensystemPanel mit Parametern sichtbar
   - `PLANET_SCHWEBEND`: Einzelplanet 1,5 m vor Spieler; PlanetDetailPanel + InfoPunkte aktiv
-  - `PLANET_IMMERSIV`: Planet in echter Größenrelation (Passthrough aus, Weltraum-Skybox); ImmersivPanel sichtbar
-  - Menü-Button (`OVRInput.Button.Start`): von überall zurück zu `AUSWAHL`
+  - `PLANET_IMMERSIV`: Raumstation-Szene lädt additiv; Spieler wird in die Station teleportiert; Planet erscheint draußen in echter Größe
+  - Menü-Button (`OVRInput.Button.Start`):
+    - In `PLANET_IMMERSIV`: zeigt nur das Raumstation-Mini-Menü ("Verlassen"), KEIN Hauptmenü
+    - In allen anderen aktiven Zuständen: zurück zu `AUSWAHL`
   - Passthrough-Toggle: `PassthroughEinschalten()` / `PassthroughAusschalten()` über `OVRPassthroughLayer`
 
 ### AR-Platzierung (Sonnensystem)
@@ -115,6 +117,18 @@
   - `Quaternion.LookRotation(-richtungZurKamera)` — entspricht Canvas-Konvention (Inhalt auf -Z-Face)
   - `LazyFollowUI.cs` kann auf beliebige World-Space-Canvas gelegt werden: folgt Spieler träge auf Augenhöhe (horizontale Blickrichtung, kein vertikales Kippen)
 
+### GrabHandle (Planeten/Canvas verschieben)
+
+- **Status:** Script + Prefab fertig; Editor-Verdrahtung für Canvas-Usecases ausstehend
+- **Beschreibung:** „Pille" unter einem grabbaren Objekt (Planet oder Canvas). Controller-Ray + Trigger → Objekt folgt dem Controller durch den Raum. Trigger loslassen → Objekt bleibt stehen.
+- **Umsetzung:** Reines Meta Interaction SDK + dünner Glue-Layer
+  - Prefab `Assets/Prefabs/GrabHandle.prefab` enthält die gesamte Interaktions-Kette: `CapsuleCollider` → `ColliderSurface` → `RayInteractable` → `Grabbable` (mit `GrabFreeTransformer` in `OneGrabTransformer`- und `TwoGrabTransformer`-Slot)
+  - Visual: `GrabHandle_Visual` (Capsule-Mesh) mit `MaterialPropertyBlockEditor` + `InteractableColorVisual` (4 Color-States: Normal/Hover/Select/Disabled)
+  - `GrabHandleGlue.cs`: nur projektspezifische Logik — LazyFollowUI-Pause beim Greifen, optionales Kamera-Ausrichten beim Loslassen. Wird via `InteractableUnityEventWrapper` (`WhenSelect`/`WhenUnselect`) verdrahtet.
+  - **Planeten-Usecase:** `ArPlanetInstanz` instanziert das Prefab unter dem Wrapper und ruft `Grabbable.InjectOptionalTargetTransform(wrapper)` — die Pille wird gegriffen, der Wrapper (= der ganze Planet) wird bewegt
+  - **Canvas-Usecase:** Prefab als Kind des Canvas platzieren, `Grabbable._targetTransform` auf den Canvas-Root setzen, `GrabHandleGlue`-Felder (`zielTransform`, `lazyFollow`, `ausrichtenBeimLoslassen=true`) im Inspector füllen
+- **Ray-Visual:** `RayInteractorRayVisual` aus `OVRInteractionComprehensive` — Farbe bei Hover/Select via `_hoverColor`/`_selectColor`, Sichtbarkeit bei leerem Raum via `_hideWhenNoInteractable`
+
 ### Info-Punkte & Info-Panel
 
 - **Status:** Scripts fertig, Unity-Editor-Setup ausstehend
@@ -131,15 +145,32 @@
     - `Debug.DrawRay` (cyan) für Scene-View-Sichtbarkeit beim Debuggen
     - Panel-Rotation: `Quaternion.LookRotation(-richtungZurKamera)` — Canvas-Konvention
 
-### Immersive Planeten-Ansicht
+### Raumstation & Immersive Planeten-Ansicht
 
-- **Status:** Script fertig, Unity-Editor-Setup ausstehend
-- **Beschreibung:** Planet wird in echter Größenrelation zur Person gezeigt (Passthrough aus, Weltraum). Referenz: Erde = 15 m VR-Radius.
-- **Umsetzung:** `ImmersivePlanetView.cs`
-  - Skalierungsformel: `vrRadius = (planet.diameter / 12756f) * 15f`
-  - Planet wird `vrRadius + abstandVonOberflaeche` Meter vor der Kamera positioniert
-  - Originalposition und -skalierung werden gespeichert und bei Verlassen des Zustands wiederhergestellt
-  - `massstabLabel` zeigt „1 m ≈ X km" als TMP_Text
+- **Status:** Scripts fertig, Unity-Editor-Setup teilweise ausstehend (Mini-Menü Canvas, SpawnPunkte)
+- **Beschreibung:** Beim Öffnen des Immersive Mode wird die Raumstation-Szene additiv geladen. Der Spieler wird in die Station teleportiert. Der ausgewählte Planet erscheint draußen in echter VR-Größe. Im Inneren der Station simuliert eine Trigger-Zone die Umgebungsbedingungen des gewählten Planeten (Schwerkraft, Atmosphäre, Wind).
+- **Umsetzung:**
+  - `GameManager.cs`: lädt `Raumstation.unity` additiv via `SceneManager.LoadSceneAsync(..., Additive)`, entlädt beim Verlassen
+  - `RaumstationController.cs` (in Raumstation.unity): Singleton; teleportiert Spieler zum SpawnPunkt; spawnt Planeten-Prefab in echter VR-Größe am PlanetSpawnPunkt; verwaltet Mini-Menü-Toggle
+  - Skalierungsformel (identisch zu `ImmersivePlanetView`): `vrRadius = (planet.diameter / 12756f) * erdeReferenzRadius` (Default: Erde = 10 m VR-Radius)
+  - `ImmersivePlanetView.cs`: bleibt erhalten für Fallback, wird im Raumstation-Modus von GameManager deaktiviert
+  - Teleport: nur Position, keine Rotation — OVR-Tracking-Basis bleibt erhalten
+  - Spieler-Ursprungsposition wird in `Start()` gespeichert, in `OnDestroy()` wiederhergestellt
+- **Mini-Menü:** WorldSpace Canvas in Raumstation.unity mit `LazyFollowUI`; ein Button „Immersive Mode verlassen" ruft `RaumstationController.VerlassenKlicken()` → `GameManager.ZurueckZuSchwebend()` auf
+
+### Planet-Umgebungszone
+
+- **Status:** Script fertig, Raumstation.unity-Setup erledigt (Zone vorhanden), Partikel-Tuning ausstehend
+- **Beschreibung:** Begehbarer Bereich (5 × 3 × 20 m) in der Raumstation. Beim Betreten herrschen die Umgebungsbedingungen des aktuell ausgewählten Planeten: Schwerkraft, Atmosphären-Partikel (Nebel/Wolken), Wind und Turbulenzen.
+- **Umsetzung:** `PlanetUmgebungsZone.cs` (`[RequireComponent(BoxCollider)]`)
+  - Liest `GameManager.Instance.ausgewaehlterPlanet` automatisch beim Betreten
+  - `Physics.gravity` + `SpielerBewegung.schwerkraft` werden auf Planetenwert gesetzt
+  - Atmosphäre: Partikel-Emissionsrate proportional zu `planet.nebelDichte` (0–1), Farbe aus `planet.atmosphaereFarbe`
+  - Wind: `ParticleSystem.NoiseModule` mit `planet.windTurbulenz`-Stärke, Geschwindigkeit aus `planet.windStaerke`
+  - Beim Verlassen: alles zurücksetzen
+  - Gizmo (Cyan-Quader) im Scene-View zur Sichtbarkeit
+- **PlanetData-Erweiterung:** 7 neue Felder unter `[Header("Umgebungszone")]`: `schwerkraft`, `atmosphaereFarbe`, `nebelDichte`, `hatWind`, `windStaerke`, `windTurbulenz`, `windPartikelFarbe`
+- **Echte Werte:** Alle 8 Planeten-Assets befüllt (z.B. Jupiter: 24,79 m/s², dichte orange Atmosphäre, extreme Winde; Mars: 3,71 m/s², roter Staub, Sandstürme; Merkur: 3,7 m/s², keine Atmosphäre)
 
 ### UI-System (Menü)
 
@@ -179,6 +210,9 @@
 | **InfoPanel-Architektur** | `InfoPanel.cs` liegt auf einem persistenten leeren „InfoSystem"-GameObject, NICHT auf dem Canvas. Sonst stoppt `Update()` wenn der Canvas via `SetActive(false)` ausgeblendet wird. |
 | **Trigger-Raycast** | `Physics.Raycast` ignoriert Trigger-Collider standardmäßig. `QueryTriggerInteraction.Collide` als letzten Parameter übergeben. |
 | **Canvas-Konvention** | `CanvasVorSpielerPositionieren()` in GameManager.cs ist die Referenz-Implementierung für korrekte Panel-Positionierung. |
+| **Meta Interaction SDK — Ray-Chain** | `Collider` → `ColliderSurface` → `RayInteractable` (Surface-Feld). `RayInteractable` nimmt KEINEN Collider direkt entgegen, sondern ein `ISurface`. `ColliderSurface` ist der Adapter. |
+| **Grabbable — Transformer-Slots** | `GrabFreeTransformer` (Nachfolger des deprecated `OneGrabFreeTransformer`) implementiert beide Interfaces (1- und 2-Hand-Grab). Daher muss er in `Grabbable._oneGrabTransformer` UND `_twoGrabTransformer` eingetragen werden. |
+| **Grabbable — Target-Override** | `Grabbable.InjectOptionalTargetTransform(t)` bewegt beim Greifen das übergebene Transform statt des GameObjects mit der Grabbable-Komponente. Damit wird die „Pille greifen, Canvas bewegen"-Mechanik ohne eigenen Code ermöglicht. |
 
 ---
 
@@ -196,7 +230,12 @@
 | 2026-04-13 | AR-Platzierung ohne Oberflächen-Erkennung | Sonnensystem soll überall im Raum platzierbar sein (nicht surface-locked) |
 | 2026-04-13 | Ring-Indikator statt halbtransparentem Vorschau-Prefab | Einfacher, kein Duplikat-Prefab nötig |
 | 2026-04-13 | InfoPanel auf separatem InfoSystem-Objekt | Canvas-`SetActive(false)` würde Update()-Loop töten; Singleton braucht persistentes Elternobjekt |
-| 2026-04-13 | Erde = 15 m VR-Radius als Immersiv-Referenz | Person steht „an der Oberfläche"; Planet füllt den Horizont sichtbar |
+| 2026-04-13 | Erde = 10 m VR-Radius als Immersiv-Referenz | Person steht „an der Oberfläche"; Planet füllt den Horizont sichtbar |
+| 2026-04-16 | Raumstation additiv laden statt Planet in Main-Szene skalieren | Eigenständige Szene mit baked Lighting, Umgebungszone und Teleport; saubere Trennung der Verantwortlichkeiten |
+| 2026-04-16 | OVR-Teleport ohne Rotation | Rotation des `spielerRoot` beim Teleport NICHT ändern — OVR-Tracking läuft relativ zur Root-Rotation; geänderte Rotation lässt die Szene „am Kopf kleben" |
+| 2026-04-16 | Prefab-Referenz in GameManager neben PlanetData | `PlanetButton` übergibt Prefab an `PlanetAuswaehlen()`, das jetzt `ausgewaehltesPrefab` speichert — RaumstationController kann so das richtige Prefab spawnen ohne PlanetData um ein `prefab`-Feld zu erweitern |
+| 2026-04-21 | GrabHandle komplett auf Meta Interaction SDK umgestellt | Vorher drei parallele Raycast-Systeme (eigenes GrabHandle.cs + ControllerRay-Quickfix + Interaction SDK fürs Canvas). Jetzt eine einzige Ray-Pipeline via RayInteractable + Grabbable; `GrabHandleGlue.cs` übernimmt nur noch die projektspezifischen Hooks (LazyFollow-Pause, Kamera-Ausrichtung) |
+| 2026-04-21 | GrabHandle als Prefab statt Code-Generation | `ArPlanetInstanz` instanziiert `Assets/Prefabs/GrabHandle.prefab` statt 45 Zeilen GameObject-Primitive-Aufbau. Plug-and-Play für weitere Usecases (jedes grabbare Objekt = Prefab spawnen + `InjectOptionalTargetTransform`) |
 
 ---
 
@@ -206,7 +245,10 @@
 |---|---|
 | SonnensystemPanel-Canvas im Unity-Editor erstellen (4 Slider + SonnensystemUI.cs) | Offen |
 | PlanetDetailPanel-Canvas im Unity-Editor erstellen (PlanetDetailUI.cs verdrahten) | Offen |
-| ImmersivPanel-Canvas im Unity-Editor erstellen (TMP_Text Maßstab + Zurück-Button) | Offen |
+| Raumstation: Mini-Menü Canvas erstellen (WorldSpace + LazyFollowUI + "Verlassen"-Button) | Offen |
+| Raumstation: SpawnPunkt-GO (Spielerposition) und PlanetSpawnPunkt-GO (außen) korrekt positionieren | Offen |
+| Raumstation: Atmosphäre- und Wind-PartikelSystems feintunen (Shape, Lifetime, Größe) | Offen |
+| Raumstation: Raumstation.unity in Build Settings eintragen | Offen |
 | „InfoSystem" leeres GameObject erstellen, InfoPanel.cs drauf, panelCanvas-Feld befüllen | Offen |
 | InfoPanel-Canvas als World-Space-Canvas erstellen (TitelText, InhaltText, Schließen-Button) | Offen |
 | 6 fehlende Planeten-Prefabs erstellen (Merkur, Venus, Mars, Saturn, Uranus, Neptun) | Offen |
@@ -214,4 +256,5 @@
 | PlanetData-Assets mit `beschreibung` und `fakten[]` befüllen | Offen |
 | OVRPassthroughLayer-Referenz im GameManager-Inspector verdrahten | Offen |
 | `StartPhase.cs` und `SpielerBewegung.cs` im Projekt aufräumen (nicht integrierte Altlasten) | Offen |
-| `OVRInteractionComprehensive` Ray nur bei Interactables sichtbar | Bekannt |
+| GrabHandle-Prefab auch für UI-Canvases (AuswahlMenü, SonnensystemPanel, PlanetDetailPanel) anbringen | Offen |
+| InfoPunkt ebenfalls auf `RayInteractable` + `InteractableUnityEventWrapper` migrieren (InfoPanel.cs hat heute denselben manuellen Raycast-Code wie das alte GrabHandle.cs) | Offen |

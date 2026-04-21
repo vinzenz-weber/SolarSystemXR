@@ -33,6 +33,11 @@ public class ImmersivePlanetView : MonoBehaviour
 
     void Update()
     {
+        // Im Raumstation-Modus übernimmt RaumstationController die Planetendarstellung.
+        // GameManager deaktiviert diese Komponente bereits beim Laden der Station,
+        // aber als zusätzliche Absicherung prüfen wir hier nochmal.
+        if (GameManager.Instance != null && GameManager.Instance.IstRaumstationAktiv()) return;
+
         bool sollteAktivSein = GameManager.Instance != null &&
                                GameManager.Instance.aktuellerZustand == SpielZustand.PLANET_IMMERSIV;
 

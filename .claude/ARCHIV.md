@@ -25,6 +25,53 @@
 
 ## Iterationen & Änderungen
 
+### GrabHandle: Manueller Raycast → Meta Interaction SDK + Prefab
+
+- **Datum:** 2026-04-21
+- **Vorher:** Drei parallele Ray-/Interaktions-Systeme
+  1. `GrabHandle.cs` (242 Zeilen) — eigener `Physics.Raycast` gegen einen Trigger-Collider, eigene `OVRInput.GetDown/GetUp`-Polling-Logik, eigener Material-Tausch via `HervorhebungSetzen()`. Ray-Origins waren die Transforms der Meta-RayInteractor-GameObjects (parasitär kopiert, nicht abonniert).
+  2. `ControllerRay.cs` (Quickfix für dieses Ticket) — eigener `LineRenderer` + zweiter `Physics.Raycast` um den unsichtbaren Controller-Ray im Passthrough sichtbar zu machen.
+  3. Meta Interaction SDK — wurde nur fürs Canvas-UI (Buttons im AuswahlCanvas) verwendet und blieb sonst als Black Box.
+  - `ArPlanetInstanz.GrabHandleErstellen()` baute das Handle mit 45 Zeilen Code: `new GameObject` + `AddComponent<CapsuleCollider>` + `GameObject.CreatePrimitive(Capsule)` + zwei neuen Materials + Script-Konfiguration. Keine Prefab-Wiederverwendung.
+- **Nachher:** Eine einzige Ray-Pipeline auf Basis des Meta Interaction SDK
+  - **Prefab `Assets/Prefabs/GrabHandle.prefab`** mit vollständiger Komponenten-Kette: `CapsuleCollider` → `ColliderSurface` → `RayInteractable` → `Grabbable` + `GrabFreeTransformer` + `InteractableUnityEventWrapper` + Visual mit `MaterialPropertyBlockEditor` + `InteractableColorVisual`.
+  - **`GrabHandleGlue.cs`** (~70 Zeilen): nur projektspezifische Hooks — LazyFollow-Pause beim Greifen, optionales Kamera-Ausrichten beim Loslassen. Verdrahtung über `WhenSelect`/`WhenUnselect` im Inspector (kein `OVRInput`-Polling mehr).
+  - **`ArPlanetInstanz.GrabHandleErstellen()`** auf ~15 Zeilen eingedampft: `Instantiate(grabHandlePrefab, transform)` + `Grabbable.InjectOptionalTargetTransform(transform)` — Pille wird gegriffen, Wrapper wird bewegt.
+  - Ray-Visual via `RayInteractorRayVisual` im `OVRInteractionComprehensive` (Nachfolger des deprecated `ControllerRayVisual`). `_hideWhenNoInteractable` löst den offenen DOKU-Punkt „Ray nur bei Interactables sichtbar" ohne eigenen Code.
+- **Grund:** Drei parallele Raycasts pro Frame + zwei konkurrierende Input-Pfade (OVRInput direkt vs. ISelector aus dem SDK) waren Bug-Multiplikator. Die fehlende visuelle Ray-Rückmeldung im Passthrough-Modus hätte man mit `ControllerRay.cs` zwar isoliert lösen können, aber das vierte Raycast-System zu ergänzen wäre die falsche Richtung gewesen — die Duplikation zog sich bereits durch zwei Features (GrabHandle + InfoPanel haben identische manuelle Raycast-Blöcke).
+- **Erkenntnisse:**
+  - Meta Interaction SDK: `RayInteractable` nimmt KEINEN `Collider` direkt, sondern eine `ISurface`. Der Adapter ist `ColliderSurface` — einfach übersehen, wenn man von Unity's Physics-Denken kommt.
+  - `OneGrabFreeTransformer` ist als deprecated markiert; der Nachfolger `GrabFreeTransformer` implementiert **beide** Interfaces (1- und 2-Hand-Grab) und muss daher in **beide** Slots der `Grabbable` (`_oneGrabTransformer` + `_twoGrabTransformer`) eingetragen werden.
+  - `Grabbable.InjectOptionalTargetTransform(t)` ist die offizielle API für „Ich greife Objekt A, aber bewege Objekt B" — exakt die GrabHandle-Mechanik, die vorher 40 Zeilen Offset-Rechnung im Update-Loop brauchte.
+  - Code-Saldo: **−280 Zeilen** (GrabHandle.cs 242 + ControllerRay.cs 38) **+70 Zeilen** (GrabHandleGlue.cs). Minus ~210 Zeilen bei gleichzeitig besserer SDK-Integration.
+  - Der Prefab-Ansatz öffnet Plug-and-Play: jedes grabbare Objekt (Canvases, einzelne Planeten, später InfoPunkte) = Prefab spawnen + `InjectOptionalTargetTransform`. Keine Kopie des Setup-Codes.
+
+### Immersive Ansicht: Planet in Main-Szene skalieren → Raumstation additiv laden
+
+- **Datum:** 2026-04-16
+- **Vorher:** `ImmersivePlanetView.cs` skalierte das schwebende Planeten-Objekt aus `PLANET_SCHWEBEND` direkt hoch (Erde = 10 m VR-Radius). Planet wurde `vrRadius + abstandVonOberflaeche` vor der Kamera positioniert. Passthrough wurde ausgeschaltet → schwarzer Weltraum-Hintergrund.
+- **Nachher:** `PLANET_IMMERSIV` lädt `Raumstation.unity` additiv via `SceneManager.LoadSceneAsync(..., Additive)`. Spieler wird in die Station teleportiert. `RaumstationController` spawnt das Planeten-Prefab in echter Größe am `PlanetSpawnPunkt`. `ImmersivePlanetView` wird deaktiviert solange die Station geladen ist.
+- **Grund:** Raumstation als eigenständiger Kontext (baked Lighting, Umgebungszone, eigene Geometrie) ist mit der alten Approach nicht kombinierbar. Additive Szene trennt Verantwortlichkeiten sauber.
+- **Erkenntnisse:** Bei additivem Szenen-Laden bleibt die erste Szene (Main.unity) vollständig aktiv — GameManager.Instance, Spieler-GameObject und alle Main-Objekte bleiben erhalten. Kein `DontDestroyOnLoad` nötig. Wichtig: Die zweite Szene teilt denselben World-Space; Objekte bei (0,0,0) in Raumstation.unity liegen bei (0,0,0) in World-Space.
+
+### Bug: OVR-Teleport mit Rotation → Szene klebt am Kopf
+
+- **Datum:** 2026-04-16
+- **Symptom:** Nach dem Teleport in die Raumstation drehte sich die gesamte Szene mit dem Kopf mit — als wäre sie am Headset festgeklebt.
+- **Ursache:** `spielerRoot.SetPositionAndRotation(pos, zielRotation)` setzte die Rotation des OVR-Player-Roots auf die Rotation des SpawnPunkt-GameObjects. In OVR läuft das gesamte Tracking relativ zur Root-Rotation. Wenn die Root-Rotation verändert wird, rotiert der Tracking-Raum mit — das Headset-Tracking wird dann in einem gedrehten Koordinatensystem interpretiert, was dazu führt dass physische Kopfbewegungen die scheinbare Szenenrotation verändern.
+- **Fix:** Beim Teleport nur Position setzen, Rotation beibehalten: `spielerRoot.SetPositionAndRotation(zielPosition, spielerRoot.rotation)`.
+- **Erkenntnisse:** Bei OVR/XR auf Quest gilt: die Rotation des Player-Roots (OVRPlayerController) NIEMALS beim Teleport verändern. Position kann frei gesetzt werden. Für eine Richtungsänderung beim Teleport gibt es separate OVR-Mechanismen (z.B. Snap Turn), aber das einfache Setzen der Root-Rotation bricht das Tracking.
+
+### Bug: SpawnPunkt auf Bodenhöhe → Spieler halb im Boden
+
+- **Datum:** 2026-04-16
+- **Symptom:** Spieler spawnierte halb im Boden der Raumstation.
+- **Ursache:** Der `CharacterController` hat eine Kapsel-Höhe (typisch ~1.8 m). `transform.position` ist die Mitte der Kapsel. Wenn der SpawnPunkt auf Bodenhöhe (Y = 0) liegt, liegt die Kapsel-Unterkante 0.9 m unterhalb des Bodens.
+- **Fix:** SpawnPunkt-GameObject im Editor ~0.9–1.0 m über dem Boden positionieren (Y anheben), sodass die Kapsel-Mitte auf der richtigen Höhe liegt.
+- **Erkenntnisse:** Unity-`CharacterController`-Teleport immer mit Kapselgröße im Kopf. Der `controller.center`-Offset (Default: `(0, 0, 0)` bei einer Kapsel mit `height = 2`) bedeutet, dass `transform.position` die Mitte der Kapsel ist. Für stehende Figuren: SpawnPunkt = gewünschte Fußposition + `capsuleHeight / 2`.
+
+
+
 ### Planet Shader: Gradient-Node für Atmosphären-Farbverlauf
 
 - **Datum:** 2026-04-15

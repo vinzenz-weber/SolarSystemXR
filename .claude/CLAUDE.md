@@ -80,6 +80,33 @@ Mehrere parallel existierende Systeme, die ähnliche Aufgaben erfüllen, führen
 
 ---
 
+## QA-Loop-Workflow
+
+Wenn der User ein Feature mit dem Zusatz **"QA-Loop"** (oder sinngemäß) anfragt, läuft der Implementierungsprozess in einer Feedback-Schleife:
+
+### Ablauf
+
+1. `feature-implementer`-Agent implementiert das Feature
+2. `qa-reviewer`-Agent reviewt das Ergebnis
+3. Ist der Status **⚠️ oder ❌**: `feature-implementer` bekommt das QA-Feedback und korrigiert
+4. Zurück zu Schritt 2 – bis der Status **✅** ist oder nach max. **3 Iterationen**
+5. Nach dem letzten Durchgang: Zusammenfassung an den User, was umgesetzt wurde und was (falls noch offen) manuell im Unity Editor getan werden muss
+
+### Wichtig
+
+- Der Loop läuft vollständig durch, bevor der User um Bestätigung gebeten wird
+- Nach max. 3 Iterationen wird der aktuelle Stand gezeigt, auch wenn der QA noch Einwände hat – dann entscheidet der User
+- Der QA-Reviewer macht nur **statische Code-Analyse** – ob das Feature in Unity tatsächlich funktioniert, muss der User im Editor/Headset testen
+
+### Aktivierung
+
+Der User schreibt z.B.:
+- "Implementiere Feature X, QA-Loop an"
+- "Bau Feature X mit QA-Loop"
+- "Feature X implementieren und iterieren bis es passt"
+
+---
+
 ## Performance & Optimierung
 
 Fokus auf Optimierung – die App soll visuell gut aussehen und gleichzeitig flüssig auf der Quest 3 im Standalone-Modus laufen.
