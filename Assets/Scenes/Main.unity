@@ -13266,8 +13266,7 @@ LineRenderer:
   m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 0f47bd67303d2504fa9402488459a1bc, type: 2}
+  m_Materials: []
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -21493,8 +21492,7 @@ LineRenderer:
   m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 0f47bd67303d2504fa9402488459a1bc, type: 2}
+  m_Materials: []
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -21591,7 +21589,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Oculus.Interaction::Oculus.Interaction.RayInteractorRayVisual
   _rayInteractor: {fileID: 2076726076}
-  _renderer: {fileID: 1253143321}
+  _renderer: {fileID: 2076726082}
   _materialPropertyBlockEditor: {fileID: 0}
   _minRayVisualStartOffset: 0
   _minRayVisualEndOffset: 0.05

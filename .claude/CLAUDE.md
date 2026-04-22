@@ -56,17 +56,54 @@ Alle Systeme (UI, InfoPanel, Interaktion, Orbits, etc.) werden zunächst **mit e
 
 ---
 
+## Meta XR Interaction SDK Samples – Zuerst prüfen
+
+Das Projekt hat die Meta XR Interaction SDK Samples (v85) bereits importiert unter:
+`Assets/Samples/Meta XR Interaction SDK/85.0.0/`
+
+**Diese Samples sind die erste Anlaufstelle für jede XR-Interaktionsfrage.** Bevor irgendein Interaktions-Code selbst geschrieben wird, werden die relevanten Sample-Szenen geprüft und deren Prefabs/Komponenten kopiert oder als Vorlage genutzt.
+
+### Verfügbare Sample-Szenen und ihre Relevanz
+
+| Szene | Verwendung |
+|---|---|
+| `ComprehensiveRigExample.unity` | Einstieg: zeigt das vollständige Interaction-Rig |
+| `RayExamples.unity` | Planeten per Ray auswählen/antippen |
+| `DistanceGrabExamples.unity` | Planeten aus der Distanz greifen |
+| `HandGrabExamples.unity` | Planeten mit der Hand greifen |
+| `TouchGrabExamples.unity` | Direktes Berühren von Objekten |
+| `UISetExamples.unity` | InfoPanel, Buttons, UI in VR |
+| `PanelWithManipulators.unity` | Panel im Raum positionieren/skalieren |
+| `PokeExamples.unity` | Finger-Tippen auf UI-Elemente |
+| `TransformerExamples.unity` | Objekte greifen, drehen, skalieren |
+| `SnapExamples.unity` | Objekte an Positionen einrasten lassen |
+| `LocomotionExamples.unity` | Bewegung im Raum |
+
+### Vorgehen
+
+1. Sample-Szene im Unity Editor öffnen und verstehen, wie die Komponenten verdrahtet sind
+2. Relevante Prefabs oder GameObjects aus der Sample-Szene in die eigene Szene kopieren
+3. Nur anpassen was nötig ist – nicht neu bauen
+4. Eigenen Code nur dann schreiben, wenn das Sample eine Lücke lässt (z.B. Anbindung an PlanetData ScriptableObject)
+
+### Warum
+
+Wochenlange eigene Implementierungen, die Meta bereits fertig und getestet bereitstellt, kosten unnötig Zeit. Die SDK-Samples sind für genau diese Hardware optimiert und werden von Meta gepflegt.
+
+---
+
 ## Bestehende Systeme bevorzugen
 
-**Bevor neuer Code geschrieben wird**, wird immer zuerst geprüft, ob ein bereits implementiertes System verwendet oder erweitert werden kann.
+**Bevor neuer Code geschrieben wird**, wird immer zuerst geprüft, ob ein bereits vorhandenes System verwendet oder erweitert werden kann.
 
 ### Regel
 
 Wenn ein neues Feature angefragt wird, gilt folgende Reihenfolge:
 
-1. **Bestehendes System nutzen** – passt ein vorhandenes Script oder eine Komponente bereits, wird dieses verwendet.
-2. **Bestehendes System erweitern** – kann das vorhandene System mit minimalem Aufwand angepasst werden, wird es erweitert statt neu gebaut.
-3. **Neues System bauen** – nur wenn die ersten beiden Optionen nicht sinnvoll umsetzbar sind.
+1. **Meta SDK Sample nutzen** – gibt es eine Sample-Szene oder ein Prefab im Interaction SDK, das die Funktionalität bereits zeigt, wird dieses kopiert und angepasst.
+2. **Bestehendes Projekt-System nutzen** – passt ein vorhandenes Script oder eine Komponente bereits, wird dieses verwendet.
+3. **Bestehendes System erweitern** – kann das vorhandene System mit minimalem Aufwand angepasst werden, wird es erweitert statt neu gebaut.
+4. **Neues System bauen** – nur wenn die ersten drei Optionen nicht sinnvoll umsetzbar sind.
 
 ### Warum
 
@@ -74,6 +111,7 @@ Mehrere parallel existierende Systeme, die ähnliche Aufgaben erfüllen, führen
 
 ### In der Praxis
 
+- Bei jeder Interaktionsfrage wird zuerst die Tabelle der Sample-Szenen oben konsultiert.
 - Vor jedem neuen Feature werden die relevanten bestehenden Scripts gelesen und verstanden.
 - Wenn eine Erweiterung eines bestehenden Scripts sinnvoller ist als ein neues Script, wird das explizit kommuniziert und vorgeschlagen.
 - Neue Scripts werden nur angelegt, wenn eine klare, eigenständige Verantwortlichkeit vorliegt, die kein bestehendes System sinnvoll übernehmen kann.
