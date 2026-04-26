@@ -13,16 +13,24 @@ MonoBehaviour:
   m_Name: Neptun
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
   planetName: Neptun
-  subHeadline: 
-  shortDescription: 
+  subHeadline: "St\xFCrmischer Eisriese am \xE4u\xDFeren Rand"
+  shortDescription: "Der \xE4u\xDFerste regul\xE4re Planet ist eine dunkle, eiskalte
+    Welt, die von \xDCberschallwinden und massiven St\xFCrmen in ihrer tiefblauen
+    Atmosph\xE4re gepeitscht wird."
   planetImage: {fileID: 0}
   diameter: 49244
+  axialTilt: 28.32
+  rotationSpeed: 0.671
   semiMajorAxis: 30.069
   eccentricity: 0.009
+  inclination: 1.76
+  longitudeOfAscendingNode: 131.78
+  argumentOfPeriapsis: 273.18
+  meanAnomalyAtEpoch: 256.22
   orbitalPeriod: 60190
-  inclination: 1.8
-  rotationSpeed: 0
   planetLineColor: {r: 0, g: 0.52716243, b: 0.5943396, a: 0}
+  planetPrefab: {fileID: 255502603945367742, guid: 0e017df732271d0449a01e290c6151af, type: 3}
+  previewPrefab: {fileID: 3586017214850719460, guid: 1de18179a99296140b56591d2d4bc949, type: 3}
   schwerkraft: 11.15
   atmosphaereFarbe: {r: 0.1, g: 0.2, b: 0.8, a: 0.6}
   nebelDichte: 0.5
@@ -32,5 +40,3 @@ MonoBehaviour:
   windPartikelFarbe: {r: 0.2, g: 0.4, b: 0.9, a: 1}
   beschreibung: 
   fakten: []
-  planetPrefab: {fileID: 255502603945367742, guid: 0e017df732271d0449a01e290c6151af, type: 3}
-  previewPrefab: {fileID: 3586017214850719460, guid: 1de18179a99296140b56591d2d4bc949, type: 3}

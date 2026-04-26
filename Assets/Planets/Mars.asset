@@ -13,16 +13,24 @@ MonoBehaviour:
   m_Name: Mars
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
   planetName: Mars
-  subHeadline: 
-  shortDescription: 
+  subHeadline: Der rostige, kalte Rote Planet
+  shortDescription: "Eine eisige W\xFCstenwelt mit riesigen Vulkanen und tiefen Canyons.
+    Seine rote Farbe verdankt er dem Eisenoxid \u2013 also Rost \u2013 auf seiner
+    staubigen Oberfl\xE4che."
   planetImage: {fileID: 0}
   diameter: 6780
+  axialTilt: 25.19
+  rotationSpeed: 1.026
   semiMajorAxis: 1.524
-  eccentricity: 0.093
-  orbitalPeriod: 687
+  eccentricity: 0.0934
   inclination: 1.85
-  rotationSpeed: 0
+  longitudeOfAscendingNode: 49.56
+  argumentOfPeriapsis: 286.5
+  meanAnomalyAtEpoch: 19.38
+  orbitalPeriod: 686.98
   planetLineColor: {r: 0.4433962, g: 0.04392132, b: 0.04392132, a: 0}
+  planetPrefab: {fileID: 382333082992069579, guid: 5aebfbcd39f4e2e48a7fa08e006b597e, type: 3}
+  previewPrefab: {fileID: 3586017214850719460, guid: 1de18179a99296140b56591d2d4bc949, type: 3}
   schwerkraft: 3.71
   atmosphaereFarbe: {r: 0.8, g: 0.4, b: 0.2, a: 0.4}
   nebelDichte: 0.2
@@ -32,5 +40,3 @@ MonoBehaviour:
   windPartikelFarbe: {r: 0.8, g: 0.35, b: 0.1, a: 1}
   beschreibung: 
   fakten: []
-  planetPrefab: {fileID: 0}
-  previewPrefab: {fileID: 3586017214850719460, guid: 1de18179a99296140b56591d2d4bc949, type: 3}

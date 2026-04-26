@@ -13,18 +13,24 @@ MonoBehaviour:
   m_Name: Merkur
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
   planetName: Merkur
-  subHeadline: Kleine Baby PLanet ja
-  shortDescription: Consequat et elit est in laboris Lorem cillum ipsum exercitation
-    magna fugiat culpa. Cupidatat cillum consectetur exercitation duis id ad proident
-    occaecat. Cillum reprehenderit
+  subHeadline: "Kleinster und sonnenn\xE4chster Planet"
+  shortDescription: "Merkur ist eine von Kratern \xFCbers\xE4te, extrem hei\xDFe
+    Welt ohne echte Atmosph\xE4re, die der Sonne so nah ist, dass ein Jahr hier nur
+    88 Tage dauert."
   planetImage: {fileID: 0}
-  diameter: 4880
-  semiMajorAxis: 0.387
-  eccentricity: 0.205
-  orbitalPeriod: 88
+  diameter: 4879
+  axialTilt: 0.03
+  rotationSpeed: 58.65
+  semiMajorAxis: 387
+  eccentricity: 0.2056
   inclination: 7
-  rotationSpeed: 0
+  longitudeOfAscendingNode: 48.33
+  argumentOfPeriapsis: 29.12
+  meanAnomalyAtEpoch: 174.79
+  orbitalPeriod: 87.97
   planetLineColor: {r: 0.25943398, g: 1, b: 0.86579055, a: 0}
+  planetPrefab: {fileID: 3683713850469700940, guid: 23fb04a1d6167154abdfcffb97e93352, type: 3}
+  previewPrefab: {fileID: 3586017214850719460, guid: 1de18179a99296140b56591d2d4bc949, type: 3}
   schwerkraft: 3.7
   atmosphaereFarbe: {r: 0.3, g: 0.3, b: 0.3, a: 0.3}
   nebelDichte: 0
@@ -34,5 +40,3 @@ MonoBehaviour:
   windPartikelFarbe: {r: 1, g: 1, b: 1, a: 1}
   beschreibung: 
   fakten: []
-  planetPrefab: {fileID: 3683713850469700940, guid: 23fb04a1d6167154abdfcffb97e93352, type: 3}
-  previewPrefab: {fileID: 3586017214850719460, guid: 1de18179a99296140b56591d2d4bc949, type: 3}

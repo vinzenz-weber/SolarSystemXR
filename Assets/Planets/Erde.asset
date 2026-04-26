@@ -13,16 +13,24 @@ MonoBehaviour:
   m_Name: Erde
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
   planetName: Erde
-  subHeadline: 
-  shortDescription: 
+  subHeadline: Unsere Heimat, reich an Leben
+  shortDescription: "Der einzige bekannte Planet mit fl\xFCssigem Wasser auf der
+    Oberfl\xE4che und einer sauerstoffreichen Atmosph\xE4re, die eine unglaubliche
+    Vielfalt an Leben erm\xF6glicht."
   planetImage: {fileID: 0}
   diameter: 12742
+  axialTilt: 23.44
+  rotationSpeed: 0.997
   semiMajorAxis: 1
-  eccentricity: 0.017
-  orbitalPeriod: 365.26
+  eccentricity: 0.0167
   inclination: 0
-  rotationSpeed: 0
+  longitudeOfAscendingNode: 0
+  argumentOfPeriapsis: 102.94
+  meanAnomalyAtEpoch: 356.04
+  orbitalPeriod: 365.25
   planetLineColor: {r: 0, g: 0.13945818, b: 1, a: 0}
+  planetPrefab: {fileID: 5324902377633925947, guid: 834b4ca4c418fb148b28957a9ee6e89c, type: 3}
+  previewPrefab: {fileID: 3586017214850719460, guid: 1de18179a99296140b56591d2d4bc949, type: 3}
   schwerkraft: 9.81
   atmosphaereFarbe: {r: 0.4, g: 0.6, b: 1, a: 0.2}
   nebelDichte: 0.05
@@ -32,5 +40,3 @@ MonoBehaviour:
   windPartikelFarbe: {r: 1, g: 1, b: 1, a: 1}
   beschreibung: 
   fakten: []
-  planetPrefab: {fileID: 5324902377633925947, guid: 834b4ca4c418fb148b28957a9ee6e89c, type: 3}
-  previewPrefab: {fileID: 3586017214850719460, guid: 1de18179a99296140b56591d2d4bc949, type: 3}

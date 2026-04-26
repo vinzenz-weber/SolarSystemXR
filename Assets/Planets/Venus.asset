@@ -13,16 +13,24 @@ MonoBehaviour:
   m_Name: Venus
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
   planetName: Venus
-  subHeadline: 
-  shortDescription: 
+  subHeadline: "H\xF6llisch hei\xDFe Zwillingsschwester der Erde"
+  shortDescription: "Obwohl sie \xE4hnlich gro\xDF wie die Erde ist, verbirgt sich
+    unter der dichten, giftigen Wolkendecke der Venus eine extrem hei\xDFe Oberfl\xE4che
+    mit enormem Druck."
   planetImage: {fileID: 0}
   diameter: 12104
+  axialTilt: 177.36
+  rotationSpeed: -243.02
   semiMajorAxis: 0.723
-  eccentricity: 0.007
-  orbitalPeriod: 225
-  inclination: 3.4
-  rotationSpeed: 0
+  eccentricity: 0.0067
+  inclination: 3.39
+  longitudeOfAscendingNode: 76.68
+  argumentOfPeriapsis: 54.88
+  meanAnomalyAtEpoch: 50.11
+  orbitalPeriod: 224.7
   planetLineColor: {r: 0.7475339, g: 0, b: 0.7735849, a: 0}
+  planetPrefab: {fileID: 6686543377770100158, guid: 02b152abccecbaa46b65776b238425ed, type: 3}
+  previewPrefab: {fileID: 3586017214850719460, guid: 1de18179a99296140b56591d2d4bc949, type: 3}
   schwerkraft: 8.87
   atmosphaereFarbe: {r: 0.9, g: 0.7, b: 0.2, a: 0.6}
   nebelDichte: 0.8
@@ -32,5 +40,3 @@ MonoBehaviour:
   windPartikelFarbe: {r: 0.85, g: 0.7, b: 0.3, a: 1}
   beschreibung: 
   fakten: []
-  planetPrefab: {fileID: 0}
-  previewPrefab: {fileID: 3586017214850719460, guid: 1de18179a99296140b56591d2d4bc949, type: 3}

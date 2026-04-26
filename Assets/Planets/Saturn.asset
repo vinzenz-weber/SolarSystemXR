@@ -13,16 +13,24 @@ MonoBehaviour:
   m_Name: Saturn
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
   planetName: Saturn
-  subHeadline: 
-  shortDescription: 
+  subHeadline: Der Planet der beeindruckenden Ringe
+  shortDescription: "Bekannt f\xFCr sein atemberaubendes und komplexes Ringsystem
+    aus Eis und Gestein, ist Saturn ein gewaltiger Gasriese mit massiven, dynamischen
+    Wettersystemen."
   planetImage: {fileID: 0}
   diameter: 116464
+  axialTilt: 26.73
+  rotationSpeed: 0.444
   semiMajorAxis: 9.537
-  eccentricity: 0.054
-  orbitalPeriod: 10759
-  inclination: 2.5
-  rotationSpeed: 0
+  eccentricity: 0.0541
+  inclination: 2.48
+  longitudeOfAscendingNode: 113.66
+  argumentOfPeriapsis: 339.39
+  meanAnomalyAtEpoch: 317.02
+  orbitalPeriod: 10759.22
   planetLineColor: {r: 0.3584906, g: 0.25637043, b: 0.05918476, a: 0}
+  planetPrefab: {fileID: 6963458221942637868, guid: 70ef21b87131b5c4ba6ce6f38ac78058, type: 3}
+  previewPrefab: {fileID: 3586017214850719460, guid: 1de18179a99296140b56591d2d4bc949, type: 3}
   schwerkraft: 10.44
   atmosphaereFarbe: {r: 0.9, g: 0.85, b: 0.5, a: 0.4}
   nebelDichte: 0.3
@@ -32,5 +40,3 @@ MonoBehaviour:
   windPartikelFarbe: {r: 0.9, g: 0.85, b: 0.6, a: 1}
   beschreibung: 
   fakten: []
-  planetPrefab: {fileID: 0}
-  previewPrefab: {fileID: 3586017214850719460, guid: 1de18179a99296140b56591d2d4bc949, type: 3}
