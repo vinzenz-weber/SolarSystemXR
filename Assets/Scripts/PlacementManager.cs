@@ -14,21 +14,22 @@ public class PlacementManager : MonoBehaviour
     // Aktuell zu platzierender Planet (null wenn Sonnensystem-Modus)
     private PlanetData currentPlanetData;
 
-    // Sonnensystem-Modus: hier merken wir uns das Prefab, das stattdessen platziert wird
+    // Sonnensystem-Modus: hier merken wir uns das Prefab, das stattdessen platziert wird.
     private GameObject _currentSolarSystemPrefab;
     private bool _isSolarSystemMode;
 
     private GameObject previewInstance;
     private GameObject visualizerInstance;
 
-    // Liste aller bereits in der Welt platzierten Objekte (Planeten oder Sonnensystem),
-    // damit wir sie beim Wechsel des Modus wieder aufräumen können.
-    private List<GameObject> _placedObjects = new List<GameObject>();
+    // Neu: Planeten und Sonnensystem getrennt merken, damit beim Platzieren
+    // gezielt nur das jeweils andere System geloescht wird.
+    private List<GameObject> _placedPlanetObjects = new List<GameObject>();
+    private GameObject _placedSolarSystemObject;
 
     public float planetHeight = 0.15f;
 
     [Header("Scaling")]
-    public float earthDiameterInVR = 0.2f; // 0.2 Meter = 20 cm für die Erde
+    public float earthDiameterInVR = 0.2f; // 0.2 Meter = 20 cm fuer die Erde
     private const float earthDiameterInKm = 12742f;
 
     // ----------- AUSWAHL: einzelner Planet -----------
@@ -57,25 +58,40 @@ public class PlacementManager : MonoBehaviour
         _currentSolarSystemPrefab = solarSystemPrefab;
 
         // Vorschau ist hier dasselbe Prefab. Falls du eine eigene Vorschau willst,
-        // kannst du im MainMenuController ein zusätzliches "previewPrefab" durchreichen.
+        // kannst du im MainMenuController ein zusaetzliches previewPrefab durchreichen.
         previewInstance = Instantiate(_currentSolarSystemPrefab);
 
         visualizerInstance = Instantiate(placementVisualizerPrefab);
     }
 
-    // ----------- AUFRÄUMEN -----------
-    // Zerstört alle bisher platzierten Objekte. Wird vom MainMenuController
-    // aufgerufen, wenn der User in den Sonnensystem-Modus wechselt.
+    // ----------- AUFRAEUMEN -----------
+    // Zerstoert alle bisher platzierten Objekte, wenn das Menue einen kompletten Reset braucht.
     public void ClearPlacedObjects()
     {
-        for (int i = 0; i < _placedObjects.Count; i++)
+        ClearPlacedPlanets();
+        ClearPlacedSolarSystem();
+    }
+
+    private void ClearPlacedPlanets()
+    {
+        for (int i = 0; i < _placedPlanetObjects.Count; i++)
         {
-            if (_placedObjects[i] != null)
+            if (_placedPlanetObjects[i] != null)
             {
-                Destroy(_placedObjects[i]);
+                Destroy(_placedPlanetObjects[i]);
             }
         }
-        _placedObjects.Clear();
+
+        _placedPlanetObjects.Clear();
+    }
+
+    private void ClearPlacedSolarSystem()
+    {
+        if (_placedSolarSystemObject != null)
+        {
+            Destroy(_placedSolarSystemObject);
+            _placedSolarSystemObject = null;
+        }
     }
 
     private void ClearPreview()
@@ -89,7 +105,7 @@ public class PlacementManager : MonoBehaviour
 
     void Update()
     {
-        // Wenn weder Planet noch Sonnensystem ausgewählt ist, machen wir nichts.
+        // Wenn weder Planet noch Sonnensystem ausgewaehlt ist, machen wir nichts.
         if (previewInstance == null || visualizerInstance == null)
         {
             lineRenderer.enabled = false;
@@ -129,21 +145,24 @@ public class PlacementManager : MonoBehaviour
             // --- PLATZIEREN ---
             if (canPlace == true && OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
             {
-                GameObject spawned;
-
                 if (_isSolarSystemMode == true)
                 {
-                    spawned = Instantiate(_currentSolarSystemPrefab, previewInstance.transform.position, Quaternion.identity);
+                    // Neu: Sonnensystem ersetzt alle einzeln platzierten Planeten.
+                    ClearPlacedPlanets();
+                    ClearPlacedSolarSystem();
+
+                    _placedSolarSystemObject = Instantiate(_currentSolarSystemPrefab, previewInstance.transform.position, Quaternion.identity);
                 }
                 else
                 {
-                    spawned = Instantiate(currentPlanetData.planetPrefab, previewInstance.transform.position, Quaternion.identity);
-                    float vrScale = GetScaledSize(currentPlanetData.diameter);
-                    spawned.transform.localScale = new Vector3(vrScale, vrScale, vrScale);
-                }
+                    // Neu: Ein einzelner Planet ersetzt ein bereits platziertes Sonnensystem.
+                    ClearPlacedSolarSystem();
 
-                // In die Liste, damit wir das Objekt später wieder aufräumen können
-                _placedObjects.Add(spawned);
+                    GameObject spawnedPlanet = Instantiate(currentPlanetData.planetPrefab, previewInstance.transform.position, Quaternion.identity);
+                    float vrScale = GetScaledSize(currentPlanetData.diameter);
+                    spawnedPlanet.transform.localScale = new Vector3(vrScale, vrScale, vrScale);
+                    _placedPlanetObjects.Add(spawnedPlanet);
+                }
 
                 Destroy(previewInstance);
                 Destroy(visualizerInstance);

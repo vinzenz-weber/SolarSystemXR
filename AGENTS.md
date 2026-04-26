@@ -210,4 +210,10 @@ Diese Datei (AGENTS.md) und `CLAUDE.md` müssen **immer synchron gehalten werden
 - Jede Änderung an AGENTS.md muss auch in CLAUDE.md übernommen werden
 - Beide Dateien enthalten identische Inhalte
 
+### Ablageorte
+
+- `AGENTS.md` liegt absichtlich im Projekt-Root, damit sie in neuen Chats leichter gefunden wird.
+- `CLAUDE.md` bleibt als versteckte Datei unter `.claude/CLAUDE.md`.
+- Wenn eine der beiden Dateien aktualisiert wird, muss immer auch die andere Datei am jeweiligen Speicherort mit aktualisiert werden.
+
 Dies gewährleistet, dass Agents und manueller Code-Review immer die gleichen Richtlinien befolgen.
