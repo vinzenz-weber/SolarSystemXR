@@ -11,6 +11,14 @@ public class PlacementManager : MonoBehaviour
 
     public GameObject placementVisualizerPrefab;
 
+    [Header("Planet Info Panel")]
+    public PlanetInfoPanelManager planetInfoPanelManager;
+
+    [Header("Sonnensystem UI")]
+    [Tooltip("World-Space-UI mit SonnensystemUI und vier Slidern. Optional, wenn das UI schon im Sonnensystem-Prefab liegt.")]
+    public SonnensystemUI sonnensystemUIPrefab;
+    private SonnensystemUI _currentSonnensystemUI;
+
     // Aktuell zu platzierender Planet (null wenn Sonnensystem-Modus)
     private PlanetData currentPlanetData;
 
@@ -70,6 +78,11 @@ public class PlacementManager : MonoBehaviour
     {
         ClearPlacedPlanets();
         ClearPlacedSolarSystem();
+
+        if (planetInfoPanelManager != null)
+        {
+            planetInfoPanelManager.HidePanel();
+        }
     }
 
     private void ClearPlacedPlanets()
@@ -83,10 +96,21 @@ public class PlacementManager : MonoBehaviour
         }
 
         _placedPlanetObjects.Clear();
+
+        if (planetInfoPanelManager != null)
+        {
+            planetInfoPanelManager.HidePanel();
+        }
     }
 
     private void ClearPlacedSolarSystem()
     {
+        if (_currentSonnensystemUI != null)
+        {
+            Destroy(_currentSonnensystemUI.gameObject);
+            _currentSonnensystemUI = null;
+        }
+
         if (_placedSolarSystemObject != null)
         {
             Destroy(_placedSolarSystemObject);
@@ -152,6 +176,7 @@ public class PlacementManager : MonoBehaviour
                     ClearPlacedSolarSystem();
 
                     _placedSolarSystemObject = Instantiate(_currentSolarSystemPrefab, previewInstance.transform.position, Quaternion.identity);
+                    SetupSonnensystemUI(_placedSolarSystemObject);
                 }
                 else
                 {
@@ -161,7 +186,10 @@ public class PlacementManager : MonoBehaviour
                     GameObject spawnedPlanet = Instantiate(currentPlanetData.planetPrefab, previewInstance.transform.position, Quaternion.identity);
                     float vrScale = GetScaledSize(currentPlanetData.diameter);
                     spawnedPlanet.transform.localScale = new Vector3(vrScale, vrScale, vrScale);
+                    RegisterSelectablePlanet(spawnedPlanet, currentPlanetData);
                     _placedPlanetObjects.Add(spawnedPlanet);
+
+                    ShowPlanetInfo(currentPlanetData);
                 }
 
                 Destroy(previewInstance);
@@ -202,5 +230,64 @@ public class PlacementManager : MonoBehaviour
     float GetScaledSize(float realSizeInKm)
     {
         return (realSizeInKm / earthDiameterInKm) * earthDiameterInVR;
+    }
+
+    private void RegisterSelectablePlanet(GameObject planetObject, PlanetData data)
+    {
+        if (planetObject == null || data == null) return;
+
+        PlanetSelectable selectable = planetObject.GetComponent<PlanetSelectable>();
+        if (selectable == null)
+        {
+            selectable = planetObject.AddComponent<PlanetSelectable>();
+        }
+
+        selectable.planetData = data;
+    }
+
+    private void ShowPlanetInfo(PlanetData data)
+    {
+        PlanetInfoPanelManager manager = planetInfoPanelManager != null
+            ? planetInfoPanelManager
+            : PlanetInfoPanelManager.Instance;
+
+        if (manager != null)
+        {
+            manager.ShowPlanet(data);
+        }
+    }
+
+    private void SetupSonnensystemUI(GameObject solarSystemObject)
+    {
+        if (solarSystemObject == null) return;
+
+        if (planetInfoPanelManager != null)
+        {
+            planetInfoPanelManager.HidePanel();
+        }
+
+        SolarSystemManager solarSystemManager = solarSystemObject.GetComponentInChildren<SolarSystemManager>();
+        if (solarSystemManager == null)
+        {
+            Debug.LogWarning("PlacementManager: Kein SolarSystemManager im platzierten Sonnensystem gefunden.");
+            return;
+        }
+
+        SonnensystemUI ui = solarSystemObject.GetComponentInChildren<SonnensystemUI>(true);
+
+        if (ui == null && sonnensystemUIPrefab != null)
+        {
+            ui = Instantiate(sonnensystemUIPrefab);
+        }
+
+        if (ui == null)
+        {
+            Debug.LogWarning("PlacementManager: Kein SonnensystemUI gefunden oder zugewiesen.");
+            return;
+        }
+
+        _currentSonnensystemUI = ui;
+        ui.gameObject.SetActive(true);
+        ui.Bind(solarSystemManager);
     }
 }
