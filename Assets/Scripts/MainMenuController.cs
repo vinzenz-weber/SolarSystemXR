@@ -4,36 +4,34 @@ using UnityEngine.UI;
 
 public class MainMenuController : MonoBehaviour
 {
-    // ----------- PLANETEN-PANEL -----------
-    [Header("Planeten-Panel: Root + UI-Texte")]
-    [Tooltip("Das ganze linke Panel mit Planet-Auswahl, Beschreibung und Planet-Buttons.")]
-    public GameObject planetenPanel;
+    // ----------- LEARN-PANEL -----------
+    [Header("Learn-Panel: Root + UI-Texte")]
+    [Tooltip("Das linke Panel mit Planet-Auswahl, Beschreibung und Planet-Buttons.")]
+    public GameObject learnPanel;
 
     public TextMeshProUGUI menuHeadline;
-    //public TextMeshProUGUI subHeadline;
     public TextMeshProUGUI descriptionText;
     public Image backgroundImage;
 
-    [Tooltip("Text auf dem Start-Experience-Button im Planeten-Panel.")]
+    [Tooltip("Text auf dem Start-Experience-Button im Learn-Panel.")]
     public TextMeshProUGUI startButtonLabel;
 
-    // ----------- SONNENSYSTEM-PANEL -----------
-    [Header("Sonnensystem-Panel: Root + Daten")]
-    [Tooltip("Das ganze rechte Panel.")]
-    public GameObject sonnensystemPanel;
+    // ----------- TEST-PANEL -----------
+    [Header("Test-Panel: Root + Daten")]
+    [Tooltip("Das rechte Panel (Test / Minispiele).")]
+    public GameObject testPanel;
 
     [Tooltip("Das Prefab des kompletten Sonnensystems, das platziert werden soll.")]
     public GameObject sonnensystemPrefab;
 
     public TextMeshProUGUI sonnensystemHeadline;
-    //public TextMeshProUGUI sonnensystemSubHeadline;
     public TextMeshProUGUI sonnensystemDescription;
 
     // ----------- TAB-BUTTONS -----------
-    [Header("Tabs unten (Planeten / Sonnensystem)")]
-    [Tooltip("Optional: visuelles Highlight für aktive/inaktive Tabs.")]
-    public Image planetenTabBackground;
-    public Image sonnensystemTabBackground;
+    [Header("Tabs (Learn / Test)")]
+    [Tooltip("Visuelles Highlight für den aktiven/inaktiven Learn-Tab.")]
+    public Image learnTabBackground;
+    public Image testTabBackground;
     public Color activeTabColor = new Color(0.7f, 0.7f, 0.7f, 1f);
     public Color inactiveTabColor = new Color(1f, 1f, 1f, 0f);
 
@@ -45,22 +43,19 @@ public class MainMenuController : MonoBehaviour
 
     void Start()
     {
-        // App startet im Planeten-Tab
-        ShowPlanetenTab();
+        ShowLearnTab();
     }
 
     // =================================================================
     //                           TAB-WECHSEL
     // =================================================================
 
-    // Wird vom Tab-Button "Planeten" aufgerufen
-    public void ShowPlanetenTab()
+    // Wird vom Tab-Button "Learn" aufgerufen
+    public void ShowLearnTab()
     {
-        if (planetenPanel != null) planetenPanel.SetActive(true);
-        if (sonnensystemPanel != null) sonnensystemPanel.SetActive(false);
+        if (learnPanel != null) learnPanel.SetActive(true);
+        if (testPanel != null) testPanel.SetActive(false);
 
-        // Wenn der User in den Planeten-Modus wechselt, soll das bereits
-        // platzierte Sonnensystem (oder alte Planeten) verschwinden.
         if (placementManager != null)
         {
             placementManager.ClearPlacedObjects();
@@ -69,14 +64,12 @@ public class MainMenuController : MonoBehaviour
         UpdateTabHighlight(true);
     }
 
-    // Wird vom Tab-Button "Sonnensystem" aufgerufen
-    public void ShowSonnensystemTab()
+    // Wird vom Tab-Button "Test" aufgerufen
+    public void ShowTestTab()
     {
-        if (planetenPanel != null) planetenPanel.SetActive(false);
-        if (sonnensystemPanel != null) sonnensystemPanel.SetActive(true);
+        if (learnPanel != null) learnPanel.SetActive(false);
+        if (testPanel != null) testPanel.SetActive(true);
 
-        // Wenn der User in den Sonnensystem-Modus wechselt, sollen alle
-        // bereits platzierten Planeten verschwinden.
         if (placementManager != null)
         {
             placementManager.ClearPlacedObjects();
@@ -85,17 +78,17 @@ public class MainMenuController : MonoBehaviour
         UpdateTabHighlight(false);
     }
 
-    private void UpdateTabHighlight(bool planetenActive)
+    private void UpdateTabHighlight(bool learnActive)
     {
-        if (planetenTabBackground != null)
-            planetenTabBackground.color = planetenActive ? activeTabColor : inactiveTabColor;
+        if (learnTabBackground != null)
+            learnTabBackground.color = learnActive ? activeTabColor : inactiveTabColor;
 
-        if (sonnensystemTabBackground != null)
-            sonnensystemTabBackground.color = planetenActive ? inactiveTabColor : activeTabColor;
+        if (testTabBackground != null)
+            testTabBackground.color = learnActive ? inactiveTabColor : activeTabColor;
     }
 
     // =================================================================
-    //                       PLANETEN-AUSWAHL
+    //                       PLANETEN-AUSWAHL (Learn)
     // =================================================================
 
     // Wird vom PlanetMenuButton aufgerufen, wenn ein Planet ausgewählt wird
@@ -104,16 +97,12 @@ public class MainMenuController : MonoBehaviour
         _currentPlanet = data;
 
         menuHeadline.text = data.planetName;
-        //subHeadline.text = data.subHeadline;
 
         if (descriptionText != null)
         {
             descriptionText.text = data.beschreibung;
         }
 
-        // --- HIER IST DIE ÄNDERUNG ---
-        // Da data.planetImage nun ein Sprite ist, können wir es direkt zuweisen,
-        // ohne nochmals ".sprite" dranhängen zu müssen.
         if (backgroundImage != null && data.planetImage != null)
         {
             backgroundImage.sprite = data.planetImage;
@@ -125,7 +114,7 @@ public class MainMenuController : MonoBehaviour
         }
     }
 
-    // Wird vom Start-Experience-Button im Planeten-Panel aufgerufen
+    // Wird vom Start-Experience-Button im Learn-Panel aufgerufen
     public void StartExperience()
     {
         if (_currentPlanet == null)
@@ -143,10 +132,10 @@ public class MainMenuController : MonoBehaviour
     }
 
     // =================================================================
-    //                       SONNENSYSTEM-AUSWAHL
+    //                       SONNENSYSTEM (Learn → SolarSystem)
     // =================================================================
 
-    // Wird vom Start-Experience-Button im Sonnensystem-Panel aufgerufen
+    // Wird vom Start-Button im Sonnensystem-Bereich aufgerufen
     public void StartSolarSystemExperience()
     {
         if (sonnensystemPrefab == null)

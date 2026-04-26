@@ -199,3 +199,15 @@ Claude aktualisiert diese Datei **eigenständig und proaktiv**, ohne explizite A
 - Kurzlebige, task-spezifische Infos – die gehören ins Memory oder in DOKU/ARCHIV
 - Code-Snippets oder fertige Implementierungen
 - Redundantes, das sich aus dem Code selbst ergibt
+
+---
+
+## Synchronisation von CLAUDE.md und AGENTS.md
+
+Diese Datei (CLAUDE.md) und `AGENTS.md` müssen **immer synchron gehalten werden**. Das bedeutet:
+
+- Jede Änderung an CLAUDE.md muss auch in AGENTS.md übernommen werden
+- Jede Änderung an AGENTS.md muss auch in CLAUDE.md übernommen werden
+- Beide Dateien enthalten identische Inhalte
+
+Dies gewährleistet, dass Agents und manueller Code-Review immer die gleichen Richtlinien befolgen.
