@@ -13,11 +13,18 @@ MonoBehaviour:
   m_Name: Merkur
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
   planetName: Merkur
+  subHeadline: Kleine Baby PLanet ja
+  shortDescription: Consequat et elit est in laboris Lorem cillum ipsum exercitation
+    magna fugiat culpa. Cupidatat cillum consectetur exercitation duis id ad proident
+    occaecat. Cillum reprehenderit
+  planetImage: {fileID: 0}
   diameter: 4880
   semiMajorAxis: 0.387
   eccentricity: 0.205
   orbitalPeriod: 88
   inclination: 7
+  rotationSpeed: 0
+  planetLineColor: {r: 0.25943398, g: 1, b: 0.86579055, a: 0}
   schwerkraft: 3.7
   atmosphaereFarbe: {r: 0.3, g: 0.3, b: 0.3, a: 0.3}
   nebelDichte: 0
@@ -25,4 +32,7 @@ MonoBehaviour:
   windStaerke: 0
   windTurbulenz: 0
   windPartikelFarbe: {r: 1, g: 1, b: 1, a: 1}
-  planetLineColor: {r: 0.25943398, g: 1, b: 0.86579055, a: 0}
+  beschreibung: 
+  fakten: []
+  planetPrefab: {fileID: 3683713850469700940, guid: 23fb04a1d6167154abdfcffb97e93352, type: 3}
+  previewPrefab: {fileID: 3586017214850719460, guid: 1de18179a99296140b56591d2d4bc949, type: 3}

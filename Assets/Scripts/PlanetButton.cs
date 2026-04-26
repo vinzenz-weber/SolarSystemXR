@@ -9,13 +9,4 @@ public class PlanetButton : MonoBehaviour
 
     [Tooltip("Das 3D-Objekt das angezeigt werden soll wenn dieser Button geklickt wird")]
     public GameObject anzeigeObjekt;
-
-    [Tooltip("Referenz auf den GameManager in der Szene")]
-    public GameManager gameManager;
-
-    // Diese Methode verdrahtest du im Inspector unter OnClick()
-    public void OnKlicken()
-    {
-        gameManager.PlanetAuswaehlen(meinPlanet, anzeigeObjekt);
-    }
 }

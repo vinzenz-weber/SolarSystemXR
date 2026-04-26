@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.UI;
 
 // Dieser Befehl erlaubt es dir, die Daten per Rechtsklick im Projektfenster zu erstellen
 [CreateAssetMenu(fileName = "NeuerPlanet", menuName = "Sonnensystem/Planeten Daten")]
@@ -6,6 +7,11 @@ public class PlanetData : ScriptableObject
 {
     [Header("Physikalische Werte")]
     public string planetName;
+    public string subHeadline;
+    public string shortDescription;
+
+    public Image planetImage;
+
     [Tooltip("in km")]
     public float diameter;        // Durchmesser in km (z.B. 12756 für Erde)
     
@@ -53,4 +59,7 @@ public class PlanetData : ScriptableObject
 
     [Tooltip("3–5 kurze Stichpunkte (z.B. Durchmesser, Atmosphäre, Besonderheiten).")]
     public string[] fakten;
+
+    public GameObject planetPrefab;
+    public GameObject previewPrefab;
 }
