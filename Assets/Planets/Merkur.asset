@@ -21,7 +21,7 @@ MonoBehaviour:
   diameter: 4879
   axialTilt: 0.03
   rotationSpeed: 58.65
-  semiMajorAxis: 387
+  semiMajorAxis: 0.387
   eccentricity: 0.2056
   inclination: 7
   longitudeOfAscendingNode: 48.33

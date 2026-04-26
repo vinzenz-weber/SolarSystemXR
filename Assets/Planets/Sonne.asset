@@ -13,23 +13,24 @@ MonoBehaviour:
   m_Name: Sonne
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
   planetName: Sonne
-  subHeadline: 
-  shortDescription: 
+  subHeadline: Unser Stern im Zentrum
+  shortDescription: "Ein gigantischer, leuchtender Ball aus Plasma, der 99,8 % der
+    Masse des gesamten Sonnensystems ausmacht und uns Licht sowie W\xE4rme spendet."
   planetImage: {fileID: 0}
-  diameter: 6780
-  axialTilt: 0
-  rotationSpeed: 0
+  diameter: 1392700
+  axialTilt: 7.25
+  rotationSpeed: 27.28
   semiMajorAxis: 0
   eccentricity: 0
   inclination: 0
   longitudeOfAscendingNode: 0
   argumentOfPeriapsis: 0
   meanAnomalyAtEpoch: 0
-  orbitalPeriod: 0
+  orbitalPeriod: 1
   planetLineColor: {r: 0, g: 0, b: 0, a: 0}
   planetPrefab: {fileID: 1531383183244880890, guid: f96440d0fe44712459bb72d9dcaa523f, type: 3}
   previewPrefab: {fileID: 3586017214850719460, guid: 1de18179a99296140b56591d2d4bc949, type: 3}
-  schwerkraft: 9.81
+  schwerkraft: 274
   atmosphaereFarbe: {r: 0.5, g: 0.5, b: 0.5, a: 0.3}
   nebelDichte: 0
   hatWind: 0
