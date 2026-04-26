@@ -13,11 +13,16 @@ MonoBehaviour:
   m_Name: Erde
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
   planetName: Erde
+  subHeadline: 
+  shortDescription: 
+  planetImage: {fileID: 0}
   diameter: 12742
   semiMajorAxis: 1
   eccentricity: 0.017
   orbitalPeriod: 365.26
   inclination: 0
+  rotationSpeed: 0
+  planetLineColor: {r: 0, g: 0.13945818, b: 1, a: 0}
   schwerkraft: 9.81
   atmosphaereFarbe: {r: 0.4, g: 0.6, b: 1, a: 0.2}
   nebelDichte: 0.05
@@ -25,4 +30,7 @@ MonoBehaviour:
   windStaerke: 0
   windTurbulenz: 0
   windPartikelFarbe: {r: 1, g: 1, b: 1, a: 1}
-  planetLineColor: {r: 0, g: 0.13945818, b: 1, a: 0}
+  beschreibung: 
+  fakten: []
+  planetPrefab: {fileID: 5324902377633925947, guid: 834b4ca4c418fb148b28957a9ee6e89c, type: 3}
+  previewPrefab: {fileID: 3586017214850719460, guid: 1de18179a99296140b56591d2d4bc949, type: 3}

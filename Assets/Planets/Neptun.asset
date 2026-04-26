@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: Neptun
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
   planetName: Neptun
+  subHeadline: 
+  shortDescription: 
+  planetImage: {fileID: 0}
   diameter: 49244
   semiMajorAxis: 30.069
   eccentricity: 0.009
@@ -30,3 +33,4 @@ MonoBehaviour:
   beschreibung: 
   fakten: []
   planetPrefab: {fileID: 255502603945367742, guid: 0e017df732271d0449a01e290c6151af, type: 3}
+  previewPrefab: {fileID: 3586017214850719460, guid: 1de18179a99296140b56591d2d4bc949, type: 3}

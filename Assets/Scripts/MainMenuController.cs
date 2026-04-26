@@ -50,7 +50,7 @@ public class MainMenuController : MonoBehaviour
     }
 
     // =================================================================
-    //                          TAB-WECHSEL
+    //                           TAB-WECHSEL
     // =================================================================
 
     // Wird vom Tab-Button "Planeten" aufgerufen
@@ -111,9 +111,12 @@ public class MainMenuController : MonoBehaviour
             descriptionText.text = data.beschreibung;
         }
 
+        // --- HIER IST DIE ÄNDERUNG ---
+        // Da data.planetImage nun ein Sprite ist, können wir es direkt zuweisen,
+        // ohne nochmals ".sprite" dranhängen zu müssen.
         if (backgroundImage != null && data.planetImage != null)
         {
-            backgroundImage.sprite = data.planetImage.sprite;
+            backgroundImage.sprite = data.planetImage;
         }
 
         if (startButtonLabel != null)

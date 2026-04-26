@@ -2,11 +2,11 @@ using UnityEngine;
 
 public class SolarSystemManager : MonoBehaviour
 {
-    [Header("Tisch-Skalierung")]
-    [Tooltip("1 AU in Meter. 0.006 = Neptune bei ~18cm Radius.")]
-    public float distanceScale = 0.006f;
+    [Header("XR-Skalierung (Zimmer-Maßstab)")]
+    [Tooltip("1 AU in Meter. Für max 1.5m Radius (Neptun bei ~30 AU) muss dieser Wert ca. 0.05f sein.")]
+    public float distanceScale = 0.05f;
 
-    [Tooltip("Planetengröße relativ zur Erde (12756 km). 0.002 = Erde ~2mm Durchmesser.")]
+    [Tooltip("Planetengröße relativ zur Erde (12742 km). 0.002 = Erde ~2mm Durchmesser.")]
     public float planetSizeScale = 0.002f;
 
     [Header("Sonne")]
@@ -15,16 +15,28 @@ public class SolarSystemManager : MonoBehaviour
     [Range(0.01f, 1f)]
     public float sunSizeRatio = 0.5f;
 
-    // Sonnen-Durchmesser skaliert automatisch mit distanceScale:
-    // Merkur-Perihelabstand = 0.387 * (1 - 0.205) = 0.307 AU
     public float SunDiameter => sunSizeRatio * 0.307f * distanceScale * 2f;
 
-    [Header("Simulation")]
+    [Header("Simulation & Zeit")]
     [Tooltip("Simulationsgeschwindigkeit in Tagen pro Sekunde.")]
     public float timeScale = 1f;
+    
+    [Tooltip("Die aktuell simulierte Zeit in Tagen seit dem Start (Epoche). Wichtig für die korrekte Planetenposition.")]
+    public double currentSimulationDays = 0.0;
 
-    [Header("Lernmodus")]
+    [Header("Lernmodus (Übertreibungen)")]
     [Tooltip("Multiplikator für alle Exzentrizitäten. 1 = realistisch, >1 = übertriebene Ellipsen.")]
     [Range(0f, 5f)]
     public float exzentrizitaetMultiplikator = 1f;
+
+    [Tooltip("Multiplikator für Inklination (Bahnneigung) zur besseren Visualisierung der schiefen Bahnen.")]
+    [Range(0f, 5f)]
+    public float inklinationMultiplikator = 1f;
+
+    private void Update()
+    {
+        // Lässt die Zeit im Sonnensystem basierend auf timeScale vergehen.
+        // double wird verwendet, um Präzisionsverluste bei sehr großen Werten zu vermeiden.
+        currentSimulationDays += timeScale * Time.deltaTime;
+    }
 }

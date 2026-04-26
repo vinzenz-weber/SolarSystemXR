@@ -25,6 +25,18 @@
 
 ## Iterationen & Änderungen
 
+### Großer Rebuild: MRUK-Stack & Prototyp-Vollumfang → Depth-API + Tab-Menü
+
+- **Datum:** 2026-04-26
+- **Vorher:** State Machine mit 6 Zuständen (`START → AUSWAHL → PLACEMENT → SONNENSYSTEM / PLANET_SCHWEBEND / PLANET_IMMERSIV`); MRUK-basierte Platzierung via `MRUKRoom.Raycast()`; additive Raumstation-Szene mit Spieler-Teleport und begehbarer Umgebungszone; eigenes InfoPanel-Singleton mit InfoPunkt-Hotspots auf jedem Planeten; Detail-Panel für schwebenden Einzel-Planeten; ImmersivePlanetView als Fallback. Insgesamt 8 Scripts (`ArPlanetInstanz`, `ArPlanetManager`, `ImmersivePlanetView`, `InfoPanel`, `PlanetDetailUI`, `PlanetUmgebungsZone`, `PlatzierungManager`, `RaumstationController`).
+- **Nachher:** State Machine auf 3 Zustände reduziert (`MAIN_MENU → PLACEMENT → WORLD`); Platzierung über Meta **Depth API** (`EnvironmentRaycastManager.Raycast`) **ohne MRUK-Room**; Hauptmenü mit Tab-Toggle (Planeten / Sonnensystem) — der Tab-Wechsel zerstört platzierte Objekte über `PlacementManager.ClearPlacedObjects()`. Der `PlacementManager` unterstützt zwei Modi (Einzel-Planet mit km→VR-Skalierung, oder Sonnensystem-Prefab in fester Größe). Acht Scripts ersatzlos entfernt; neu hinzugekommen sind nur `MainMenuController.cs` und `PlanetMenuButton.cs`. `GameManager.cs` von 357 auf ~80 Zeilen.
+- **Grund:** Durch Versionssprünge der Meta-XR-SDKs haben viele Teile des bisherigen Stacks immer wieder gebrochen — `OVRSceneManager` deprecated, MRUK-API geändert, `OneGrabFreeTransformer` ersetzt, Anchor-Kette anders verkabelt. Jeder Update-Versuch hat einen anderen Teil zerschossen, weil mehrere SDK-Generationen gleichzeitig benutzt wurden. Die Konsequenz: kompletter Rebuild auf der minimal nötigen Oberfläche. Die Depth API liefert Position + Normal direkt aus dem Depth-Mesh und braucht weder ein `MRUKRoom` noch eine Anchor-Hierarchie — damit fällt der häufigste Bruchpunkt weg.
+- **Erkenntnisse:**
+  - Meta-SDK-Stacks dürfen nicht versionsübergreifend gemischt werden. Wenn ein Subsystem auf v60 angefangen wurde und ein anderes auf v85 dazukommt, gibt es bei jedem Update Versionskonflikte. Lieber eine schmale API-Oberfläche pro Feature wählen und SDK-Updates komplett mitnehmen.
+  - **Depth API > MRUK-Room für reine Boden-/Tisch-Platzierung.** MRUK lohnt sich erst bei semantischer Raumkenntnis (Wand, Decke, Möbel-Anchors). Für „lege ein Objekt auf eine annähernd horizontale Fläche" ist `EnvironmentRaycastManager.Raycast` + `Dot(normal, Vector3.up) > 0.85` der einfachere und stabilere Weg.
+  - Prototyp-Scope-Reduktion zahlt sich aus: 8 entfernte Scripts haben den Codebase-Footprint massiv vereinfacht, ohne dass der Wireframe darunter leidet — er sieht ohnehin nur noch zwei Modi vor.
+  - Tracking-Liste platzierter Objekte (`_placedObjects`) ist die richtige Stelle für „Modus-Wechsel räumt die Welt auf"-Logik. Alternative wäre ein Tag/Layer-basiertes `FindObjectsOfType` gewesen — Liste ist günstiger und expliziter.
+
 ### GrabHandle: Manueller Raycast → Meta Interaction SDK + Prefab
 
 - **Datum:** 2026-04-21
@@ -187,6 +199,11 @@
 | 2026-04-12 | "Placement" Layer (Layer 6) als primäre Raycast-Methode | Mit MRUK.Raycast() nicht mehr nötig; bleibt nur als Desktop-Fallback |
 | 2026-04-12 | MRUKRoom.Raycast() statt Physics.Raycast | MRUK temporär aus GameManager entfernt; DesktopPlacement nutzt Physics.Raycast |
 | 2026-04-12 | MRUK als Singleton (MRUK.Instance) | MRUK aus GameManager entfernt; Placement noch ausstehend |
+| 2026-04-13 | State Machine mit 6 Zuständen + Raumstation/Immersive-Modus | Durch Meta-SDK-Versionssprünge wiederholt gebrochen; Prototyp auf 3 States reduziert (MAIN_MENU/PLACEMENT/WORLD) |
+| 2026-04-13 | InfoPanel + InfoPunkt-Hotspots auf Planeten | Im Rebuild gestrichen — UI-Fokus liegt jetzt auf dem Hauptmenü-Tab-Toggle |
+| 2026-04-16 | Raumstation additiv laden + begehbare Umgebungszone | Im Rebuild gestrichen — Scope-Reduktion nach SDK-Versionschaos |
+| 2026-04-21 | GrabHandle-Prefab als Bewegungsmechanik | Vorerst nicht mehr verdrahtet; bleibt als Code/Prefab im Repo, ist aber an keinen aktiven Flow angebunden |
+| 2026-04-26 | MRUKRoom-Raycast für Platzierung | Endgültig durch Depth API (`EnvironmentRaycastManager.Raycast`) ersetzt — Boden/Tisch-Erkennung über Normal-Vergleich, kein Room-Setup nötig |
 
 ---
 

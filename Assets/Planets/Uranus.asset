@@ -13,11 +13,16 @@ MonoBehaviour:
   m_Name: Uranus
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
   planetName: Uranus
+  subHeadline: 
+  shortDescription: 
+  planetImage: {fileID: 0}
   diameter: 25362
   semiMajorAxis: 19.191
   eccentricity: 0.047
   orbitalPeriod: 30687
   inclination: 0.8
+  rotationSpeed: 0
+  planetLineColor: {r: 0.051982276, g: 0.6792453, b: 0.041651852, a: 0}
   schwerkraft: 8.87
   atmosphaereFarbe: {r: 0.4, g: 0.85, b: 0.85, a: 0.5}
   nebelDichte: 0.4
@@ -25,4 +30,7 @@ MonoBehaviour:
   windStaerke: 12
   windTurbulenz: 0.4
   windPartikelFarbe: {r: 0.5, g: 0.9, b: 0.9, a: 1}
-  planetLineColor: {r: 0.051982276, g: 0.6792453, b: 0.041651852, a: 0}
+  beschreibung: 
+  fakten: []
+  planetPrefab: {fileID: 0}
+  previewPrefab: {fileID: 3586017214850719460, guid: 1de18179a99296140b56591d2d4bc949, type: 3}

@@ -1,34 +1,54 @@
 using UnityEngine;
-using UnityEngine.UI;
 
-// Dieser Befehl erlaubt es dir, die Daten per Rechtsklick im Projektfenster zu erstellen
 [CreateAssetMenu(fileName = "NeuerPlanet", menuName = "Sonnensystem/Planeten Daten")]
 public class PlanetData : ScriptableObject
 {
-    [Header("Physikalische Werte")]
+    [Header("Allgemeine Informationen")]
     public string planetName;
     public string subHeadline;
+    
+    [TextArea(2, 4)]
     public string shortDescription;
 
-    public Image planetImage;
+    [Tooltip("Nutze Sprite anstelle von UI.Image, da ScriptableObjects keine Szenen-Komponenten speichern können.")]
+    public Sprite planetImage;
 
-    [Tooltip("in km")]
-    public float diameter;        // Durchmesser in km (z.B. 12756 für Erde)
+    [Header("Physikalische Werte")]
+    [Tooltip("Durchmesser in km (z.B. 12742 für Erde)")]
+    public float diameter;
     
-    [Header("Umlaufbahn")]
-    [Tooltip("in AU")]
-    public float semiMajorAxis;   // Große Halbachse in AU (z.B. 1.0 für Erde)
+    [Tooltip("Achsenneigung in Grad (z.B. 23.44 für Erde). Wichtig für die korrekte 3D-Drehung.")]
+    public float axialTilt;
 
-    public float eccentricity;      // Exzentrizität (0 = Kreis, >0 = Ellipse)
-    [Tooltip("in Days")]
-    public float orbitalPeriod; // Dauer eines Umlaufs in Tagen (z.B. 365.25)
-    [Tooltip("in Degrees")]
-    public float inclination;       // Bahnneigung in Grad
-    [Tooltip("in Days")]
+    [Tooltip("Dauer einer Eigenrotation in Tagen (z.B. 0.997 für Erde)")]
     public float rotationSpeed;
 
+    [Header("Umlaufbahn (Kepler-Elemente)")]
+    [Tooltip("Große Halbachse in AU (z.B. 1.0 für Erde)")]
+    public float semiMajorAxis;
+
+    [Tooltip("Exzentrizität (0 = perfekter Kreis, nahe 1 = extreme Ellipse)")]
+    public float eccentricity;
+
+    [Tooltip("Bahnneigung in Grad relativ zur Ekliptik")]
+    public float inclination;
+
+    [Tooltip("Länge des aufsteigenden Knotens in Grad (Drehung der Bahnebene)")]
+    public float longitudeOfAscendingNode;
+
+    [Tooltip("Argument der Periapsis in Grad (Drehung der Ellipse in der Bahnebene)")]
+    public float argumentOfPeriapsis;
+
+    [Tooltip("Mittlere Anomalie zur Epoche in Grad (Startposition des Planeten bei Zeit = 0)")]
+    public float meanAnomalyAtEpoch;
+
+    [Tooltip("Dauer eines kompletten Umlaufs um die Sonne in Tagen")]
+    public float orbitalPeriod;
+
     [Header("Visualisierung")]
-    public Color planetLineColor; // Farbe des Planeten
+    public Color planetLineColor = Color.white;
+    public GameObject planetPrefab;
+    public GameObject previewPrefab;
 
     [Header("Umgebungszone")]
     [Tooltip("Schwerkraft in m/s² (Erde = 9.81, Jupiter = 24.79, Mars = 3.71)")]
@@ -52,14 +72,11 @@ public class PlanetData : ScriptableObject
     [Tooltip("Farbe der Windpartikel (z.B. Roter Staub bei Mars)")]
     public Color windPartikelFarbe = Color.white;
 
-    [Header("Informationen")]
+    [Header("Zusätzliche Informationen")]
     [Tooltip("Kurze Beschreibung des Planeten, erscheint im Detail-Panel.")]
-    [TextArea(2, 4)]
+    [TextArea(3, 6)]
     public string beschreibung;
 
     [Tooltip("3–5 kurze Stichpunkte (z.B. Durchmesser, Atmosphäre, Besonderheiten).")]
     public string[] fakten;
-
-    public GameObject planetPrefab;
-    public GameObject previewPrefab;
 }

@@ -13,11 +13,16 @@ MonoBehaviour:
   m_Name: Saturn
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
   planetName: Saturn
+  subHeadline: 
+  shortDescription: 
+  planetImage: {fileID: 0}
   diameter: 116464
   semiMajorAxis: 9.537
   eccentricity: 0.054
   orbitalPeriod: 10759
   inclination: 2.5
+  rotationSpeed: 0
+  planetLineColor: {r: 0.3584906, g: 0.25637043, b: 0.05918476, a: 0}
   schwerkraft: 10.44
   atmosphaereFarbe: {r: 0.9, g: 0.85, b: 0.5, a: 0.4}
   nebelDichte: 0.3
@@ -25,4 +30,7 @@ MonoBehaviour:
   windStaerke: 15
   windTurbulenz: 0.5
   windPartikelFarbe: {r: 0.9, g: 0.85, b: 0.6, a: 1}
-  planetLineColor: {r: 0.3584906, g: 0.25637043, b: 0.05918476, a: 0}
+  beschreibung: 
+  fakten: []
+  planetPrefab: {fileID: 0}
+  previewPrefab: {fileID: 3586017214850719460, guid: 1de18179a99296140b56591d2d4bc949, type: 3}
