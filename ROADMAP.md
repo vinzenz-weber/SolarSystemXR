@@ -62,12 +62,12 @@ Main Menu (Passthrough)
 ---
 
 ### Phase 5 — Minispiel 1: Reihenfolge
-- [ ] Prefab `Minigame_Reihenfolge.prefab`: 8 Bahn-Ringe + 8 grabbable Planeten
-- [ ] Snap-Mechanik aus `SnapExamples.unity` kopiert (`SnapInteractable` + `SnapInteractor`)
-- [ ] Pro Bahn `correctOrbitIndex` (0=Merkur … 7=Neptun)
-- [ ] Neues Script `ReihenfolgeChecker.cs`: Snap-Events → Material grün/rot
-- [ ] "Geschafft!"-Hinweis bei allen 8 grün
-- [ ] Reset-Button leert Snaps, randomisiert Bench
+- [x] Prefab `Minigame_Reihenfolge.prefab`: 8 Bahn-Ringe + 8 grabbable Planeten
+- [x] Snap-Mechanik aus `SnapExamples.unity` kopiert (`SnapInteractable` + `SnapInteractor`)
+- [x] Pro Bahn `correctOrbitIndex` (0=Merkur … 7=Neptun)
+- [x] Neues Script `ReihenfolgeChecker.cs`: Snap-Events → Material grün/rot
+- [x] "Geschafft!"-Hinweis bei allen 8 grün
+- [x] Reset-Button leert Snaps, randomisiert Bench
 - [ ] **Verifikation im Headset:** Greifen, snappen, Farbwechsel, Reset
 
 ---

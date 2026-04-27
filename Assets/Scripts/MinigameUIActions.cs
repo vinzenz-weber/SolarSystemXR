@@ -26,4 +26,15 @@ public class MinigameUIActions : MonoBehaviour
 
         MinigameManager.Instance.EndMinigame();
     }
+
+    public void ResetCurrentMinigame()
+    {
+        if (MinigameManager.Instance == null)
+        {
+            Debug.LogWarning("MinigameUIActions: Kein MinigameManager in der Szene gefunden.");
+            return;
+        }
+
+        MinigameManager.Instance.ResetMinigame();
+    }
 }
