@@ -52,11 +52,12 @@ Main Menu (Passthrough)
 ---
 
 ### Phase 4 — Test-Tab: Skelett mit drei Einträgen + Reset-Mechanik
-- [ ] Im Test-Panel drei Einträge: "Reihenfolge", "Size", "Gravity (Coming Soon)"
-- [ ] Neues Script `MinigameManager.cs` mit `StartMinigame()`, `EndMinigame()`, `ResetMinigame()`
-- [ ] `GameManager.cs` um Minispiel-States erweitern
-- [ ] Pro Minispiel ein World-Space-UI: Reset-Button + Zurück-Button
-- [ ] **Verifikation:** Drei Einträge schalten korrekt, Reset funktioniert, Zurück führt ins Hauptmenü
+- [x] Im Test-Panel drei Einträge: "Reihenfolge", "Size", "Gravity (Coming Soon)"
+- [x] Neues Script `MinigameManager.cs` mit `StartMinigame()`, `EndMinigame()`, `ResetMinigame()`
+- [x] `GameManager.cs` um Minispiel-States erweitern
+- [x] Pro Minispiel ein World-Space-UI: Abschliessen-Button + Beenden-Button
+- [x] Reset-Button im Main Menu setzt Quiz-Fortschritt zurueck
+- [x] **Verifikation:** Drei Eintraege schalten korrekt, Abschliessen speichert Erfolg, Beenden fuehrt ohne Erfolg ins Hauptmenue, Reset setzt beide Quizzes auf offen
 
 ---
 

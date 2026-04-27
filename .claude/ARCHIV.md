@@ -25,6 +25,36 @@
 
 ## Iterationen & Änderungen
 
+### Phase 4: Runtime-Placeholder-UI -> editorbasierte Minigame-Prefabs
+
+- **Datum:** 2026-04-27
+- **Vorher:** Das Test-Tab-Skelett erzeugte zeitweise Placeholder-Buttons und Minigame-Panels per Code. Diese UI funktionierte nicht sauber mit Quest-Controller-Rays, weil das notwendige Meta Interaction SDK Canvas-Setup (`Add Ray Interaction to Canvas`) nicht zur Runtime-Erzeugung passte. Der Reset-Button war zunaechst als Reset des aktiven Minigames gedacht.
+- **Nachher:** `Button_Reihenfolge`, `Button_Size` und `Button_Gravity` sind Editor-UI im Main Menu. `MinigameManager` instanziiert nur noch zugewiesene Minigame-Prefabs und erzeugt keine Fallback-UI. `Minigame_Reihenfolge.prefab` und `Minigame_Size.prefab` enthalten eigene World-Space-UIs mit `MinigameUIActions`: `Abschliessen` speichert den Quiz-Erfolg, `Beenden` kehrt ohne Erfolg ins Main Menu zurueck. Der Reset-Button im Main Menu setzt den gespeicherten Fortschritt beider Quizzes zurueck.
+- **Grund:** XR-UI braucht die Komponenten und Event-Pipeline des Meta Interaction SDK. Diese im Code nachzubauen waere fehleranfaellig und widerspricht der Projektregel, SDK-Samples/Editor-Setups zu bevorzugen.
+- **Erkenntnisse:**
+  - World-Space-Canvas fuer Quest-Controller-Ray-Interaktion sollte als Prefab/Editor-Objekt gebaut und mit `Add Ray Interaction to Canvas` vorbereitet werden.
+  - Runtime-erzeugte UI ist fuer schnelle Desktop-Prototypen praktisch, aber in XR schnell eine Sackgasse, wenn Interaction-SDK-Komponenten fehlen.
+  - Completion-Status gehoert nicht in das UI-Prefab, sondern in eine zentrale Minigame-Verwaltung (`MinigameManager` + `PlayerPrefs`), damit Buttons und zukuenftige Checker-Scripts denselben Zustand verwenden.
+
+### Editor-Placement: Depth API im Playmode deaktiviert
+
+- **Datum:** 2026-04-27
+- **Vorher:** `PlacementManager` rief auch im Unity Editor `EnvironmentRaycastManager.Raycast(...)` auf. Dadurch war der Playmode auf Windows traege, obwohl die echte Depth API fuer die finale Platzierung ohnehin nur im Quest-Build relevant ist.
+- **Nachher:** `PlacementManager.useEditorFallbackPlacement` ist standardmaessig aktiv. Im Editor wird der `EnvironmentRaycastManager` deaktiviert und die Vorschau an einen festen Punkt vor dem Controller-Ray gesetzt. Im Quest-Build bleibt die Depth-API-Platzierung unveraendert aktiv.
+- **Grund:** UI-, Menue- und State-Flow sollen schnell im Editor testbar sein, ohne auf langsame oder nicht verfuegbare Depth-API-Daten zu warten.
+- **Erkenntnisse:** Entwicklungs-Fallbacks muessen die teuren XR-Subsysteme wirklich umgehen, nicht nur deren Ergebnis ignorieren. Sonst bleibt die Performance-Strafe im Playmode bestehen.
+
+### Phase 3: Einzelne InfoPanels -> globales InfoPanel + Runtime-Binding
+
+- **Datum:** 2026-04-27
+- **Vorher:** Die Doku ging noch von getrennten Planeten-/Sonnensystem-Panels und einem weitgehend verworfenen InfoPanel/InfoPunkt-Ansatz aus. Fuer das Sonnensystem-UI war unklar, wie ein `SolarSystemManager` referenziert werden soll, obwohl dieser erst durch das platzierte Prefab entsteht.
+- **Nachher:** Phase 3 nutzt ein globales, wiederverwendbares `PlanetInfoPanel`. Es zeigt per `Bind(PlanetData)` immer die Daten des aktuell platzierten oder per Ray angeklickten Planeten. `PlanetRaySelector` arbeitet nur im `WORLD`-State, damit er nicht mit dem Placement-Trigger kollidiert. Das Sonnensystem-Slider-Panel bindet sich nach Placement per `Bind(SolarSystemManager)` an die frisch instanziierte Sonnensystem-Instanz; der Manager muss im UI-Prefab nicht im Inspector gesetzt werden.
+- **Grund:** Ein Panel pro Planet wuerde Layout-Duplizierung, fehleranfaellige Prefab-Pflege und unnoetige Objekte erzeugen. Beim Sonnensystem ist eine statische Inspector-Referenz technisch falsch, weil das Zielobjekt erst zur Laufzeit platziert wird.
+- **Erkenntnisse:**
+  - UI-Panels sollten generisch und datengetrieben bleiben. `PlanetData` ist die Quelle, nicht das Prefab-Layout.
+  - Runtime-instanzierte Objekte sollten ihre abhaengigen UIs explizit binden, statt ueber feste Inspector-Referenzen oder globale Suche zu arbeiten.
+  - `GameState.WORLD` ist eine sinnvolle Grenze fuer Auswahl-Interaktion: Placement bestaetigt Objekte, WORLD waehlt oder veraendert bestehende Objekte.
+
 ### Großer Rebuild: MRUK-Stack & Prototyp-Vollumfang → Depth-API + Tab-Menü
 
 - **Datum:** 2026-04-26

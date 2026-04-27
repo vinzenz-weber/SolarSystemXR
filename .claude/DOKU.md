@@ -1,6 +1,6 @@
 # Dokumentation: Sonnensystem XR
 
-> **Letzte Aktualisierung:** 2026-04-26
+> **Letzte Aktualisierung:** 2026-04-27
 
 ---
 
@@ -12,9 +12,20 @@
 | Render Pipeline | URP |
 | Target Platform | Quest 3 Standalone (Android) |
 | XR SDK | Meta XR SDK v85 |
-| Platzierung | Depth API (`EnvironmentRaycastManager`) — **kein MRUK-Room** |
-| Testing (Windows) | Meta Quest Link (Play Mode im Headset) |
+| Platzierung | Quest-Build: Depth API (`EnvironmentRaycastManager`), Editor-Playmode: Ray-Fallback ohne Depth API |
+| Testing (Windows) | Unity Playmode fuer UI/Flow; Quest-Build fuer echte Depth API |
 | Testing (Mac) | Build auf Headset |
+
+---
+
+## Aktuelle Roadmap
+
+- Aktuelle Arbeitsgrundlage ist `ROADMAP.md`: Main Menu Umbau auf `Learn` / `Test` mit spaeteren Minispielen.
+- Architektur-Entscheidung bleibt: alles in `MainScene.unity`, kein Scene-Loading. Modi werden ueber Container-GameObjects, `SetActive` und Prefab-Instanziierung gesteuert.
+- Phase 1 ist erledigt: 8 Planeten-`PlanetData`-Assets sind vorhanden.
+- Phase 2 ist code-seitig weitgehend vorbereitet, Editor-Verkabelung und Headset-Verifikation sind noch offen.
+- Phase 3 ist in Umsetzung: Learn-Tab mit `Planets` und `SolarSystem`, globales Planet-InfoPanel, Sonnensystem-Slider-UI.
+- Phase 4 ist erledigt: Test-Tab startet Minigame-Prefabs, Abschliessen/Beenden funktionieren, Quiz-Fortschritt kann im Main Menu zurueckgesetzt werden.
 
 ---
 
@@ -22,94 +33,96 @@
 
 ### Sonnensystem-Simulation
 
-- **Status:** Fertig
-- **Beschreibung:** Alle 8 Planeten umkreisen die Sonne auf Kepler-Ellipsen. Größen und Abstände sind korrekt skaliert (Abstände und Planetengrößen unabhängig voneinander skalierbar).
+- **Status:** Fertig, wird in Phase 3 in den Learn-Flow eingebunden.
+- **Beschreibung:** Planeten umkreisen die Sonne auf Kepler-Ellipsen. Groessen, Abstaende, Simulationszeit und Exzentrizitaet sind getrennt steuerbar.
 - **Umsetzung:**
-  - `PlanetData` ScriptableObjects mit echten astronomischen Daten (Durchmesser, semiMajorAxis, Exzentrizität, Umlaufzeit) + `beschreibung`, `fakten[]` und Umgebungszonen-Felder
-  - `PlanetBody.cs`: Kepler-Formel `r = a*(1-e²)/(1+e*cos(θ))`, angle-basiertes Trail-Sampling
-  - `SolarSystemManager.cs`: Zentrale Skalierungsvariablen `distanceScale`, `planetSizeScale`, `exzentrizitaetMultiplikator`
-  - Sonnengröße dynamisch: kann Merkur-Orbit nie überlappen
-- **Skalierung:** `distanceScale = 0.006` → Neptun bei ~18 cm Radius (Tischgröße)
-- **Assets:** 9 PlanetData-Assets (Merkur, Venus, Erde, Mars, Jupiter, Saturn, Uranus, Neptun, Sonne)
+  - `PlanetData` ScriptableObjects mit astronomischen Daten, Beschreibungen, Fakten und Prefab-Referenzen.
+  - `SolarSystemManager.cs` erzeugt Planeten und Orbit-Linien aus `PlanetData`.
+  - Zentrale Runtime-Parameter: `distanceScale`, `planetSizeScale`, `timeScale`, `exzentrizitaetMultiplikator`, `inklinationMultiplikator`.
+- **Hinweis:** Das Sonnensystem-Prefab wird bei der AR-Platzierung nicht mehr pauschal skaliert; es soll im Prefab selbst in sinnvoller VR-Groesse vorbereitet sein.
 
-### Trail-Effekt (Planetenspuren)
+### Sonnensystem-Slider-UI
 
-- **Status:** Fertig
-- **Beschreibung:** Jeder Planet zieht eine leuchtende Spur in seiner Farbe. Spur deckt exakt einen vollen Orbit ab und fadet zum alten Ende aus.
-- **Umsetzung:** `LineRenderer` mit Ring-Buffer, HDR-Farben + URP Bloom, beidseitig sichtbar (`_Cull=0`), pre-allokierter Buffer + `SetPositions()`-Batch-API.
+- **Status:** Script fertig, Prefab/Editor-Setup offen.
+- **Beschreibung:** Ein World-Space-Slider-Panel erscheint nach dem Platzieren des Sonnensystems neben dem User und steuert genau die frisch platzierte Sonnensystem-Instanz.
+- **Umsetzung:**
+  - `SonnensystemUI.cs` hat `Bind(SolarSystemManager)` und sucht den Manager nur als Fallback.
+  - `PlacementManager.cs` findet nach dem Placement den `SolarSystemManager` im platzierten Prefab und bindet das UI automatisch.
+  - Optional kann ein `SonnensystemUI` bereits im Sonnensystem-Prefab liegen; alternativ wird ein `sonnensystemUIPrefab` aus dem `PlacementManager` instanziiert.
+  - Slider: Distanz, Groesse, Zeit und Exzentrizitaet.
+- **Editor-Aufgabe:** `SonnensystemUIPanel.prefab` mit 4 Slidern bauen und im `PlacementManager` referenzieren.
 
-### Planet Shader & SunPasser
+### Globales Planet-InfoPanel
 
-- **Status:** In Entwicklung
-- **Beschreibung:** Eigene Planeten-Materialien mit dynamischer Beleuchtung durch die Sonne und Atmosphären-Effekt.
-- **Umsetzung:** `SunPasser.cs` (`[ExecuteAlways]`) + `M_Planet.shadergraph` (3 Wolken-Layer, Fresnel-Atmosphäre via `_AtmosphereInnerColor` / `_AtmosphereOuterColor` mit `_AtmosphereBias`-Power-Kurve, Atmosphäre nur sonnenseitig sichtbar).
+- **Status:** Script fertig, Prefab/Editor-Setup offen.
+- **Beschreibung:** Es gibt ein einziges globales InfoPanel. Es wird neben dem User angezeigt und zeigt immer die Daten des aktuell ausgewaehlten Planeten.
+- **Umsetzung:**
+  - `PlanetInfoPanel.cs`: `Bind(PlanetData)` fuellt Headline, Subheadline, Beschreibung, Fakten, Durchmesser, Schwerkraft und optional Bild.
+  - `PlanetInfoPanelManager.cs`: verwaltet das eine Panel, zeigt/versteckt es und positioniert es neben dem User.
+  - `PlanetSelectable.cs`: generische Komponente auf Planet-Objekten, die ihr `PlanetData` ans Panel meldet.
+  - `PlanetRaySelector.cs`: Controller-Ray-Auswahl per Trigger im `WORLD`-State.
+  - `PlacementManager.cs`: fuegt nach Einzelplanet-Placement automatisch `PlanetSelectable` hinzu und zeigt das InfoPanel direkt mit den Daten des platzierten Planeten.
+- **Entscheidung:** Kein eigenes Panel pro Planet. Layout und Logik bleiben zentral, Inhalte kommen aus `PlanetData`.
 
-### Cloud-Animation (Erde)
+### State Machine
 
-- **Status:** Fertig
-- **Beschreibung:** Rotierende Wolkenschicht auf dem Erde-Prefab.
-- **Umsetzung:** `CloudBehaviour.cs` — Y-Rotation mit `cloudSpeed * Time.deltaTime`, `sizePercentage` (0–3 %), `OnValidate()` für Live-Preview.
+- **Status:** Aktiv genutzt.
+- **Beschreibung:** Der App-Flow nutzt `MAIN_MENU`, `PLACEMENT`, `WORLD` und die Test-Zustaende `TEST_REIHENFOLGE`, `TEST_SIZE`, `TEST_GRAVITY_PLACEHOLDER`.
+- **Umsetzung:** `GameManager.cs`
+  - `MAIN_MENU`: Hauptmenue-Canvas sichtbar.
+  - `PLACEMENT`: Hauptmenue ausgeblendet, `PlacementManager` zeigt Vorschau am Depth-Raycast.
+  - `WORLD`: Objekt steht, Planet-Ray-Auswahl ist aktiv, Options-Taste oeffnet das Hauptmenue wieder.
+  - `TEST_*`: Hauptmenue ausgeblendet, aktives Minigame-Prefab ist sichtbar; Options-Taste beendet das Minigame und fuehrt ins Test-Menue zurueck.
+- **Hinweis:** `PlanetRaySelector` reagiert nur im `WORLD`-State, damit er nicht mit dem Placement-Trigger kollidiert.
 
-### State Machine (Spielzustände)
+### Platzierung per Depth API
 
-- **Status:** Scripts fertig, Editor-Setup teils ausstehend
-- **Beschreibung:** 3 Zustände: `MAIN_MENU → PLACEMENT → WORLD`.
-- **Umsetzung:** `GameManager.cs` (Singleton)
-  - `MAIN_MENU`: Hauptmenü-Canvas sichtbar; User wählt Planet oder Sonnensystem
-  - `PLACEMENT`: Hauptmenü zu; `PlacementManager` zeigt Vorschau am Depth-Raycast
-  - `WORLD`: Objekt steht; `OVRInput.Button.Start` öffnet das Hauptmenü erneut
-- **Hinweis:** Vorgängerversionen mit 6 Zuständen + Raumstation/Immersive-Modus sind ins Archiv gewandert.
-
-### Platzierung (Depth API)
-
-- **Status:** Fertig (Code), Editor-Setup im Build noch testen
-- **Beschreibung:** Im `PLACEMENT`-State folgt eine Vorschau dem Controller-Ray. Trifft der Ray eine annähernd horizontale Fläche (Boden/Tisch), färbt sich die `LineRenderer`-Linie grün; Trigger platziert das Objekt.
+- **Status:** Code fertig; Editor-Playmode nutzt einen Depth-freien Fallback.
+- **Beschreibung:** Im `PLACEMENT`-State folgt eine Vorschau dem Controller-Ray. Eine horizontale Flaeche wird ueber die Hit-Normal erkannt; Trigger platziert das Objekt.
 - **Umsetzung:** `PlacementManager.cs`
-  - Raycast über `Meta.XR.EnvironmentRaycastManager.Raycast(Ray, out hit)` — direkt gegen das Depth-Mesh, **ohne MRUK-Room**
-  - `IsHorizontal(normal)`: `Vector3.Dot(normal, Vector3.up) > 0.85` als Boden-Kriterium
-  - **Zwei Modi:**
-    - `SelectPlanet(PlanetData)` — instanziiert `previewPrefab`, skaliert mit `GetScaledSize(diameter)` (`earthDiameterInVR = 0.2 m` als Referenz), platziert mit Höhenoffset `planetHeight`
-    - `SelectSolarSystem(GameObject)` — instanziiert das Sonnensystem-Prefab in eigener Größe, ohne Skalierung und ohne Höhenoffset
-  - `placementVisualizerPrefab` (Ring/Marker) wird parallel zur Vorschau am Raycast-Hitpoint angezeigt
-  - Platzierung mit `OVRInput.Button.SecondaryIndexTrigger` → spawnt das echte Prefab, wechselt in `WORLD`
-  - **Alle platzierten Objekte werden in einer `_placedObjects`-Liste getrackt** und beim Tab-Wechsel im Hauptmenü via `ClearPlacedObjects()` zerstört
+  - Quest-Build: Raycast ueber `EnvironmentRaycastManager.Raycast(Ray, out hit)`.
+  - Unity Editor: `useEditorFallbackPlacement` setzt den Hitpunkt in fixer Distanz vor den Controller-Ray und deaktiviert den `EnvironmentRaycastManager`, damit die Depth API im Playmode nicht laeuft.
+  - `IsHorizontal(normal)`: `Vector3.Dot(normal, Vector3.up) > 0.85`.
+  - `SelectPlanet(PlanetData)`: Vorschau und echtes Planet-Prefab aus `PlanetData`, Groessenskalierung relativ zur Erde.
+  - `SelectSolarSystem(GameObject)`: Sonnensystem-Prefab ohne Laufzeit-Skalierung.
+  - Beim Platzieren eines Planeten wird das globale InfoPanel aktualisiert.
+  - Beim Platzieren eines Sonnensystems wird die Sonnensystem-Slider-UI gebunden und das Planet-InfoPanel versteckt.
 
-### Hauptmenü (Planeten / Sonnensystem)
+### Main Menu Learn/Test
 
-- **Status:** Scripts fertig, Canvas-Setup ausstehend
-- **Beschreibung:** World-Space-Canvas mit zwei umschaltbaren Panels und einer Tab-Bar unten:
-  - **Planeten-Panel:** Headline, Beschreibung, „[Planet] hinzufügen"-Button, horizontaler Scroller mit Planet-Buttons
-  - **Sonnensystem-Panel:** Headline, Beschreibung, „Start Experience"-Button
-  - **Tabs:** „Planeten" / „Sonnensystem" — Wechsel zerstört alle bereits platzierten Objekte (`PlacementManager.ClearPlacedObjects()`)
+- **Status:** Learn-Flow weiter in Arbeit; Test-Tab-Skelett fuer Phase 4 fertig.
+- **Beschreibung:** Das Hauptmenue wird auf die Roadmap-Struktur umgebaut:
+  - `Learn`: `Planets` und `SolarSystem`
+  - `Test`: `Reihenfolge`, `Size`, `Gravity`
 - **Umsetzung:**
-  - `MainMenuController.cs` — verwaltet beide Panels, Tab-Highlight via Background-Image-Color, hält `sonnensystemPrefab`-Referenz, ruft `placementManager.SelectPlanet(...)` bzw. `SelectSolarSystem(...)` auf
-  - `PlanetMenuButton.cs` — auf jedem Planet-Button im Scroller, befüllt Label aus `PlanetData` und ruft im `OnClick` `MainMenuController.SelectPlanet(data)` auf
-  - `PlanetButton.cs` — schmale Bridge zwischen `PlanetData` und Anzeige-Prefab (Inspector-Verbindung)
+  - `MainMenuController.cs` verwaltet Auswahl zwischen Planet und Sonnensystem und startet Placement.
+  - `PlanetMenuButton.cs` befuellt Planet-Buttons aus `PlanetData` und ruft `SelectPlanet(data)` auf.
+  - `MainMenuController.cs` startet die Minigames ueber `MinigameManager` und faerbt Quiz-Buttons bei abgeschlossenem Quiz um.
+  - `GameManager` blendet das Menue beim Placement/WORLD/TEST-State aus.
+- **Offen:** Die sichtbare Learn-Canvas-Struktur in `MainScene.unity` muss im Editor final auf `Planets` + `SolarSystem` angepasst werden.
 
-### Sonnensystem-Parameter-UI
+### Test-Tab / Minigame-Skelett
 
-- **Status:** Script fertig, Editor-Setup ausstehend
-- **Beschreibung:** World-Space-Panel mit 4 Slidern zum Live-Anpassen der Simulation.
-- **Umsetzung:** `SonnensystemUI.cs`
-  - **Bahnabstände:** 0.002–0.025 → `SolarSystemManager.distanceScale`
-  - **Planetengrößen:** 0.0005–0.01 → `SolarSystemManager.planetSizeScale`
-  - **Geschwindigkeit:** 0–100 Tage/s → `SolarSystemManager.timeScale`
-  - **Exzentrizität:** 0–5 → `SolarSystemManager.exzentrizitaetMultiplikator`
-  - Reset-Button setzt alle Werte auf Defaults
+- **Status:** Phase 4 fertig und im Playmode verifiziert.
+- **Beschreibung:** Der Test-Tab startet drei Modi: `Reihenfolge`, `Size` und `Gravity (Coming Soon)`.
+- **Umsetzung:**
+  - `MinigameManager.cs` instanziiert pro aktivem Modus genau ein Minigame-Prefab und positioniert es vor dem User.
+  - `Minigame_Reihenfolge.prefab` und `Minigame_Size.prefab` enthalten eigene World-Space-UIs aus dem Editor; es wird keine UI mehr per Code erzeugt.
+  - `MinigameUIActions.cs` stellt Button-Methoden fuer Prefab-UIs bereit: `CompleteAndReturnToMenu()` und `ExitWithoutCompleting()`.
+  - `CompleteCurrentMinigame()` speichert den Erfolg via `PlayerPrefs`; der jeweilige Quiz-Button zeigt vorlaeufig "(geschafft)" und eine andere Farbe.
+  - `ResetQuizProgress()` setzt `Reihenfolge` und `Size` im Main Menu wieder auf offen, als waeren beide Quizzes noch nicht gemacht.
+- **Wichtig:** World-Space-Canvases in Minigame-Prefabs muessen im Editor mit `Interaction SDK > Add Ray Interaction to Canvas` vorbereitet werden.
+
+### Planet Shader, SunPasser und Cloud-Animation
+
+- **Status:** Weiterhin aktiv.
+- **Beschreibung:** Planeten-Materialien mit dynamischer Beleuchtung und Atmosphaeren-Effekt; Erde hat eine rotierende Wolkenschicht.
+- **Umsetzung:** `SunPasser.cs`, `M_Planet.shadergraph`, `CloudBehaviour.cs`.
 
 ### Desktop-Testing Tools
 
-- **Status:** Fertig (nicht für Quest-Build relevant)
-- **Beschreibung:** Scripts für Desktop-Entwicklung ohne Headset.
-- **Umsetzung:**
-  - `DesktopDebugCamera.cs` — Free-look (WASD + Maus, Shift = Boost, ESC = Cursor-Unlock)
-  - `DesktopPlacement.cs` — platziert Prefab via Rechtsklick-Raycast
-  - `PlacementTester.cs` — Spawn an RayInteractor-Hitpoint
-
-### LazyFollowUI
-
-- **Status:** Fertig
-- **Beschreibung:** Wiederverwendbare Komponente; lässt einen Canvas träge der Spielerblickrichtung folgen, ohne vertikales Kippen.
+- **Status:** Vorhanden, nicht fuer Quest-Build zentral.
+- **Beschreibung:** Hilfsscripts fuer Entwicklung ohne Headset: `DesktopDebugCamera.cs`, `DesktopPlacement.cs`, `PlacementTester.cs`.
 
 ---
 
@@ -117,26 +130,33 @@
 
 | Konvention | Detail |
 |---|---|
-| **Depth API für Platzierung** | `EnvironmentRaycastManager.Raycast(Ray, out hit)` aus `Meta.XR.MRUtilityKit`. Liefert Position + Normal direkt aus dem Depth-Mesh — kein `MRUKRoom` und kein `Physics.Raycast` nötig. |
-| **Horizontalität** | Boden/Tisch wird über `Vector3.Dot(normal, Vector3.up) > 0.85` erkannt. |
-| **Skalierung Planeten** | `vrScale = (diameter / earthDiameterInKm) * earthDiameterInVR`. Sonnensystem-Prefab dagegen wird **nicht** skaliert — es muss bereits in VR-Größe gestaltet sein. |
-| **Tab-Wechsel räumt auf** | Sowohl `ShowPlanetenTab()` als auch `ShowSonnensystemTab()` rufen `placementManager.ClearPlacedObjects()` auf, damit Modi nicht visuell vermischt werden. |
-| **Naming Conventions** | `_camelCase` für private Felder, `camelCase` für public, `PascalCase` für Methoden/Klassen. Booleans mit `is/has/can`. |
+| Datenquelle Planeten | Planetenspezifische Daten liegen in `PlanetData`, nicht in UI- oder Interaktionsscripts. |
+| Globales InfoPanel | Ein `PlanetInfoPanel` fuer alle Planeten; Umschalten per `Bind(PlanetData)`. |
+| Sonnensystem-UI | Das Slider-Panel referenziert den `SolarSystemManager` nicht im Prefab, sondern bekommt ihn nach Placement ueber `Bind(SolarSystemManager)`. |
+| Depth API fuer Platzierung | Im Quest-Build liefert `EnvironmentRaycastManager.Raycast(Ray, out hit)` Position und Normal aus dem Depth-Mesh. |
+| Editor-Placement | Im Unity Editor ist die Depth API deaktiviert; die Platzierung nutzt einen festen Punkt vor dem Controller-Ray. |
+| Horizontalitaet | Boden/Tisch wird ueber `Vector3.Dot(normal, Vector3.up) > 0.85` erkannt. |
+| Skalierung Einzelplanet | `vrScale = (diameter / earthDiameterInKm) * earthDiameterInVR`. |
+| Skalierung Sonnensystem | Das Sonnensystem-Prefab bleibt in eigener VR-Groesse; Runtime-Slider veraendern interne Manager-Werte. |
+| State-Grenze | Placement-Trigger und Planet-Auswahl werden durch `GameState.PLACEMENT` vs. `GameState.WORLD` getrennt. |
+| Minigame-UI | Minigame-UIs werden als Prefab-Inhalt im Editor gebaut, nicht zur Laufzeit per Code erzeugt. |
 
 ---
 
 ## Aktuelle Entscheidungen
 
-| Datum | Entscheidung | Begründung |
+| Datum | Entscheidung | Begruendung |
 |---|---|---|
 | 2026-04-12 | Meta Building Blocks bevorzugt | Einfacher, schneller, weniger eigener Code |
-| 2026-04-12 | Code auf einfachem Level halten | Verständlichkeit und eigene Bearbeitbarkeit |
-| 2026-04-12 | Code-Kommentare auf Deutsch | Muttersprache, einfacher für Doku |
-| 2026-04-12 | World-Space Canvas statt Screen-Space | In XR gibt es keinen echten Screen — World-Space wird im 3D-Raum verankert |
-| 2026-04-12 | PlanetData als ScriptableObject | Trennung von Daten und Logik; einfach erweiterbar ohne Code-Änderung |
-| 2026-04-26 | Platzierung über Depth API statt MRUK-Room | Meta-SDK-Versionssprünge haben den MRUK-basierten Ansatz wiederholt gebrochen. `EnvironmentRaycastManager` liefert Position + Normal direkt aus dem Depth-Mesh — ohne Room-Setup, ohne Anchor-Kette, ohne weiteren SDK-Bruchpunkt |
-| 2026-04-26 | State Machine auf 3 Zustände reduziert | Raumstation, Immersive-Modus, separate Detail-Panels und Info-Punkte sind aus dem Prototyp gestrichen. Der reduzierte Flow (`MAIN_MENU → PLACEMENT → WORLD`) deckt den aktuellen Wireframe vollständig ab |
-| 2026-04-26 | Hauptmenü als Tab-Toggle | Wireframe sieht zwei nebeneinanderliegende Panels (Planeten / Sonnensystem) mit Tab-Bar unten vor — beim Wechsel wird die platzierte Welt geleert, damit Modi nicht vermischt werden |
+| 2026-04-12 | Code auf einfachem Level halten | Verstaendlichkeit und eigene Bearbeitbarkeit |
+| 2026-04-12 | Code-Kommentare auf Deutsch | Muttersprache, einfacher fuer Doku |
+| 2026-04-12 | PlanetData als ScriptableObject | Trennung von Daten und Logik; einfach erweiterbar ohne Code-Aenderung |
+| 2026-04-26 | Platzierung ueber Depth API statt MRUK-Room | Stabiler fuer reine Boden-/Tisch-Platzierung, weniger SDK-Bruchpunkte |
+| 2026-04-26 | State Machine auf 3 Zustaende reduziert | Der reduzierte Flow deckt den aktuellen Wireframe ab |
+| 2026-04-27 | Ein globales Planet-InfoPanel statt Panel pro Planet | Weniger Prefab-Duplizierung, besser wartbar, passt zum `PlanetData`-Ansatz |
+| 2026-04-27 | Sonnensystem-Slider-UI bindet Runtime-Instanz | Der `SolarSystemManager` existiert erst nach Placement; Inspector-Referenz im UI-Prefab waere falsch |
+| 2026-04-27 | Editor-Placement ohne Depth API | Die Depth API macht den Playmode auf Windows traege; UI- und Flow-Tests sollen ohne Quest-Build moeglich sein |
+| 2026-04-27 | Minigame-UIs nicht per Code erzeugen | Meta Interaction SDK Canvas-Setup muss im Editor/Prefab passieren, damit Quest-Controller-Ray-Interaktion funktioniert |
 
 ---
 
@@ -144,11 +164,25 @@
 
 | Aufgabe | Status |
 |---|---|
-| Hauptmenü-Canvas im Editor aufbauen (`PlanetenPanel` / `SonnensystemPanel` / `TabBar` mit Buttons) | Offen |
-| `MainMenuController`-Felder verkabeln (Panels, Texte, Tab-Backgrounds, Sonnensystem-Prefab) | Offen |
-| Sonnensystem-Prefab in finaler VR-Größe gestalten (keine Laufzeit-Skalierung mehr!) | Offen |
-| Planet-Buttons im Scroller mit jeweiligem `PlanetData` befüllen | Offen |
-| `PlacementManager.placementVisualizerPrefab` zuweisen | Offen |
-| Depth-API-Setup in der Szene prüfen (`EnvironmentRaycastManager`, Permissions, Build-Settings) | Offen |
-| `StartPhase.cs` und `SpielerBewegung.cs` (Altlasten ohne Anbindung) aufräumen oder entfernen | Offen |
-| `InfoPunkt.cs` ist noch im Repo, hat aber keine Anbindung mehr — entscheiden ob entfernen oder reaktivieren | Offen |
+| `PlanetInfoPanelSystem` in `MainScene` anlegen und `PlanetInfoPanelManager` verkabeln | Offen |
+| `PlanetInfoPanel` World-Space-Canvas/Prefab mit TMP-Feldern bauen | Offen |
+| `PlacementManager.planetInfoPanelManager` zuweisen | Offen |
+| `PlanetRaySelector` mit richtigem Controller-`rayOrigin` in der Szene verkabeln | Offen |
+| `SonnensystemUIPanel.prefab` mit 4 Slidern bauen | Offen |
+| `PlacementManager.sonnensystemUIPrefab` zuweisen | Offen |
+| `MainMenuController`-Felder fuer Learn/Test und SolarSystem-Prefab im Inspector pruefen | Offen |
+| Learn-Panel im Editor auf `Planets` + `SolarSystem` umbauen | Offen |
+| Test-Panel Phase 4: Buttons, Minigame-Prefabs, Abschliessen/Beenden, Reset-Fortschritt | Fertig |
+| `UISetExamples.unity` und `PanelWithManipulators.unity` als Vorlage fuer VR-UI/Panel pruefen | Offen |
+| Headset-Test: Erde platzieren -> InfoPanel sichtbar und lesbar | Offen |
+| Headset-Test: Sonnensystem platzieren -> Slider sichtbar und wirksam | Offen |
+| Collider auf Planet-Prefabs pruefen, damit `PlanetRaySelector` sie treffen kann | Offen |
+| `StartPhase.cs`, `SpielerBewegung.cs`, `InfoPunkt.cs` auf Altlasten pruefen | Offen |
+
+---
+
+## Letzte technische Verifikation
+
+- **2026-04-27:** `dotnet build Assembly-CSharp.csproj --no-restore` erfolgreich.
+- **2026-04-27:** Phase-4-Test-Flow im Playmode verifiziert: Quiz-Buttons starten passende Panels, Abschliessen speichert Erfolg, Beenden speichert nicht, Main-Menu-Reset loescht Fortschritt.
+- Warnungen bleiben aus bestehenden UISet/OpenXR/Altlasten, keine neuen Compile-Fehler.

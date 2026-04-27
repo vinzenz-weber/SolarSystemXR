@@ -36,9 +36,21 @@ public class PlacementManager : MonoBehaviour
 
     public float planetHeight = 0.15f;
 
+    [Header("Editor-Fallback ohne Depth API")]
+    [Tooltip("Im Unity Editor wird die Depth API komplett umgangen. Das Objekt erscheint stattdessen in fixer Distanz am Controller-Ray.")]
+    public bool useEditorFallbackPlacement = true;
+
+    [Tooltip("Distanz vor dem Ray-Origin, in der die Vorschau im Editor platziert wird.")]
+    public float editorPlacementDistance = 1.5f;
+
     [Header("Scaling")]
     public float earthDiameterInVR = 0.2f; // 0.2 Meter = 20 cm fuer die Erde
     private const float earthDiameterInKm = 12742f;
+
+    private void Start()
+    {
+        DisableDepthApiInEditorFallback();
+    }
 
     // ----------- AUSWAHL: einzelner Planet -----------
     public void SelectPlanet(PlanetData data)
@@ -137,11 +149,11 @@ public class PlacementManager : MonoBehaviour
         }
 
         Ray ray = new Ray(rayOrigin.position, rayOrigin.forward);
-        bool didHit = raycastManager.Raycast(ray, out var hitInfo);
+        bool didHit = TryGetPlacementPoint(ray, out Vector3 hitPoint, out Vector3 hitNormal);
 
         if (didHit == true)
         {
-            bool canPlace = IsHorizontal(hitInfo.normal);
+            bool canPlace = IsEditorFallbackActive() || IsHorizontal(hitNormal);
 
             if (canPlace == true)
             {
@@ -159,12 +171,12 @@ public class PlacementManager : MonoBehaviour
             lineRenderer.enabled = true;
 
             lineRenderer.SetPosition(0, rayOrigin.position);
-            lineRenderer.SetPosition(1, hitInfo.point);
+            lineRenderer.SetPosition(1, hitPoint);
 
             // Beim Sonnensystem heben wir die Vorschau nicht an - es steht direkt auf dem Boden.
             float lift = _isSolarSystemMode ? 0f : planetHeight;
-            previewInstance.transform.position = hitInfo.point + Vector3.up * lift;
-            visualizerInstance.transform.position = hitInfo.point;
+            previewInstance.transform.position = hitPoint + Vector3.up * lift;
+            visualizerInstance.transform.position = hitPoint;
 
             // --- PLATZIEREN ---
             if (canPlace == true && OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
@@ -225,6 +237,49 @@ public class PlacementManager : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    private bool TryGetPlacementPoint(Ray ray, out Vector3 point, out Vector3 normal)
+    {
+        if (IsEditorFallbackActive() == true)
+        {
+            // Wichtig fuer den Editor: keine Depth-API-Abfrage.
+            point = ray.origin + ray.direction * editorPlacementDistance;
+            normal = Vector3.up;
+            return true;
+        }
+
+        point = Vector3.zero;
+        normal = Vector3.up;
+
+        if (raycastManager == null)
+        {
+            Debug.LogWarning("PlacementManager: Kein EnvironmentRaycastManager zugewiesen.");
+            return false;
+        }
+
+        bool didHit = raycastManager.Raycast(ray, out var hitInfo);
+        if (didHit == false) return false;
+
+        point = hitInfo.point;
+        normal = hitInfo.normal;
+        return true;
+    }
+
+    private bool IsEditorFallbackActive()
+    {
+        return Application.isEditor == true && useEditorFallbackPlacement == true;
+    }
+
+    private void DisableDepthApiInEditorFallback()
+    {
+        if (IsEditorFallbackActive() == false) return;
+        if (raycastManager == null) return;
+
+        // Der Editor-Fallback soll die Depth API nicht nur nicht abfragen,
+        // sondern den Runtime-Manager im Playmode auch deaktivieren.
+        raycastManager.enabled = false;
+        Debug.Log("PlacementManager: Editor-Fallback aktiv - Depth API RaycastManager deaktiviert.");
     }
 
     float GetScaledSize(float realSizeInKm)

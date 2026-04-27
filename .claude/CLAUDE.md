@@ -162,6 +162,10 @@ Fokus auf Optimierung – die App soll visuell gut aussehen und gleichzeitig fl�
 
 Es gibt zwei Dokumentationsdateien im Projekt, die den Fortschritt der Masterarbeit festhalten:
 
+**Ablageort:** Beide Dateien liegen versteckt im Projektordner `.claude/`:
+- `.claude/DOKU.md`
+- `.claude/ARCHIV.md`
+
 ### `DOKU.md` – Aktueller Stand
 Enthält nur den **aktuellen, lebendigen Stand** des Projekts: aktive Features, technische Entscheidungen, bekannte Probleme.
 
@@ -204,7 +208,7 @@ Claude aktualisiert diese Datei **eigenständig und proaktiv**, ohne explizite A
 
 ## Synchronisation von CLAUDE.md und AGENTS.md
 
-Diese Datei (CLAUDE.md) und `AGENTS.md` müssen **immer synchron gehalten werden**. Das bedeutet:
+`AGENTS.md` und `CLAUDE.md` müssen **immer synchron gehalten werden**. Das bedeutet:
 
 - Jede Änderung an CLAUDE.md muss auch in AGENTS.md übernommen werden
 - Jede Änderung an AGENTS.md muss auch in CLAUDE.md übernommen werden
