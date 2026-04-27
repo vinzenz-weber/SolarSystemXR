@@ -25,6 +25,22 @@
 
 ## Iterationen & Änderungen
 
+### Reihenfolge-Minispiel: eigener Aufbau -> Meta SnapExamples + leichte Projektlogik
+
+- **Datum:** 2026-04-27
+- **Vorher:** Das Reihenfolge-Minispiel war nur als Test-Tab/Prefab-Skelett dokumentiert. Es war unklar, ob die Snap-/Grab-Funktionalitaet selbst gebaut oder aus der Meta Sample-Szene uebernommen werden soll. Erste Versuche, Controller-Grab direkt an den Planeten-Scripts nachzuruesten, waeren zu viel eigene Interaktionslogik geworden.
+- **Nachher:** `Minigame_Reihenfolge.prefab` basiert auf dem Meta Interaction SDK `SnapExamples`-Aufbau. Die Planeten bleiben normale SDK-Interactables mit `Grabbable`, `SnapInteractor` und `HandGrabInteractable`; die eigene Logik liegt nur in kleinen Projekt-Scripts:
+  - `ReihenfolgePlanet.cs` speichert `PlanetData` und `OrbitIndex`.
+  - `ReihenfolgeOrbitSlot.cs` liest den gesnappten Planeten aus `SnapInteractable.SelectingInteractorViews` und setzt Ring-Feedback.
+  - `ReihenfolgeChecker.cs` sammelt Slots/Planeten aus dem Prefab und prueft, ob alle aktiven Slots korrekt belegt sind.
+  - `ReihenfolgeControllerHandMode.cs` schaltet beim Reihenfolge-Minispiel temporaer `OVRManager.controllerDrivenHandPosesType = Natural`, wie in `SnapExamples`, und stellt danach den alten Modus wieder her.
+- **Grund:** Die Meta Samples loesen Snap, HandGrab und Controller-driven hand poses bereits robust. Fuer das Projekt ist nur die fachliche Regel relevant: welcher Planet gehoert auf welchen Orbit.
+- **Erkenntnisse:**
+  - Der entscheidende Unterschied zur `SnapExamples`-Szene war nicht am Planetenobjekt, sondern am Rig/OVRManager: `controllerDrivenHandPosesType` stand im Sample auf `Natural`, in der MainScene auf `None`.
+  - Controller sollen global sichtbar und ray-faehig bleiben. Deshalb wird der Controller-Hand-Modus nicht dauerhaft in der Szene aktiviert, sondern nur waehrend `MinigameType.Reihenfolge`.
+  - Meta-Ringe aus dem Sample nutzen teils `RoundedBoxProperties`; Ring-Feedback muss daher nicht nur `Renderer.material`, sondern auch diese Properties aktualisieren.
+  - Bei SDK-Sample-Prefabs ist es stabiler, den manuellen Editor-Aufbau zu behalten und nur Daten-/Feedback-Scripts zu ergaenzen, statt das komplette Setup per Builder-Script neu zu erzeugen.
+
 ### Phase 4: Runtime-Placeholder-UI -> editorbasierte Minigame-Prefabs
 
 - **Datum:** 2026-04-27

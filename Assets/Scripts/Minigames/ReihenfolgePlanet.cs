@@ -20,6 +20,16 @@ public class ReihenfolgePlanet : MonoBehaviour
     private Color _neutralColor = Color.white;
     private Material _feedbackMaterial;
 
+    private void Reset()
+    {
+        AutoFillReferences();
+    }
+
+    private void OnValidate()
+    {
+        AutoFillReferences();
+    }
+
     public void Initialize(PlanetData planetData, int orbitIndex, Color neutralColor)
     {
         PlanetData = planetData;
@@ -74,6 +84,29 @@ public class ReihenfolgePlanet : MonoBehaviour
         if (FeedbackRenderer != null)
         {
             _feedbackMaterial = FeedbackRenderer.material;
+        }
+    }
+
+    private void AutoFillReferences()
+    {
+        if (Rigidbody == null)
+        {
+            Rigidbody = GetComponent<Rigidbody>();
+        }
+
+        if (Grabbable == null)
+        {
+            Grabbable = GetComponent<Grabbable>();
+        }
+
+        if (SnapInteractor == null)
+        {
+            SnapInteractor = GetComponentInChildren<SnapInteractor>(true);
+        }
+
+        if (FeedbackRenderer == null)
+        {
+            FeedbackRenderer = GetComponentInChildren<Renderer>(true);
         }
     }
 }

@@ -23,6 +23,9 @@ public class MinigameManager : MonoBehaviour
     public PlacementManager placementManager;
     public MainMenuController mainMenuController;
 
+    [Header("XR-Modi")]
+    public ReihenfolgeControllerHandMode reihenfolgeControllerHandMode;
+
     [Header("Positionierung")]
     [Tooltip("Abstand des Minigame-Prefabs vor der Kamera.")]
     public float panelDistance = 1.4f;
@@ -51,6 +54,7 @@ public class MinigameManager : MonoBehaviour
     public void StartMinigame(MinigameType type)
     {
         Debug.Log("MinigameManager: Starte Minispiel " + type + ".");
+        SetReihenfolgeControllerHandMode(false);
         EndActiveInstanceOnly();
 
         _currentType = type;
@@ -72,11 +76,13 @@ public class MinigameManager : MonoBehaviour
         _activeMinigame = Instantiate(prefab);
 
         PositionMinigameInFrontOfUser(_activeMinigame);
+        SetReihenfolgeControllerHandMode(type == MinigameType.Reihenfolge);
         SetGameState(type);
     }
 
     public void EndMinigame()
     {
+        SetReihenfolgeControllerHandMode(false);
         EndActiveInstanceOnly();
         _hasActiveMinigame = false;
 
@@ -212,5 +218,29 @@ public class MinigameManager : MonoBehaviour
     private string GetCompletedKey(MinigameType type)
     {
         return "MinigameCompleted_" + type;
+    }
+
+    private void SetReihenfolgeControllerHandMode(bool isEnabled)
+    {
+        ReihenfolgeControllerHandMode mode = GetReihenfolgeControllerHandMode();
+        if (mode == null) return;
+
+        mode.SetControllerHandMode(isEnabled);
+    }
+
+    private ReihenfolgeControllerHandMode GetReihenfolgeControllerHandMode()
+    {
+        if (reihenfolgeControllerHandMode != null)
+        {
+            return reihenfolgeControllerHandMode;
+        }
+
+        reihenfolgeControllerHandMode = GetComponent<ReihenfolgeControllerHandMode>();
+        if (reihenfolgeControllerHandMode == null)
+        {
+            reihenfolgeControllerHandMode = gameObject.AddComponent<ReihenfolgeControllerHandMode>();
+        }
+
+        return reihenfolgeControllerHandMode;
     }
 }

@@ -103,7 +103,7 @@
 
 ### Test-Tab / Minigame-Skelett
 
-- **Status:** Phase 4 fertig und im Playmode verifiziert.
+- **Status:** Phase 4 fertig; Reihenfolge-Minispiel ist als echtes Snap-Minispiel in Umsetzung und code-seitig vorbereitet.
 - **Beschreibung:** Der Test-Tab startet drei Modi: `Reihenfolge`, `Size` und `Gravity (Coming Soon)`.
 - **Umsetzung:**
   - `MinigameManager.cs` instanziiert pro aktivem Modus genau ein Minigame-Prefab und positioniert es vor dem User.
@@ -111,7 +111,21 @@
   - `MinigameUIActions.cs` stellt Button-Methoden fuer Prefab-UIs bereit: `CompleteAndReturnToMenu()` und `ExitWithoutCompleting()`.
   - `CompleteCurrentMinigame()` speichert den Erfolg via `PlayerPrefs`; der jeweilige Quiz-Button zeigt vorlaeufig "(geschafft)" und eine andere Farbe.
   - `ResetQuizProgress()` setzt `Reihenfolge` und `Size` im Main Menu wieder auf offen, als waeren beide Quizzes noch nicht gemacht.
+  - Beim Start von `Reihenfolge` aktiviert `ReihenfolgeControllerHandMode` temporaer Meta `controllerDrivenHandPosesType = Natural`, damit Controller wie in den Meta SnapExamples Hand-Grabs ausloesen koennen. Beim Verlassen wird der vorherige Modus wiederhergestellt.
 - **Wichtig:** World-Space-Canvases in Minigame-Prefabs muessen im Editor mit `Interaction SDK > Add Ray Interaction to Canvas` vorbereitet werden.
+
+### Reihenfolge-Minispiel
+
+- **Status:** Funktionslogik code-seitig vorbereitet; finale Headset-Verifikation offen.
+- **Beschreibung:** Planeten werden aus einer Liste gegriffen und auf die richtigen Umlaufbahn-Ringe gesnappt. Jeder Ring prueft, ob der richtige Planet auf ihm liegt, und gibt visuelles Feedback.
+- **Umsetzung:**
+  - Grundlage ist das Meta Interaction SDK `SnapExamples`-Setup, nicht eine selbst geschriebene Grab-/Snap-Logik.
+  - `Minigame_Reihenfolge.prefab` enthaelt die kopierten Orbit-/Snap-Elemente und die snappable Planeten.
+  - `ReihenfolgePlanet.cs` haelt `PlanetData`, `OrbitIndex`, `Grabbable`, `Rigidbody` und den `SnapInteractor`.
+  - `ReihenfolgeOrbitSlot.cs` liest den aktuellen Planet aus `SnapInteractable.SelectingInteractorViews`, prueft den `OrbitIndex` und faerbt den Ring.
+  - `ReihenfolgeChecker.cs` sammelt Slots/Planeten automatisch aus den Kindern des Prefabs und bewertet, ob alle aktiven Slots korrekt belegt sind.
+  - `InteractablePlanetVisual.cs` erzeugt das Planet-Visual unter einem `VisualRoot`; lokale Position und Rotation sind im Inspector anpassbar.
+- **Wichtig:** Das Prefab bleibt manuell im Editor aufgebaut. `ReihenfolgeMinigameBuilder` ist im Prefab deaktiviert, damit der manuelle SnapExamples-Aufbau nicht zur Laufzeit ueberschrieben wird.
 
 ### Planet Shader, SunPasser und Cloud-Animation
 
@@ -140,6 +154,8 @@
 | Skalierung Sonnensystem | Das Sonnensystem-Prefab bleibt in eigener VR-Groesse; Runtime-Slider veraendern interne Manager-Werte. |
 | State-Grenze | Placement-Trigger und Planet-Auswahl werden durch `GameState.PLACEMENT` vs. `GameState.WORLD` getrennt. |
 | Minigame-UI | Minigame-UIs werden als Prefab-Inhalt im Editor gebaut, nicht zur Laufzeit per Code erzeugt. |
+| Reihenfolge-Interaktion | Reihenfolge nutzt Meta SnapExamples-Komponenten. Eigener Code prueft nur Daten/Feedback, nicht das Greifen/Snappen selbst. |
+| Controller-Hand-Modus | `controllerDrivenHandPosesType = Natural` wird nur waehrend `MinigameType.Reihenfolge` gesetzt und danach wiederhergestellt. |
 
 ---
 
@@ -157,6 +173,8 @@
 | 2026-04-27 | Sonnensystem-Slider-UI bindet Runtime-Instanz | Der `SolarSystemManager` existiert erst nach Placement; Inspector-Referenz im UI-Prefab waere falsch |
 | 2026-04-27 | Editor-Placement ohne Depth API | Die Depth API macht den Playmode auf Windows traege; UI- und Flow-Tests sollen ohne Quest-Build moeglich sein |
 | 2026-04-27 | Minigame-UIs nicht per Code erzeugen | Meta Interaction SDK Canvas-Setup muss im Editor/Prefab passieren, damit Quest-Controller-Ray-Interaktion funktioniert |
+| 2026-04-27 | Reihenfolge-Minispiel auf Meta SnapExamples aufbauen | Snap/Grab ist im SDK bereits geloest; eigener Code bleibt auf Planetendaten, Slot-Pruefung und Feedback beschraenkt |
+| 2026-04-27 | Controller-Hand-Modus nur fuer Reihenfolge aktivieren | Controller sollen in anderen Szenen sichtbar und ray-faehig bleiben; nur das Snap-Minispiel braucht Controller-driven hand poses |
 
 ---
 
@@ -173,6 +191,8 @@
 | `MainMenuController`-Felder fuer Learn/Test und SolarSystem-Prefab im Inspector pruefen | Offen |
 | Learn-Panel im Editor auf `Planets` + `SolarSystem` umbauen | Offen |
 | Test-Panel Phase 4: Buttons, Minigame-Prefabs, Abschliessen/Beenden, Reset-Fortschritt | Fertig |
+| Reihenfolge-Prefab: alle Planeten, SnapInteractor und OrbitSlots final im Inspector pruefen | In Arbeit |
+| Headset-Test: Reihenfolge mit Controller greifen, snappen, Ring-Feedback und Abschluss pruefen | Offen |
 | `UISetExamples.unity` und `PanelWithManipulators.unity` als Vorlage fuer VR-UI/Panel pruefen | Offen |
 | Headset-Test: Erde platzieren -> InfoPanel sichtbar und lesbar | Offen |
 | Headset-Test: Sonnensystem platzieren -> Slider sichtbar und wirksam | Offen |
@@ -184,5 +204,6 @@
 ## Letzte technische Verifikation
 
 - **2026-04-27:** `dotnet build Assembly-CSharp.csproj --no-restore` erfolgreich.
+- **2026-04-27:** Reihenfolge-Code nach SnapExamples-Integration kompiliert: `dotnet build Assembly-CSharp.csproj --no-restore` erfolgreich.
 - **2026-04-27:** Phase-4-Test-Flow im Playmode verifiziert: Quiz-Buttons starten passende Panels, Abschliessen speichert Erfolg, Beenden speichert nicht, Main-Menu-Reset loescht Fortschritt.
 - Warnungen bleiben aus bestehenden UISet/OpenXR/Altlasten, keine neuen Compile-Fehler.

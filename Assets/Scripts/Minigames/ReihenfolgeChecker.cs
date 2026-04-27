@@ -6,6 +6,8 @@ using UnityEngine;
 public class ReihenfolgeChecker : MonoBehaviour
 {
     [Header("Spielobjekte")]
+    [Tooltip("Wenn aktiv, sammelt der Checker Slots und Planeten automatisch aus den Children ein.")]
+    public bool AutoCollectChildren = true;
     public ReihenfolgeOrbitSlot[] Slots;
     public ReihenfolgePlanet[] Planets;
     public Transform[] BenchPositions;
@@ -22,10 +24,19 @@ public class ReihenfolgeChecker : MonoBehaviour
 
     private bool _hasCompleted;
 
+    private void Reset()
+    {
+        CollectChildren();
+    }
+
     private void Start()
     {
+        if (AutoCollectChildren)
+        {
+            CollectChildren();
+        }
+
         HideSuccessText();
-        ResetGame();
     }
 
     private void Update()
@@ -202,5 +213,12 @@ public class ReihenfolgeChecker : MonoBehaviour
         {
             SuccessText.gameObject.SetActive(false);
         }
+    }
+
+    [ContextMenu("Slots und Planeten automatisch sammeln")]
+    public void CollectChildren()
+    {
+        Slots = GetComponentsInChildren<ReihenfolgeOrbitSlot>(true);
+        Planets = GetComponentsInChildren<ReihenfolgePlanet>(true);
     }
 }
