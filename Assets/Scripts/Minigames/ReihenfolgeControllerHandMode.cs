@@ -1,6 +1,6 @@
 using UnityEngine;
 
-// Schaltet den Meta-Controller-als-Hand-Modus nur fuer das Reihenfolge-Minispiel ein.
+// Schaltet den Meta-Controller-als-Hand-Modus fuer Snap-Minispiele ein.
 // Die Controller-Modelle/Rays bleiben davon unberuehrt.
 public class ReihenfolgeControllerHandMode : MonoBehaviour
 {

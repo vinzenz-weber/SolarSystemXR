@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 100001}
   - component: {fileID: 2018180648983611674}
+  - component: {fileID: 6612349012345680601}
+  - component: {fileID: 6612349012345680602}
   m_Layer: 0
   m_Name: Minigame_Size
   m_TagString: Untagged
@@ -30,7 +32,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 8060578312729425770}
   - {fileID: 4071480716403168817}
   - {fileID: 7764851361516553545}
   - {fileID: 5401226727895786132}
@@ -49,6 +50,70 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc63fd5899687f34caa9ab1744f8f072, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MinigameUIActions
+--- !u!114 &6612349012345680601
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2cae2b3bbb304a63900d7b50f7c34c42, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SizeChecker
+  AutoCollectChildren: 1
+  ListSnapInteractable: {fileID: 3581356368645249047}
+  ListRoot: {fileID: 4071480716403168817}
+  Slots:
+  - {fileID: 516455428193588526}
+  - {fileID: 885485196785896411}
+  - {fileID: 33077261533593605}
+  - {fileID: 7232453453837167445}
+  - {fileID: 8074057417904056016}
+  - {fileID: 2926364606353422216}
+  - {fileID: 8678367577675512496}
+  - {fileID: 269460045098093717}
+  Planets:
+  - {fileID: 8581628104681123550}
+  - {fileID: 6564519711806637350}
+  - {fileID: 6097995080665727478}
+  - {fileID: 10904530953676912}
+  - {fileID: 8201212434467502670}
+  - {fileID: 763974694322180397}
+  - {fileID: 7248654684528341713}
+  - {fileID: 1580651945998374700}
+  SuccessText: {fileID: 0}
+  ExpectedPlanetCount: 8
+  InvertOrder: 0
+  NeutralColor: {r: 0.25, g: 0.65, b: 1, a: 0.65}
+  CorrectColor: {r: 0.1, g: 0.9, b: 0.35, a: 1}
+  WrongColor: {r: 1, g: 0.18, b: 0.12, a: 1}
+  WrongBlinkDuration: 0.45
+  EarthSizeMeters: 0.04
+  EarthDiameterKm: 12742
+  WrongReturnDelay: 2
+  ReturnDuration: 0.45
+--- !u!114 &6612349012345680602
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 100000}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f61a49bf95d4e79848a45bf164793f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SizeMinigameWorldLayout
+  ListRoot: {fileID: 4071480716403168817}
+  OrbitsRoot: {fileID: 7764851361516553545}
+  WorldHeight: 1.1
+  ListDistance: 1.05
+  OrbitsDistance: 1.35
+  ListSideOffset: 0
+  OrbitsSideOffset: 0
+  AlignOnStart: 1
 --- !u!1 &105596681151203031
 GameObject:
   m_ObjectHideFlags: 0
@@ -1033,7 +1098,7 @@ Transform:
   m_GameObject: {fileID: 623628259757271068}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.08900001, y: 0, z: 0}
+  m_LocalPosition: {x: 0.1, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1680,7 +1745,7 @@ MonoBehaviour:
   _maxInteractors: 2
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 1718480437167490901}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
 --- !u!114 &7232453453837167445
@@ -2626,7 +2691,7 @@ Transform:
   m_GameObject: {fileID: 1664863071809970137}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.066000015, y: 0, z: 0}
+  m_LocalPosition: {x: -0.1, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -3027,7 +3092,7 @@ MonoBehaviour:
   _maxInteractors: 2
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 1718480437167490901}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
 --- !u!114 &2926364606353422216
@@ -3291,7 +3356,7 @@ MonoBehaviour:
   _maxInteractors: 2
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 1718480437167490901}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
 --- !u!114 &8678367577675512496
@@ -4000,11 +4065,11 @@ Transform:
   m_GameObject: {fileID: 2474432708067981315}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: -0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -0.6823387, y: -0.26288992, z: -0.26753998}
-  m_LocalScale: {x: 1.5, y: 1.5000001, z: 0.22318}
+  m_LocalPosition: {x: 0.022999998, y: 0.048000097, z: 0.08399999}
+  m_LocalScale: {x: 1.5, y: 1.5000002, z: 0.22318}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 100001}
+  m_Father: {fileID: 7764851361516553545}
   m_LocalEulerAnglesHint: {x: 90, y: 0, z: 0}
 --- !u!33 &5993395722348921889
 MeshFilter:
@@ -5660,7 +5725,7 @@ MonoBehaviour:
   _maxInteractors: 2
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 1718480437167490901}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
 --- !u!114 &885485196785896411
@@ -6253,7 +6318,7 @@ Transform:
   m_GameObject: {fileID: 3399950852504072358}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.432, y: 0, z: 0}
+  m_LocalPosition: {x: 0.7, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -6461,7 +6526,7 @@ MonoBehaviour:
   _maxInteractors: 2
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 1718480437167490901}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
 --- !u!114 &8074057417904056016
@@ -6616,7 +6681,7 @@ Transform:
   m_GameObject: {fileID: 3699845330283679329}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.35360005, y: 0, z: 0}
+  m_LocalPosition: {x: -0.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -7127,7 +7192,7 @@ MonoBehaviour:
   _maxInteractors: 2
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 1718480437167490901}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
 --- !u!114 &516455428193588526
@@ -9304,7 +9369,7 @@ MonoBehaviour:
   _maxInteractors: 2
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 1718480437167490901}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
 --- !u!114 &269460045098093717
@@ -9569,7 +9634,7 @@ Transform:
   m_GameObject: {fileID: 5395691847775673687}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.50699997, y: 0, z: 0}
+  m_LocalPosition: {x: -0.7, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -10262,9 +10327,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2018180648983611674}
-        m_TargetAssemblyTypeName: MinigameUIActions, Assembly-CSharp
-        m_MethodName: CompleteAndReturnToMenu
+      - m_Target: {fileID: 6612349012345680601}
+        m_TargetAssemblyTypeName: SizeChecker, Assembly-CSharp
+        m_MethodName: FinishButtonPressed
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -12019,7 +12084,7 @@ Transform:
   m_GameObject: {fileID: 6780651222343173105}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: -0.22099999, y: 0, z: 0}
+  m_LocalPosition: {x: -0.3, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -12203,7 +12268,7 @@ MonoBehaviour:
   _maxInteractors: 2
   _maxSelectingInteractors: 1
   _data: {fileID: 0}
-  _rigidbody: {fileID: 0}
+  _rigidbody: {fileID: 1718480437167490901}
   _snapPoseDelegate: {fileID: 0}
   _movementProvider: {fileID: 0}
 --- !u!114 &33077261533593605
@@ -12496,7 +12561,7 @@ Transform:
   m_GameObject: {fileID: 6925745855131599248}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.187, y: 0, z: 0}
+  m_LocalPosition: {x: 0.3, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -12929,10 +12994,11 @@ Transform:
   m_GameObject: {fileID: 7483806907036846174}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 1, z: 0.689}
+  m_LocalPosition: {x: 0.035, y: 1.272, z: 1.44}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 8060578312729425770}
   - {fileID: 8746667685022481207}
   - {fileID: 4378451902896745949}
   - {fileID: 7829231024751276455}
@@ -13203,7 +13269,7 @@ Transform:
   m_GameObject: {fileID: 7710318629493021180}
   serializedVersion: 2
   m_LocalRotation: {x: 0.7071068, y: 0, z: 0, w: 0.7071068}
-  m_LocalPosition: {x: 0.305, y: 0, z: 0}
+  m_LocalPosition: {x: 0.5, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

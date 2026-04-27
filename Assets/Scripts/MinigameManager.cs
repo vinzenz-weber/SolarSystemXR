@@ -76,7 +76,7 @@ public class MinigameManager : MonoBehaviour
         _activeMinigame = Instantiate(prefab);
 
         PositionMinigameInFrontOfUser(_activeMinigame);
-        SetReihenfolgeControllerHandMode(type == MinigameType.Reihenfolge);
+        SetReihenfolgeControllerHandMode(NeedsControllerHandMode(type));
         SetGameState(type);
     }
 
@@ -218,6 +218,12 @@ public class MinigameManager : MonoBehaviour
     private string GetCompletedKey(MinigameType type)
     {
         return "MinigameCompleted_" + type;
+    }
+
+    private bool NeedsControllerHandMode(MinigameType type)
+    {
+        return type == MinigameType.Reihenfolge
+            || type == MinigameType.Size;
     }
 
     private void SetReihenfolgeControllerHandMode(bool isEnabled)
