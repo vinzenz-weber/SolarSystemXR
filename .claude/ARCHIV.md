@@ -25,6 +25,17 @@
 
 ## Iterationen & Änderungen
 
+### Meta Snap-Listen: automatische Platzierung ueber Default/TimeOut Interactable verstanden
+
+- **Datum:** 2026-04-27
+- **Vorher:** Bei `Minigame_Size.prefab` war unklar, warum die Planeten nicht automatisch in das `List`-Objekt einsortiert wurden, obwohl das Rechteck nach manuellem Pinch korrekt wuchs. Zunaechst lag der Verdacht auf dem `List > SnapInteractable`-Setup bzw. dessen Rigidbody-Referenz.
+- **Nachher:** Das Listen-Setup aus der Meta Interaction SDK `SnapExamples`-Szene wurde als funktionierender Kern bestaetigt: `ListSnapPoseDelegate` berechnet die Positionen der gesnappten Elemente, `ListSnapPoseDelegateRoundedBoxVisual` skaliert den sichtbaren Rahmen. Der entscheidende Unterschied lag bei den Planeten-`SnapInteractor`s: In `Minigame_Reihenfolge.prefab` zeigen `Default Interactable` und `Time Out Interactable` auf `List > SnapInteractable`; in `Minigame_Size.prefab` standen diese Felder noch auf `None`.
+- **Grund:** Ohne `Default Interactable`/`Time Out Interactable` kennt ein Planet beim Start kein Ziel fuer automatisches Snapping. Sobald der Planet im Playmode beruehrt/gepincht wird, sucht der `SnapInteractor` aktiv nach einem passenden `SnapInteractable`, findet die Liste und registriert sich dann korrekt.
+- **Erkenntnisse:**
+  - Wenn die Liste nach manuellem Snappen korrekt waechst, funktionieren `ListSnapPoseDelegate`, Border-Visual und Listen-`SnapInteractable` bereits.
+  - Automatische Startplatzierung ist eine Eigenschaft der einzelnen Planeten-`SnapInteractor`s, nicht der Liste selbst.
+  - Fuer kopierte SnapExamples-Setups muessen nicht nur Komponenten kopiert werden, sondern auch die Referenzen zwischen Planet-`SnapInteractor` und Listen-`SnapInteractable`.
+
 ### Reihenfolge-Minispiel: eigener Aufbau -> Meta SnapExamples + leichte Projektlogik
 
 - **Datum:** 2026-04-27

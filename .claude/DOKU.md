@@ -127,6 +127,18 @@
   - `InteractablePlanetVisual.cs` erzeugt das Planet-Visual unter einem `VisualRoot`; lokale Position und Rotation sind im Inspector anpassbar.
 - **Wichtig:** Das Prefab bleibt manuell im Editor aufgebaut. `ReihenfolgeMinigameBuilder` ist im Prefab deaktiviert, damit der manuelle SnapExamples-Aufbau nicht zur Laufzeit ueberschrieben wird.
 
+### Meta Snap-Listen in Minigames
+
+- **Status:** Aktiv genutzt in `Minigame_Reihenfolge.prefab` und als Vorlage fuer `Minigame_Size.prefab`.
+- **Beschreibung:** Die automatisch wachsende Planeten-Liste kommt aus der Meta Interaction SDK `SnapExamples`-Szene. Die Planeten werden nicht per eigenem Layout-Script verteilt, sondern ueber SDK-Snap-Komponenten dynamisch in einer Liste angeordnet.
+- **Umsetzung:**
+  - `List > SnapInteractable` enthaelt einen `SnapInteractable` und einen `ListSnapPoseDelegate`.
+  - Im `SnapInteractable` ist `Snap Pose Delegate` auf den lokalen `ListSnapPoseDelegate` gesetzt.
+  - `List > Border` enthaelt `ListSnapPoseDelegateRoundedBoxVisual`; dieses Visual liest die aktuelle Listengroesse aus dem `ListSnapPoseDelegate` und skaliert den Rahmen automatisch.
+  - Jeder Planet/Kugel hat einen `SnapInteractor` mit `Default Interactable` und `Time Out Interactable` auf `List > SnapInteractable`.
+  - Beim Start oder nach Timeout snappen die Planeten dadurch automatisch in die Liste. Beim Hinzufuegen/Entfernen registriert der `ListSnapPoseDelegate` die aktiven Interactors und berechnet neue Positionen entlang der lokalen X-Achse der Liste.
+- **Wichtig:** Wenn die Planeten erst nach Beruehrung/Pinch in die Liste fliegen, aber nicht automatisch beim Start, ist die Liste selbst meist korrekt. Dann fehlen wahrscheinlich auf den Planeten-`SnapInteractor`s die Referenzen `Default Interactable` und/oder `Time Out Interactable` auf das Listen-`SnapInteractable`.
+
 ### Planet Shader, SunPasser und Cloud-Animation
 
 - **Status:** Weiterhin aktiv.
@@ -155,6 +167,7 @@
 | State-Grenze | Placement-Trigger und Planet-Auswahl werden durch `GameState.PLACEMENT` vs. `GameState.WORLD` getrennt. |
 | Minigame-UI | Minigame-UIs werden als Prefab-Inhalt im Editor gebaut, nicht zur Laufzeit per Code erzeugt. |
 | Reihenfolge-Interaktion | Reihenfolge nutzt Meta SnapExamples-Komponenten. Eigener Code prueft nur Daten/Feedback, nicht das Greifen/Snappen selbst. |
+| Snap-Listen | Dynamische Planeten-Listen nutzen `ListSnapPoseDelegate` + `ListSnapPoseDelegateRoundedBoxVisual` aus den Meta SnapExamples; automatische Startplatzierung braucht `Default Interactable`/`Time Out Interactable` auf den Planeten-`SnapInteractor`s. |
 | Controller-Hand-Modus | `controllerDrivenHandPosesType = Natural` wird nur waehrend `MinigameType.Reihenfolge` gesetzt und danach wiederhergestellt. |
 
 ---
@@ -175,6 +188,7 @@
 | 2026-04-27 | Minigame-UIs nicht per Code erzeugen | Meta Interaction SDK Canvas-Setup muss im Editor/Prefab passieren, damit Quest-Controller-Ray-Interaktion funktioniert |
 | 2026-04-27 | Reihenfolge-Minispiel auf Meta SnapExamples aufbauen | Snap/Grab ist im SDK bereits geloest; eigener Code bleibt auf Planetendaten, Slot-Pruefung und Feedback beschraenkt |
 | 2026-04-27 | Controller-Hand-Modus nur fuer Reihenfolge aktivieren | Controller sollen in anderen Szenen sichtbar und ray-faehig bleiben; nur das Snap-Minispiel braucht Controller-driven hand poses |
+| 2026-04-27 | Snap-Listen aus Meta SnapExamples uebernehmen | `ListSnapPoseDelegate` loest die automatische Anordnung und Groessenanpassung bereits; eigener Layout-Code waere unnoetig und fehleranfaelliger |
 
 ---
 
@@ -192,6 +206,7 @@
 | Learn-Panel im Editor auf `Planets` + `SolarSystem` umbauen | Offen |
 | Test-Panel Phase 4: Buttons, Minigame-Prefabs, Abschliessen/Beenden, Reset-Fortschritt | Fertig |
 | Reihenfolge-Prefab: alle Planeten, SnapInteractor und OrbitSlots final im Inspector pruefen | In Arbeit |
+| Size-Prefab: Planeten-`SnapInteractor`s auf `List > SnapInteractable` als `Default Interactable` und `Time Out Interactable` pruefen | In Arbeit |
 | Headset-Test: Reihenfolge mit Controller greifen, snappen, Ring-Feedback und Abschluss pruefen | Offen |
 | `UISetExamples.unity` und `PanelWithManipulators.unity` als Vorlage fuer VR-UI/Panel pruefen | Offen |
 | Headset-Test: Erde platzieren -> InfoPanel sichtbar und lesbar | Offen |

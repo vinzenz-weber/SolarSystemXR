@@ -273,8 +273,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ReihenfolgeOrbitSlot
   CorrectOrbitIndex: 1
-  SnapInteractable: {fileID: 1678739688047354717}
-  FeedbackRenderer: {fileID: 0}
+  SnapInteractable: {fileID: 1517059389661624395}
+  FeedbackRenderer: {fileID: 6418667019076666281}
+  FeedbackRoundedBox: {fileID: 7814530526041904624}
 --- !u!1 &238421064453080588
 GameObject:
   m_ObjectHideFlags: 0
@@ -380,8 +381,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ReihenfolgeOrbitSlot
   CorrectOrbitIndex: 2
-  SnapInteractable: {fileID: 1678739688047354717}
-  FeedbackRenderer: {fileID: 0}
+  SnapInteractable: {fileID: 2623205530019829292}
+  FeedbackRenderer: {fileID: 6875648891160881109}
+  FeedbackRoundedBox: {fileID: 4538771651368804737}
 --- !u!1 &305177421191055184
 GameObject:
   m_ObjectHideFlags: 0
@@ -1377,8 +1379,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ReihenfolgeOrbitSlot
   CorrectOrbitIndex: 7
-  SnapInteractable: {fileID: 1678739688047354717}
-  FeedbackRenderer: {fileID: 0}
+  SnapInteractable: {fileID: 1623136985138487079}
+  FeedbackRenderer: {fileID: 5196598452622262253}
+  FeedbackRoundedBox: {fileID: 4378727173007132360}
 --- !u!1 &1038441877249426777
 GameObject:
   m_ObjectHideFlags: 0
@@ -3342,6 +3345,7 @@ MonoBehaviour:
   CorrectOrbitIndex: 5
   SnapInteractable: {fileID: 114111555396354550}
   FeedbackRenderer: {fileID: 5066753739526420473}
+  FeedbackRoundedBox: {fileID: 1925174918223257499}
 --- !u!1 &2217526265883686374
 GameObject:
   m_ObjectHideFlags: 0
@@ -3904,6 +3908,7 @@ MonoBehaviour:
   CorrectOrbitIndex: 0
   SnapInteractable: {fileID: 1678739688047354717}
   FeedbackRenderer: {fileID: 5547549955315178215}
+  FeedbackRoundedBox: {fileID: 4485230324800354211}
 --- !u!114 &2253911125610234286
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3918,7 +3923,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ReihenfolgeOrbitSlot
   CorrectOrbitIndex: 0
   SnapInteractable: {fileID: 1678739688047354717}
-  FeedbackRenderer: {fileID: 0}
+  FeedbackRenderer: {fileID: 6184759942449117299}
+  FeedbackRoundedBox: {fileID: 4485230324800354211}
 --- !u!1 &2423712989070380508
 GameObject:
   m_ObjectHideFlags: 0
@@ -6730,8 +6736,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ReihenfolgeOrbitSlot
   CorrectOrbitIndex: 4
-  SnapInteractable: {fileID: 1678739688047354717}
-  FeedbackRenderer: {fileID: 0}
+  SnapInteractable: {fileID: 1245727504423742021}
+  FeedbackRenderer: {fileID: 4383457577836842621}
+  FeedbackRoundedBox: {fileID: 1767041760450131989}
 --- !u!1 &3438444129269376144
 GameObject:
   m_ObjectHideFlags: 0
@@ -10625,8 +10632,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ReihenfolgeOrbitSlot
   CorrectOrbitIndex: 3
-  SnapInteractable: {fileID: 1678739688047354717}
-  FeedbackRenderer: {fileID: 0}
+  SnapInteractable: {fileID: 8010728111464880898}
+  FeedbackRenderer: {fileID: 9019367716543836030}
+  FeedbackRoundedBox: {fileID: 142155478514009529}
 --- !u!1 &5538096474398210522
 GameObject:
   m_ObjectHideFlags: 0
@@ -12816,8 +12824,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ReihenfolgeOrbitSlot
   CorrectOrbitIndex: 6
-  SnapInteractable: {fileID: 1678739688047354717}
-  FeedbackRenderer: {fileID: 0}
+  SnapInteractable: {fileID: 2884442213439683888}
+  FeedbackRenderer: {fileID: 5058779657440111698}
+  FeedbackRoundedBox: {fileID: 4654470317890205290}
 --- !u!1 &6878869808291745183
 GameObject:
   m_ObjectHideFlags: 0
