@@ -1,6 +1,6 @@
 # Dokumentation: Sonnensystem XR
 
-> **Letzte Aktualisierung:** 2026-04-27
+> **Letzte Aktualisierung:** 2026-04-28
 
 ---
 
@@ -26,6 +26,7 @@
 - Phase 2 ist code-seitig weitgehend vorbereitet, Editor-Verkabelung und Headset-Verifikation sind noch offen.
 - Phase 3 ist in Umsetzung: Learn-Tab mit `Planets` und `SolarSystem`, globales Planet-InfoPanel, Sonnensystem-Slider-UI.
 - Phase 4 ist erledigt: Test-Tab startet Minigame-Prefabs, Abschliessen/Beenden funktionieren, Quiz-Fortschritt kann im Main Menu zurueckgesetzt werden.
+- Phase 6 ist in Umsetzung: `Size` nutzt jetzt einen eigenen Manager, Prefab-World-Layout, Live-Auswertung und planetenspezifisches Groessen-Feedback.
 
 ---
 
@@ -127,6 +128,19 @@
   - `InteractablePlanetVisual.cs` erzeugt das Planet-Visual unter einem `VisualRoot`; lokale Position und Rotation sind im Inspector anpassbar.
 - **Wichtig:** Das Prefab bleibt manuell im Editor aufgebaut. `ReihenfolgeMinigameBuilder` ist im Prefab deaktiviert, damit der manuelle SnapExamples-Aufbau nicht zur Laufzeit ueberschrieben wird.
 
+### Size-Minispiel
+
+- **Status:** Grundlogik und Prefab-Anbindung umgesetzt; finale Headset-Verifikation offen.
+- **Beschreibung:** Planeten werden aus der Meta-Snap-Liste auf Groessen-Slots gelegt. Korrekt platzierte Planeten wachsen sofort auf ihre relative Zielgroesse an, falsch platzierte Planeten fliegen nach kurzer Wartezeit zur Liste zurueck.
+- **Umsetzung:**
+  - `SizeChecker.cs` sammelt Planeten und Slots aus `Minigame_Size.prefab`, prueft die Belegung live und nutzt `PlanetData.diameter` fuer die erwartete Reihenfolge.
+  - Die Zielgroesse wird relativ zu einem zentralen Referenzwert berechnet: aktuell `EarthSizeMeters = 0.04`, also Erde = 4 cm.
+  - Sobald ein Planet korrekt auf seinem Slot liegt, wird das sichtbare `InteractablePlanetVisual.VisualRoot` skaliert und alle `Rigidbody`/`Collider` des Planeten deaktiviert, damit spaetere Ueberlappungen ihn nicht wegschieben.
+  - Falsch platzierte Planeten behalten kurzes Rot-Feedback und werden nach `WrongReturnDelay` wieder zur Listenflaeche zurueck animiert.
+  - `FinishButtonPressed()` liegt jetzt auf `SizeChecker`; der Fertig-Button darf das Minispiel nicht mehr direkt ohne korrekte Loesung abschliessen.
+  - `SizeMinigameWorldLayout.cs` positioniert `List` und Slot-/Orbit-Gruppe beim Spawn automatisch vor dem User, parallel zum Boden und auf ca. 1.10 m Hoehe.
+- **Hinweis:** Die sichtbare Groessenanpassung passiert am Visual-Root des jeweiligen Interactable-Planeten, nicht am Grab-/Snap-Root.
+
 ### Meta Snap-Listen in Minigames
 
 - **Status:** Aktiv genutzt in `Minigame_Reihenfolge.prefab` und als Vorlage fuer `Minigame_Size.prefab`.
@@ -138,6 +152,15 @@
   - Jeder Planet/Kugel hat einen `SnapInteractor` mit `Default Interactable` und `Time Out Interactable` auf `List > SnapInteractable`.
   - Beim Start oder nach Timeout snappen die Planeten dadurch automatisch in die Liste. Beim Hinzufuegen/Entfernen registriert der `ListSnapPoseDelegate` die aktiven Interactors und berechnet neue Positionen entlang der lokalen X-Achse der Liste.
 - **Wichtig:** Wenn die Planeten erst nach Beruehrung/Pinch in die Liste fliegen, aber nicht automatisch beim Start, ist die Liste selbst meist korrekt. Dann fehlen wahrscheinlich auf den Planeten-`SnapInteractor`s die Referenzen `Default Interactable` und/oder `Time Out Interactable` auf das Listen-`SnapInteractable`.
+
+### Minigame-Spawn und Controller-Hand-Modus
+
+- **Status:** Aktiv genutzt.
+- **Beschreibung:** Snap-Minispiele brauchen neben dem Meta-Snap-Setup auch die passende Spawn-Position im Raum und temporaer den Meta-Controller-Hand-Modus.
+- **Umsetzung:**
+  - `MinigameManager.cs` behandelt `Reihenfolge` und `Size` jetzt gleich fuer den Controller-Hand-Modus.
+  - `ReihenfolgeControllerHandMode.cs` bleibt das zentrale Umschalt-Script und wird fuer beide Snap-Minispiele verwendet.
+  - `SizeMinigameWorldLayout.cs` richtet das `Size`-Prefab relativ zur Hauptkamera aus, damit Liste und Slots nicht von einer zufaelligen Prefab-Authoring-Position abhaengen.
 
 ### Planet Shader, SunPasser und Cloud-Animation
 
@@ -168,7 +191,9 @@
 | Minigame-UI | Minigame-UIs werden als Prefab-Inhalt im Editor gebaut, nicht zur Laufzeit per Code erzeugt. |
 | Reihenfolge-Interaktion | Reihenfolge nutzt Meta SnapExamples-Komponenten. Eigener Code prueft nur Daten/Feedback, nicht das Greifen/Snappen selbst. |
 | Snap-Listen | Dynamische Planeten-Listen nutzen `ListSnapPoseDelegate` + `ListSnapPoseDelegateRoundedBoxVisual` aus den Meta SnapExamples; automatische Startplatzierung braucht `Default Interactable`/`Time Out Interactable` auf den Planeten-`SnapInteractor`s. |
-| Controller-Hand-Modus | `controllerDrivenHandPosesType = Natural` wird nur waehrend `MinigameType.Reihenfolge` gesetzt und danach wiederhergestellt. |
+| Controller-Hand-Modus | `controllerDrivenHandPosesType = Natural` wird waehrend der Snap-Minispiele `Reihenfolge` und `Size` gesetzt und danach wiederhergestellt. |
+| Size-Wachstum | Die Echtgroessen-Darstellung im Size-Minispiel skaliert das sichtbare `InteractablePlanetVisual.VisualRoot`, nicht den Interactable-Root. |
+| Size-Spawn | `Minigame_Size.prefab` darf als Prefab global instanziiert werden; die sinnvolle Raumpositionierung von Liste und Slots passiert danach zur Laufzeit ueber `SizeMinigameWorldLayout`. |
 
 ---
 
@@ -187,8 +212,10 @@
 | 2026-04-27 | Editor-Placement ohne Depth API | Die Depth API macht den Playmode auf Windows traege; UI- und Flow-Tests sollen ohne Quest-Build moeglich sein |
 | 2026-04-27 | Minigame-UIs nicht per Code erzeugen | Meta Interaction SDK Canvas-Setup muss im Editor/Prefab passieren, damit Quest-Controller-Ray-Interaktion funktioniert |
 | 2026-04-27 | Reihenfolge-Minispiel auf Meta SnapExamples aufbauen | Snap/Grab ist im SDK bereits geloest; eigener Code bleibt auf Planetendaten, Slot-Pruefung und Feedback beschraenkt |
-| 2026-04-27 | Controller-Hand-Modus nur fuer Reihenfolge aktivieren | Controller sollen in anderen Szenen sichtbar und ray-faehig bleiben; nur das Snap-Minispiel braucht Controller-driven hand poses |
+| 2026-04-27 | Controller-Hand-Modus nur fuer Snap-Minispiele aktivieren | Controller sollen in anderen Szenen sichtbar und ray-faehig bleiben; nur `Reihenfolge` und `Size` brauchen controller-driven hand poses |
 | 2026-04-27 | Snap-Listen aus Meta SnapExamples uebernehmen | `ListSnapPoseDelegate` loest die automatische Anordnung und Groessenanpassung bereits; eigener Layout-Code waere unnoetig und fehleranfaelliger |
+| 2026-04-28 | Size-Minispiel bewertet ueber einen zentralen Manager statt ueber den Fertig-Button | Die Loesung soll live pruefbar sein, den Fertig-Button gegen falsches Abschliessen absichern und planetenspezifisches Groessen-Feedback steuern |
+| 2026-04-28 | Korrekt platzierte Size-Planeten skalieren am `VisualRoot` | Das sichtbare Planet-Visual liegt im Interactable-Prefab unter `InteractablePlanetVisual`; Root-Skalierung allein ist fuer das unmittelbare Feedback zu unzuverlaessig |
 
 ---
 
@@ -207,6 +234,9 @@
 | Test-Panel Phase 4: Buttons, Minigame-Prefabs, Abschliessen/Beenden, Reset-Fortschritt | Fertig |
 | Reihenfolge-Prefab: alle Planeten, SnapInteractor und OrbitSlots final im Inspector pruefen | In Arbeit |
 | Size-Prefab: Planeten-`SnapInteractor`s auf `List > SnapInteractable` als `Default Interactable` und `Time Out Interactable` pruefen | In Arbeit |
+| Size-Prefab im Headset pruefen: korrekter Slot -> sofortige Groessenanpassung, Collider/Rigidbody aus | Offen |
+| Size-Prefab im Headset pruefen: falscher Slot -> Rot-Feedback und Rueckflug nach 2 Sekunden | Offen |
+| Size-Prefab im Headset pruefen: `List` und Slots werden vor dem User auf ca. 1.10 m Hoehe gespawnt | Offen |
 | Headset-Test: Reihenfolge mit Controller greifen, snappen, Ring-Feedback und Abschluss pruefen | Offen |
 | `UISetExamples.unity` und `PanelWithManipulators.unity` als Vorlage fuer VR-UI/Panel pruefen | Offen |
 | Headset-Test: Erde platzieren -> InfoPanel sichtbar und lesbar | Offen |
@@ -221,4 +251,5 @@
 - **2026-04-27:** `dotnet build Assembly-CSharp.csproj --no-restore` erfolgreich.
 - **2026-04-27:** Reihenfolge-Code nach SnapExamples-Integration kompiliert: `dotnet build Assembly-CSharp.csproj --no-restore` erfolgreich.
 - **2026-04-27:** Phase-4-Test-Flow im Playmode verifiziert: Quiz-Buttons starten passende Panels, Abschliessen speichert Erfolg, Beenden speichert nicht, Main-Menu-Reset loescht Fortschritt.
+- **2026-04-28:** Size-Minispiel nach Phase-6-Integration kompiliert: `dotnet build Assembly-CSharp.csproj --no-restore` erfolgreich.
 - Warnungen bleiben aus bestehenden UISet/OpenXR/Altlasten, keine neuen Compile-Fehler.

@@ -25,6 +25,28 @@
 
 ## Iterationen & Änderungen
 
+### Phase 6 / Size-Minispiel: vom statischen Prefab zum live geprueften Snap-Minispiel
+
+- **Datum:** 2026-04-28
+- **Vorher:** `Minigame_Size.prefab` war zwar als eigenes Prefab vorhanden, aber die Logik war noch nicht auf den finalen Snap-Flow angepasst. Der vorhandene Fertig-Button haette das Minispiel direkt abschliessen koennen, auch ohne korrekte Loesung. Ausserdem war unklar, wie Liste und Snap-Slots bei globaler Prefab-Instanziierung sinnvoll relativ zum User ausgerichtet werden sollen.
+- **Nachher:** Phase 6 fuehrt einen zentralen `SizeChecker.cs` als Manager fuer das komplette `Size`-Minispiel ein. Er sammelt Planeten und Slots automatisch aus dem Prefab, prueft die aktuelle Belegung live ueber die vorhandenen Meta-Snap-Komponenten und verwendet `PlanetData.diameter` fuer die erwartete Reihenfolge. Der Fertig-Button ruft jetzt `FinishButtonPressed()` auf dem `SizeChecker` auf, statt direkt `CompleteAndReturnToMenu()` auszufuehren. Fuer die Raumplatzierung richtet `SizeMinigameWorldLayout.cs` `List` und Slot-Gruppe nach dem Spawn vor dem User, parallel zum Boden und auf etwa 1.10 m Hoehe aus.
+- **Grund:** Das Size-Minispiel sollte sich an dieselbe Projektlogik halten wie `Reihenfolge`: Meta SDK fuer Grab/Snap, eigener Projektcode nur fuer Regeln, Feedback und Zustand. Die Positionierung durfte nicht von einer festen Authoring-Position im Prefab abhaengen, weil das Minigame als Ganzes vom `MinigameManager` instanziiert wird.
+- **Erkenntnisse:**
+  - Bei XR-Prefabs ist ein nachgelagertes Layout-Script oft robuster als eine hart eingebackene Weltposition im Prefab.
+  - Ein Fertig-Button sollte in Wissens- und Sortier-Minispielen nie direkt den Erfolg markieren, sondern nur die Fachlogik anstossen.
+  - Wenn die Meta-Snap-Komponenten bereits die Interaktion loesen, bleibt eigener Code am stabilsten, wenn er nur `SelectingInteractorViews`, Slot-Reihenfolge und Feedback ausliest.
+
+### Size-Groessenfeedback: Root-Skalierung -> sichtbares VisualRoot
+
+- **Datum:** 2026-04-28
+- **Vorher:** Die erste Groessenlogik fuer das Size-Minispiel skalierte den `ReihenfolgePlanet`-Root. Gleichzeitig setzte die Slot-Auswertung den Zustand bei einem neu platzierten, korrekten Planeten zu frueh auf "bereits korrekt". In der Praxis fuehrte das dazu, dass das direkte Wachstum teilweise gar nicht sichtbar oder komplett uebersprungen war.
+- **Nachher:** Die Skalierung laeuft jetzt ueber das sichtbare `InteractablePlanetVisual.VisualRoot`. Dessen Anfangsskalierung wird beim Start gecacht, damit ein Reset oder ein Rueckflug auf den Ausgangszustand zuruecksetzen kann. Sobald ein Planet neu korrekt auf seinem Slot liegt, wird sein Visual sofort auf die relative Zielgroesse skaliert; danach werden `Rigidbody` und `Collider` deaktiviert, damit Ueberlappungen ihn nicht physikalisch wegschieben.
+- **Grund:** Das sichtbare Planet-Visual liegt im Prefab nicht direkt auf dem Interactable-Root, sondern unter einem separaten `VisualRoot`. Gleichzeitig musste die Statuslogik so geordnet werden, dass "neu korrekt" und "war schon korrekt" sauber unterschieden werden.
+- **Erkenntnisse:**
+  - Bei Interactable-Prefabs mit separatem Visual-Container sollte visuelles Feedback immer am sichtbaren Child-Hierarchie-Zweig ansetzen, nicht pauschal am Root.
+  - Zustandsmaschinen fuer Live-Feedback brauchen eine klare Reihenfolge: alten Zustand lesen, neuen Zustand ableiten, erst danach den State aktualisieren.
+  - Physik-Deaktivierung nach korrekter Platzierung ist im XR-Snap-Kontext nicht nur Optimierung, sondern verhindert echte Fehlbewegungen durch Ueberlappung.
+
 ### Meta Snap-Listen: automatische Platzierung ueber Default/TimeOut Interactable verstanden
 
 - **Datum:** 2026-04-27

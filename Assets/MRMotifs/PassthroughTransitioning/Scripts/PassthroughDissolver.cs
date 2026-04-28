@@ -2,6 +2,7 @@
 
 using Meta.XR.Samples;
 using MRMotifs.SharedAssets;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -18,13 +19,22 @@ namespace MRMotifs.PassthroughTransitioning
         [SerializeField]
         private float boundaryThreshold = 0.25f;
 
+        [Tooltip("Geschwindigkeit, mit der zwischen VR und Passthrough gewechselt wird.")]
+        [SerializeField]
+        private float dissolveSpeed = 1.5f;
+
         private Camera m_mainCamera;
         private Material m_material;
         private MeshRenderer m_meshRenderer;
         private MenuPanel m_menuPanel;
         private Slider m_alphaSlider;
+        private OVRPassthroughLayer m_oVRPassthroughLayer;
+        private float m_currentDissolveLevel;
+        private const float DISSOLVE_TOLERANCE = 0.001f;
 
         private static readonly int s_dissolutionLevel = Shader.PropertyToID("_Level");
+
+        public bool IsPassthroughActive => m_currentDissolveLevel > boundaryThreshold;
 
         private void Awake()
         {
@@ -40,8 +50,9 @@ namespace MRMotifs.PassthroughTransitioning
 
             m_meshRenderer = GetComponent<MeshRenderer>();
             m_material = m_meshRenderer.material;
-            m_material.SetFloat(s_dissolutionLevel, 0);
+            SetDissolveLevel(0);
             m_meshRenderer.enabled = true;
+            m_oVRPassthroughLayer = FindAnyObjectByType<OVRPassthroughLayer>();
 
             SetSphereSize(distance);
 
@@ -50,7 +61,10 @@ namespace MRMotifs.PassthroughTransitioning
             if (m_menuPanel != null)
             {
                 m_alphaSlider = m_menuPanel.PassthroughFaderSlider;
-                m_alphaSlider.onValueChanged.AddListener(HandleSliderChange);
+                if (m_alphaSlider != null)
+                {
+                    m_alphaSlider.onValueChanged.AddListener(HandleSliderChange);
+                }
             }
 
 #if UNITY_ANDROID
@@ -60,7 +74,7 @@ namespace MRMotifs.PassthroughTransitioning
 
         private void OnDestroy()
         {
-            if (m_menuPanel != null)
+            if (m_alphaSlider != null)
             {
                 m_alphaSlider.onValueChanged.RemoveListener(HandleSliderChange);
             }
@@ -73,10 +87,9 @@ namespace MRMotifs.PassthroughTransitioning
 
         private void CheckIfPassthroughIsRecommended()
         {
-            m_material.SetFloat(s_dissolutionLevel, OVRManager.IsPassthroughRecommended() ? 1 : 0);
-            OVRManager.instance.shouldBoundaryVisibilityBeSuppressed = OVRManager.IsPassthroughRecommended();
+            SetPassthroughActiveImmediate(OVRManager.IsPassthroughRecommended());
 
-            if (m_menuPanel != null)
+            if (m_alphaSlider != null)
             {
                 m_alphaSlider.value = OVRManager.IsPassthroughRecommended() ? 1 : 0;
             }
@@ -84,9 +97,62 @@ namespace MRMotifs.PassthroughTransitioning
 
         private void HandleSliderChange(float value)
         {
+            StopAllCoroutines();
+            SetDissolveLevel(value);
+        }
+
+        public void TogglePassthrough()
+        {
+            SetPassthroughActive(IsPassthroughActive == false);
+        }
+
+        public void SetPassthroughActive(bool isActive)
+        {
+            StopAllCoroutines();
+
+            if (isActive && m_oVRPassthroughLayer != null)
+            {
+                m_oVRPassthroughLayer.enabled = true;
+            }
+
+            StartCoroutine(DissolveToTarget(isActive ? 1f : 0f));
+        }
+
+        public void SetPassthroughActiveImmediate(bool isActive)
+        {
+            StopAllCoroutines();
+
+            if (m_oVRPassthroughLayer != null)
+            {
+                m_oVRPassthroughLayer.enabled = isActive;
+            }
+
+            SetDissolveLevel(isActive ? 1f : 0f);
+        }
+
+        private IEnumerator DissolveToTarget(float targetValue)
+        {
+            while (Mathf.Abs(m_currentDissolveLevel - targetValue) > DISSOLVE_TOLERANCE)
+            {
+                var newValue = Mathf.MoveTowards(m_currentDissolveLevel, targetValue, dissolveSpeed * Time.deltaTime);
+                SetDissolveLevel(newValue);
+                yield return null;
+            }
+
+            SetDissolveLevel(targetValue);
+
+            if (Mathf.Approximately(targetValue, 0f) && m_oVRPassthroughLayer != null)
+            {
+                m_oVRPassthroughLayer.enabled = false;
+            }
+        }
+
+        private void SetDissolveLevel(float value)
+        {
+            m_currentDissolveLevel = value;
             m_material.SetFloat(s_dissolutionLevel, value);
 
-            if (value > boundaryThreshold || value < boundaryThreshold)
+            if (OVRManager.instance != null)
             {
                 OVRManager.instance.shouldBoundaryVisibilityBeSuppressed = value > boundaryThreshold;
             }

@@ -1,3 +1,4 @@
+using MRMotifs.PassthroughTransitioning;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -78,6 +79,16 @@ public class MainMenuController : MonoBehaviour
     public PlacementManager placementManager;
     public MinigameManager minigameManager;
 
+    [Header("Passthrough / VR")]
+    [Tooltip("Toggle im MainMenu, der zwischen Passthrough und VR wechselt.")]
+    [SerializeField] private Toggle _passthroughModeToggle;
+
+    [Tooltip("Dissolver aus MR Motif #1. Wenn leer, wird er automatisch in der Szene gesucht.")]
+    [SerializeField] private PassthroughDissolver _passthroughDissolver;
+
+    [Tooltip("Startzustand: aktiv = Passthrough, inaktiv = VR.")]
+    [SerializeField] private bool _isPassthroughOnAtStart;
+
     private PlanetData _currentPlanet;
     private ExperienceSelection _currentSelection = ExperienceSelection.None;
     private string _reihenfolgeBaseLabel = "Reihenfolge";
@@ -87,7 +98,16 @@ public class MainMenuController : MonoBehaviour
     void Start()
     {
         CacheQuizButtonReferences();
+        SetupPassthroughToggle();
         ShowLearnTab();
+    }
+
+    private void OnDestroy()
+    {
+        if (_passthroughModeToggle != null)
+        {
+            _passthroughModeToggle.onValueChanged.RemoveListener(SetPassthroughMode);
+        }
     }
 
     // =================================================================
@@ -386,5 +406,38 @@ public class MainMenuController : MonoBehaviour
         {
             targetText.text = newText;
         }
+    }
+
+    private void SetupPassthroughToggle()
+    {
+        if (_passthroughDissolver == null)
+        {
+            _passthroughDissolver = FindFirstObjectByType<PassthroughDissolver>();
+        }
+
+        if (_passthroughModeToggle != null)
+        {
+            _passthroughModeToggle.SetIsOnWithoutNotify(_isPassthroughOnAtStart);
+            _passthroughModeToggle.onValueChanged.AddListener(SetPassthroughMode);
+        }
+
+        SetPassthroughMode(_isPassthroughOnAtStart);
+    }
+
+    // Kann direkt im Toggle unter On Value Changed (bool) eingetragen werden.
+    public void SetPassthroughMode(bool isActive)
+    {
+        if (_passthroughDissolver == null)
+        {
+            _passthroughDissolver = FindFirstObjectByType<PassthroughDissolver>();
+        }
+
+        if (_passthroughDissolver == null)
+        {
+            Debug.LogWarning("MainMenuController: Kein PassthroughDissolver in der Szene gefunden.");
+            return;
+        }
+
+        _passthroughDissolver.SetPassthroughActive(isActive);
     }
 }
