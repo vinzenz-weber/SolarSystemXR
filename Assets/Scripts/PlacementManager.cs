@@ -11,6 +11,10 @@ public class PlacementManager : MonoBehaviour
 
     public GameObject placementVisualizerPrefab;
 
+    [Header("Einzelplanet Prefabs")]
+    [Tooltip("Generisches Interactable-Prefab mit InteractablePlanetVisual/VisualRoot. Leer = PlanetData.planetPrefab wird direkt platziert.")]
+    public GameObject interactablePlanetPrefab;
+
     [Header("Planet Info Panel")]
     public PlanetInfoPanelManager planetInfoPanelManager;
 
@@ -94,6 +98,27 @@ public class PlacementManager : MonoBehaviour
         if (planetInfoPanelManager != null)
         {
             planetInfoPanelManager.HidePanel();
+        }
+    }
+
+    public void SetPlacedContentVisible(bool isVisible)
+    {
+        for (int i = 0; i < _placedPlanetObjects.Count; i++)
+        {
+            if (_placedPlanetObjects[i] != null)
+            {
+                _placedPlanetObjects[i].SetActive(isVisible);
+            }
+        }
+
+        if (_placedSolarSystemObject != null)
+        {
+            _placedSolarSystemObject.SetActive(isVisible);
+        }
+
+        if (_currentSonnensystemUI != null)
+        {
+            _currentSonnensystemUI.gameObject.SetActive(isVisible);
         }
     }
 
@@ -195,7 +220,8 @@ public class PlacementManager : MonoBehaviour
                     // Neu: Ein einzelner Planet ersetzt ein bereits platziertes Sonnensystem.
                     ClearPlacedSolarSystem();
 
-                    GameObject spawnedPlanet = Instantiate(currentPlanetData.planetPrefab, previewInstance.transform.position, Quaternion.identity);
+                    GameObject spawnedPlanet = Instantiate(GetPlacementPrefab(currentPlanetData), previewInstance.transform.position, Quaternion.identity);
+                    SetupPlacedPlanetVisual(spawnedPlanet, currentPlanetData);
                     float vrScale = GetScaledSize(currentPlanetData.diameter);
                     spawnedPlanet.transform.localScale = new Vector3(vrScale, vrScale, vrScale);
                     RegisterSelectablePlanet(spawnedPlanet, currentPlanetData);
@@ -285,6 +311,29 @@ public class PlacementManager : MonoBehaviour
     float GetScaledSize(float realSizeInKm)
     {
         return (realSizeInKm / earthDiameterInKm) * earthDiameterInVR;
+    }
+
+    private GameObject GetPlacementPrefab(PlanetData data)
+    {
+        if (data == null) return null;
+
+        return data.interactablePlanetPrefab != null
+            ? data.interactablePlanetPrefab
+            : interactablePlanetPrefab != null
+                ? interactablePlanetPrefab
+            : data.planetPrefab;
+    }
+
+    private void SetupPlacedPlanetVisual(GameObject planetObject, PlanetData data)
+    {
+        if (planetObject == null || data == null) return;
+
+        InteractablePlanetVisual visualLoader = planetObject.GetComponentInChildren<InteractablePlanetVisual>(true);
+        if (visualLoader == null) return;
+
+        visualLoader.PlanetData = data;
+        visualLoader.RefreshVisual();
+        visualLoader.RefreshOnStart = false;
     }
 
     private void RegisterSelectablePlanet(GameObject planetObject, PlanetData data)

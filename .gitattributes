@@ -1,0 +1,12 @@
+"Assets/NatureManufacture Assets/**/*.tga" filter=lfs diff=lfs merge=lfs -text
+"Assets/NatureManufacture Assets/**/*.png" filter=lfs diff=lfs merge=lfs -text
+"Assets/NatureManufacture Assets/**/*.jpg" filter=lfs diff=lfs merge=lfs -text
+"Assets/NatureManufacture Assets/**/*.jpeg" filter=lfs diff=lfs merge=lfs -text
+"Assets/NatureManufacture Assets/**/*.psd" filter=lfs diff=lfs merge=lfs -text
+"Assets/NatureManufacture Assets/**/*.exr" filter=lfs diff=lfs merge=lfs -text
+"Assets/NatureManufacture Assets/**/*.fbx" filter=lfs diff=lfs merge=lfs -text
+"Assets/NatureManufacture Assets/**/*.FBX" filter=lfs diff=lfs merge=lfs -text
+Assets/Scenes/MainScenes/OutdoorScene/**/*.png filter=lfs diff=lfs merge=lfs -text
+Assets/Scenes/MainScenes/OutdoorScene/**/*.exr filter=lfs diff=lfs merge=lfs -text
+Assets/Scenes/MainScenes/OutdoorScene/**/*.fbx filter=lfs diff=lfs merge=lfs -text
+Assets/Scenes/MainScenes/OutdoorScene/**/*.FBX filter=lfs diff=lfs merge=lfs -text

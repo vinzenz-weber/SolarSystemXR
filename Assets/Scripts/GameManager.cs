@@ -4,12 +4,14 @@ using UnityEngine;
 // MAIN_MENU  -> Hauptmenue ist sichtbar, User waehlt eine Experience aus
 // PLACEMENT  -> Hauptmenue zu, User platziert einen Planeten oder das Sonnensystem
 // WORLD      -> Objekt steht; per Options-Taste links laesst sich das Hauptmenue wieder oeffnen
+// IMMERSIVE  -> VR-Naturszene mit gewaehltem Planeten an der Mondposition
 // TEST_*     -> ein Minispiel oder Platzhalter ist aktiv
 public enum GameState
 {
     MAIN_MENU,
     PLACEMENT,
     WORLD,
+    IMMERSIVE,
     TEST_REIHENFOLGE,
     TEST_SIZE,
     TEST_GRAVITY_PLACEHOLDER
@@ -51,6 +53,16 @@ public class GameManager : MonoBehaviour
         // Im WORLD- und TEST-State oeffnet die Options-Taste links das Hauptmenue wieder.
         if (CanReturnToMainMenuWithStartButton() && OVRInput.GetDown(OVRInput.Button.Start))
         {
+            if (CurrentState == GameState.IMMERSIVE)
+            {
+                ImmersiveModeController immersiveModeController = FindFirstObjectByType<ImmersiveModeController>();
+                if (immersiveModeController != null)
+                {
+                    immersiveModeController.ExitImmersiveMode();
+                    return;
+                }
+            }
+
             if (IsTestState(CurrentState) && MinigameManager.Instance != null)
             {
                 MinigameManager.Instance.EndMinigame();
@@ -74,6 +86,7 @@ public class GameManager : MonoBehaviour
 
             case GameState.PLACEMENT:
             case GameState.WORLD:
+            case GameState.IMMERSIVE:
                 Show(mainMenuCanvas, false);
                 break;
 
@@ -95,7 +108,9 @@ public class GameManager : MonoBehaviour
 
     private bool CanReturnToMainMenuWithStartButton()
     {
-        return CurrentState == GameState.WORLD || IsTestState(CurrentState);
+        return CurrentState == GameState.WORLD
+            || CurrentState == GameState.IMMERSIVE
+            || IsTestState(CurrentState);
     }
 
     private bool IsTestState(GameState state)

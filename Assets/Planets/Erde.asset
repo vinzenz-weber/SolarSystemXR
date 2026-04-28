@@ -30,6 +30,7 @@ MonoBehaviour:
   orbitalPeriod: 365.25
   planetLineColor: {r: 0, g: 0.13945818, b: 1, a: 0}
   planetPrefab: {fileID: 5324902377633925947, guid: 834b4ca4c418fb148b28957a9ee6e89c, type: 3}
+  interactablePlanetPrefab: {fileID: 4859827795797014331, guid: a006819faa052fb40a3d26b607edfc4f, type: 3}
   previewPrefab: {fileID: 3586017214850719460, guid: 1de18179a99296140b56591d2d4bc949, type: 3}
   schwerkraft: 9.81
   atmosphaereFarbe: {r: 0.4, g: 0.6, b: 1, a: 0.2}

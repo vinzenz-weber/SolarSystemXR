@@ -48,6 +48,10 @@ public class PlanetData : ScriptableObject
     [Header("Visualisierung")]
     public Color planetLineColor = Color.white;
     public GameObject planetPrefab;
+
+    [Tooltip("Optionaler Spezialfall: eigenes Interactable-Prefab nur fuer diesen Planeten. Normalerweise leer lassen und das gemeinsame Prefab im PlacementManager nutzen.")]
+    public GameObject interactablePlanetPrefab;
+
     public GameObject previewPrefab;
 
     [Header("Umgebungszone")]

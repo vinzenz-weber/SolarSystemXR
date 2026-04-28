@@ -65,3 +65,7 @@ crashlytics-build.properties
 Assets/Materials/Planets/Erde/8K Texture/8k_earth_clouds.psd.meta
 
 Assets/Materials/Planets/Jupiter/8K/8k_jupiter_clouds_3.psd.meta
+
+# Unity local/generated user files
+/.utmp/
+/UserSettings/

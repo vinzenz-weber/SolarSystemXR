@@ -25,6 +25,19 @@
 
 ## Iterationen & Änderungen
 
+### Immersive Mode: Raumstation/Szenenwechsel -> MainScene-Dissolve mit Natur-Root
+
+- **Datum:** 2026-04-28
+- **Vorher:** Fuer den Immersive Mode gab es bereits den Ansatz, eine Raumstation bzw. eine eigene Immersive-Szene zu laden. Teilweise wurde dafuer eine neue Szene verwendet bzw. additiv geladen. Die Idee war, den Immersive-Kontext sauber von der MainScene zu trennen.
+- **Problem:** Der Szenenwechsel funktionierte im XR-Kontext nicht stabil genug. Beim Laden traten schwarze Bildschirme, Ruckeln und Timing-/State-Probleme auf. Ausserdem wurde der App-Flow schwerer wartbar, weil Kamera-Rig, Passthrough, UI, GameManager und geladene Szene gleichzeitig koordiniert werden mussten.
+- **Nachher:** Der Immersive Mode bleibt in der bestehenden `MainScene`. Ein vorbereiteter Immersive-/Outdoor-Root wird per `SetActive` eingeblendet, Passthrough wird ueber den vorhandenen `PassthroughDissolver` nach VR gedissolved, und der gewaehlte Planet wird am vorhandenen SpawnPoint instanziiert. Das Detail-Panel bleibt sichtbar; sein Button wechselt zu `Leave Immersive Mode`.
+- **Grund:** Fuer Quest 3 Standalone ist ein kontinuierlicher, nicht ladender XR-Flow stabiler als ein Szenenwechsel waehrend der Experience. Die visuelle Transition ist ohnehin bereits durch den Dissolve geloest.
+- **Erkenntnisse:**
+  - XR-Szenenwechsel koennen deutlich empfindlicher sein als normale Unity-Szenenwechsel, weil Camera Rig, Passthrough-Layer, UI-Raycaster und Runtime-State zeitgleich betroffen sind.
+  - Fuer Modi innerhalb derselben Experience ist ein deaktivierter Root in der MainScene oft robuster als `SceneManager.LoadScene` oder additive Szenen.
+  - Der Immersive Mode muss nicht architektonisch eine eigene Szene sein; fachlich reicht ein eigener Root mit Environment, SpawnPoint und Mode-Controller.
+  - Der fruehere Raumstation-Ansatz bleibt als Lernmoment relevant: gute visuelle Idee, aber fuer den aktuellen Masterarbeits-Prototyp zu teuer und fehleranfaellig.
+
 ### Phase 6 / Size-Minispiel: vom statischen Prefab zum live geprueften Snap-Minispiel
 
 - **Datum:** 2026-04-28

@@ -25,6 +25,7 @@
 - Phase 1 ist erledigt: 8 Planeten-`PlanetData`-Assets sind vorhanden.
 - Phase 2 ist code-seitig weitgehend vorbereitet, Editor-Verkabelung und Headset-Verifikation sind noch offen.
 - Phase 3 ist in Umsetzung: Learn-Tab mit `Planets` und `SolarSystem`, globales Planet-InfoPanel, Sonnensystem-Slider-UI.
+- Zusatzmodus fuer Phase 3 ist in Umsetzung: Immersive Mode zeigt den ausgewaehlten Planeten in einer VR-Natur-/Nachtszene am Mond-Ort.
 - Phase 4 ist erledigt: Test-Tab startet Minigame-Prefabs, Abschliessen/Beenden funktionieren, Quiz-Fortschritt kann im Main Menu zurueckgesetzt werden.
 - Phase 6 ist in Umsetzung: `Size` nutzt jetzt einen eigenen Manager, Prefab-World-Layout, Live-Auswertung und planetenspezifisches Groessen-Feedback.
 
@@ -55,24 +56,46 @@
 
 ### Globales Planet-InfoPanel
 
-- **Status:** Script fertig, Prefab/Editor-Setup offen.
+- **Status:** Aktiv genutzt; Immersive-Button ergaenzt, finale Headset-Verifikation offen.
 - **Beschreibung:** Es gibt ein einziges globales InfoPanel. Es wird neben dem User angezeigt und zeigt immer die Daten des aktuell ausgewaehlten Planeten.
 - **Umsetzung:**
   - `PlanetInfoPanel.cs`: `Bind(PlanetData)` fuellt Headline, Subheadline, Beschreibung, Fakten, Durchmesser, Schwerkraft und optional Bild.
   - `PlanetInfoPanelManager.cs`: verwaltet das eine Panel, zeigt/versteckt es und positioniert es neben dem User.
+  - Das Panel enthaelt einen Button fuer den Immersive Mode. Im normalen Zustand heisst er `Immersive Mode`, im Immersive Mode wechselt er zu `Leave Immersive Mode`.
+  - `PlanetInfoPanelManager.ToggleImmersiveMode(PlanetData)` leitet den aktuellen Planeten an den `ImmersiveModeController` weiter oder beendet den aktiven Immersive Mode.
   - `PlanetSelectable.cs`: generische Komponente auf Planet-Objekten, die ihr `PlanetData` ans Panel meldet.
   - `PlanetRaySelector.cs`: Controller-Ray-Auswahl per Trigger im `WORLD`-State.
   - `PlacementManager.cs`: fuegt nach Einzelplanet-Placement automatisch `PlanetSelectable` hinzu und zeigt das InfoPanel direkt mit den Daten des platzierten Planeten.
 - **Entscheidung:** Kein eigenes Panel pro Planet. Layout und Logik bleiben zentral, Inhalte kommen aus `PlanetData`.
 
+### Immersive Mode: Planet am Mond-Ort
+
+- **Status:** Code umgesetzt, Editor-Setup/Headset-Verifikation offen.
+- **Beschreibung:** Aus dem Learn-Flow heraus kann der User nach dem Platzieren eines Planeten ueber das Detail-Panel in eine VR-Natur-/Nachtszene wechseln. Dort wird der ausgewaehlte Planet an einem weit entfernten SpawnPoint angezeigt, als wuerde er an der Stelle des Mondes stehen.
+- **Umsetzung:**
+  - `ImmersiveModeController.cs` aktiviert ein vorhandenes `ImmersiveModeRoot`/`ImmersiveSceneRoot`/`OutdoorScene`-Root oder nutzt ein referenziertes Root aus dem Inspector.
+  - Der Planet wird aus `PlanetData.planetPrefab` am `PlanetSpawnPoint`, `ImmersivePlanetSpawnPoint`, `SpawnPoint` oder `MoonAnchor` instanziiert.
+  - `PlanetBody` und `PlanetSelectable` werden auf der Immersive-Kopie deaktiviert, damit keine Orbit-/Ray-Auswahl-Logik in die Ansicht hineinspielt.
+  - Passthrough wird ueber den vorhandenen `PassthroughDissolver` nach VR gedissolved, statt eine neue Szene zu laden.
+  - Das normale platzierte Learn-/Sonnensystem-Objekt wird ueber `PlacementManager.SetPlacedContentVisible(false)` ausgeblendet und beim Verlassen wieder eingeblendet.
+  - Das InfoPanel bleibt sichtbar und dient gleichzeitig als Exit-UI: Button-Text `Leave Immersive Mode`.
+- **Scaling:**
+  - Standard ist `calculateMoonDiameterFromSpawnDistance = true`: Die sichtbare Mondgroesse wird aus der echten Entfernung zwischen Kamera und SpawnPoint berechnet.
+  - Formel fuer den Mond-Durchmesser im World-Space: `2 * distanceToSpawnPoint * tan(moonAngularDiameterDegrees / 2)`.
+  - Planetendurchmesser: `moonVisualDiameter * (planetData.diameter / 3474.8f)`.
+  - Bei einem SpawnPoint um ca. 57.2 km Entfernung ergibt sich ein Mond-Vergleichsdurchmesser von ca. 499 m; Erde ca. 1830 m, Jupiter ca. 20096 m.
+  - Die Kamera-`farClipPlane` wird im Immersive Mode temporaer an die SpawnPoint-Entfernung angepasst und beim Verlassen zurueckgesetzt.
+- **Editor-Aufgabe:** Immersive-Environment in der `MainScene` unter/als Immersive-Root vorbereiten, SpawnPoint sinnvoll platzieren und den App-Flow in der `MainScene` testen.
+
 ### State Machine
 
 - **Status:** Aktiv genutzt.
-- **Beschreibung:** Der App-Flow nutzt `MAIN_MENU`, `PLACEMENT`, `WORLD` und die Test-Zustaende `TEST_REIHENFOLGE`, `TEST_SIZE`, `TEST_GRAVITY_PLACEHOLDER`.
+- **Beschreibung:** Der App-Flow nutzt `MAIN_MENU`, `PLACEMENT`, `WORLD`, `IMMERSIVE` und die Test-Zustaende `TEST_REIHENFOLGE`, `TEST_SIZE`, `TEST_GRAVITY_PLACEHOLDER`.
 - **Umsetzung:** `GameManager.cs`
   - `MAIN_MENU`: Hauptmenue-Canvas sichtbar.
   - `PLACEMENT`: Hauptmenue ausgeblendet, `PlacementManager` zeigt Vorschau am Depth-Raycast.
   - `WORLD`: Objekt steht, Planet-Ray-Auswahl ist aktiv, Options-Taste oeffnet das Hauptmenue wieder.
+  - `IMMERSIVE`: Hauptmenue ausgeblendet, Immersive-Root aktiv; Options-Taste verlaesst den Immersive Mode sauber.
   - `TEST_*`: Hauptmenue ausgeblendet, aktives Minigame-Prefab ist sichtbar; Options-Taste beendet das Minigame und fuehrt ins Test-Menue zurueck.
 - **Hinweis:** `PlanetRaySelector` reagiert nur im `WORLD`-State, damit er nicht mit dem Placement-Trigger kollidiert.
 
@@ -181,6 +204,8 @@
 |---|---|
 | Datenquelle Planeten | Planetenspezifische Daten liegen in `PlanetData`, nicht in UI- oder Interaktionsscripts. |
 | Globales InfoPanel | Ein `PlanetInfoPanel` fuer alle Planeten; Umschalten per `Bind(PlanetData)`. |
+| Immersive Mode | Kein Scene-Loading; Immersive-Environment bleibt Teil der MainScene und wird ueber Root-GameObject + Dissolve aktiviert. |
+| Immersive Spawn | Planet wird am referenzierten SpawnPoint angezeigt; bei grosser Distanz berechnet `ImmersiveModeController` die Mond-Scheingroesse aus dem Spawn-Abstand. |
 | Sonnensystem-UI | Das Slider-Panel referenziert den `SolarSystemManager` nicht im Prefab, sondern bekommt ihn nach Placement ueber `Bind(SolarSystemManager)`. |
 | Depth API fuer Platzierung | Im Quest-Build liefert `EnvironmentRaycastManager.Raycast(Ray, out hit)` Position und Normal aus dem Depth-Mesh. |
 | Editor-Placement | Im Unity Editor ist die Depth API deaktiviert; die Platzierung nutzt einen festen Punkt vor dem Controller-Ray. |
@@ -216,6 +241,8 @@
 | 2026-04-27 | Snap-Listen aus Meta SnapExamples uebernehmen | `ListSnapPoseDelegate` loest die automatische Anordnung und Groessenanpassung bereits; eigener Layout-Code waere unnoetig und fehleranfaelliger |
 | 2026-04-28 | Size-Minispiel bewertet ueber einen zentralen Manager statt ueber den Fertig-Button | Die Loesung soll live pruefbar sein, den Fertig-Button gegen falsches Abschliessen absichern und planetenspezifisches Groessen-Feedback steuern |
 | 2026-04-28 | Korrekt platzierte Size-Planeten skalieren am `VisualRoot` | Das sichtbare Planet-Visual liegt im Interactable-Prefab unter `InteractablePlanetVisual`; Root-Skalierung allein ist fuer das unmittelbare Feedback zu unzuverlaessig |
+| 2026-04-28 | Immersive Mode bleibt in der MainScene und nutzt Dissolve statt Scene-Loading | Fruehere Raumstations-/Szenenwechsel-Ansatz fuehrte zu schwarzem Bildschirm, Ruckeln und komplexem XR-State; Root-Activation + Passthrough-Dissolve ist stabiler |
+| 2026-04-28 | Immersive-Planet wird ueber scheinbare Mondgroesse skaliert | Echte Planetengroessen sind unbrauchbar; die visuelle Lernidee ist die korrekte scheinbare Groesse am Mond-Ort |
 
 ---
 
@@ -223,9 +250,14 @@
 
 | Aufgabe | Status |
 |---|---|
-| `PlanetInfoPanelSystem` in `MainScene` anlegen und `PlanetInfoPanelManager` verkabeln | Offen |
-| `PlanetInfoPanel` World-Space-Canvas/Prefab mit TMP-Feldern bauen | Offen |
-| `PlacementManager.planetInfoPanelManager` zuweisen | Offen |
+| `PlanetInfoPanelSystem` in `MainScene` anlegen und `PlanetInfoPanelManager` verkabeln | Fertig, Inspector-Referenzen weiter pruefen |
+| `PlanetInfoPanel` World-Space-Canvas/Prefab mit TMP-Feldern bauen | Fertig, Lesbarkeit im Headset pruefen |
+| `PlacementManager.planetInfoPanelManager` zuweisen | Fertig, Headset-Test offen |
+| Immersive-Root/Environment in der `MainScene` final organisieren | In Arbeit |
+| Immersive-SpawnPoint pruefen: Name/Referenz, Entfernung, Sichtbarkeit, Far Clip und Skalierung | In Arbeit |
+| Build Settings pruefen: App-Flow muss aus `MainScene.unity` starten; reine `OutdoorScene` ist nur Environment/Test | Offen |
+| Headset-Test: Planet platzieren -> InfoPanel -> Immersive Mode -> Planet am SpawnPoint sichtbar | Offen |
+| Headset-Test: InfoPanel bleibt im Immersive Mode sichtbar und Button verlaesst den Modus | Offen |
 | `PlanetRaySelector` mit richtigem Controller-`rayOrigin` in der Szene verkabeln | Offen |
 | `SonnensystemUIPanel.prefab` mit 4 Slidern bauen | Offen |
 | `PlacementManager.sonnensystemUIPrefab` zuweisen | Offen |
@@ -252,4 +284,5 @@
 - **2026-04-27:** Reihenfolge-Code nach SnapExamples-Integration kompiliert: `dotnet build Assembly-CSharp.csproj --no-restore` erfolgreich.
 - **2026-04-27:** Phase-4-Test-Flow im Playmode verifiziert: Quiz-Buttons starten passende Panels, Abschliessen speichert Erfolg, Beenden speichert nicht, Main-Menu-Reset loescht Fortschritt.
 - **2026-04-28:** Size-Minispiel nach Phase-6-Integration kompiliert: `dotnet build Assembly-CSharp.csproj --no-restore` erfolgreich.
+- **2026-04-28:** Immersive Mode nach InfoPanel-/SpawnPoint-/Dissolve-Integration kompiliert: `dotnet build Assembly-CSharp.csproj --no-restore` erfolgreich.
 - Warnungen bleiben aus bestehenden UISet/OpenXR/Altlasten, keine neuen Compile-Fehler.
