@@ -29,6 +29,7 @@ MonoBehaviour:
   orbitalPeriod: 1
   planetLineColor: {r: 0, g: 0, b: 0, a: 0}
   planetPrefab: {fileID: 1531383183244880890, guid: f96440d0fe44712459bb72d9dcaa523f, type: 3}
+  interactablePlanetPrefab: {fileID: 4859827795797014331, guid: a006819faa052fb40a3d26b607edfc4f, type: 3}
   previewPrefab: {fileID: 3586017214850719460, guid: 1de18179a99296140b56591d2d4bc949, type: 3}
   schwerkraft: 274
   atmosphaereFarbe: {r: 0.5, g: 0.5, b: 0.5, a: 0.3}
@@ -38,4 +39,11 @@ MonoBehaviour:
   windTurbulenz: 0
   windPartikelFarbe: {r: 1, g: 1, b: 1, a: 1}
   beschreibung: 
+  planetSizeInfoText: 
+  orbitalDistanceInfoText: 
+  orbitalSpeedInfoText: 
+  axialTiltInfoText: 
+  eccentricityInfoText: 
+  planetScaleInfoText: 
+  gravityInfoText: 
   fakten: []

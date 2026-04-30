@@ -1,4 +1,5 @@
 using MRMotifs.PassthroughTransitioning;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -71,8 +72,18 @@ public class MainMenuController : MonoBehaviour
     [Tooltip("Visuelles Highlight fuer den aktiven/inaktiven Tab.")]
     public Image learnTabBackground;
     public Image testTabBackground;
-    public Color activeTabColor = new Color(0.7f, 0.7f, 0.7f, 1f);
+    public Color activeTabColor = new Color(1f, 1f, 1f, 0.4f);
     public Color inactiveTabColor = new Color(1f, 1f, 1f, 0f);
+
+    [Header("Neues MenuRoot")]
+    [Tooltip("Root des neuen finalen Menues. Wenn leer, wird GameManager.mainMenuCanvas oder ein Objekt mit dem Namen MenuRoot verwendet.")]
+    [SerializeField] private GameObject menuRoot;
+
+    [Tooltip("Verdrahtet Buttons im neuen MenuRoot automatisch mit diesem Controller.")]
+    [SerializeField] private bool autoBindMenuRoot = true;
+
+    [Tooltip("PlanetData-Assets in der Reihenfolge der Planet-Buttons im neuen MenuRoot.")]
+    [SerializeField] private List<PlanetData> menuPlanetData = new List<PlanetData>();
 
     // ----------- REFERENZEN -----------
     [Header("Referenzen")]
@@ -94,10 +105,16 @@ public class MainMenuController : MonoBehaviour
     private string _reihenfolgeBaseLabel = "Reihenfolge";
     private string _sizeBaseLabel = "Size";
     private string _gravityBaseLabel = "Gravity (Coming Soon)";
+    private Color _learnTabVisibleColor;
+    private Color _testTabVisibleColor;
+    private bool _hasCachedTabColors;
+    private Transform _startExperienceButton;
 
     void Start()
     {
+        AutoBindMenuRoot();
         CacheQuizButtonReferences();
+        CacheTabVisibleColors();
         SetupPassthroughToggle();
         ShowLearnTab();
     }
@@ -137,11 +154,36 @@ public class MainMenuController : MonoBehaviour
 
     private void UpdateTabHighlight(bool learnActive)
     {
-        if (learnTabBackground != null)
-            learnTabBackground.color = learnActive ? activeTabColor : inactiveTabColor;
+        CacheTabVisibleColors();
+        SetTabBackgroundVisible(learnTabBackground, _learnTabVisibleColor, learnActive);
+        SetTabBackgroundVisible(testTabBackground, _testTabVisibleColor, learnActive == false);
+    }
 
-        if (testTabBackground != null)
-            testTabBackground.color = learnActive ? inactiveTabColor : activeTabColor;
+    private void CacheTabVisibleColors()
+    {
+        if (_hasCachedTabColors) return;
+
+        _learnTabVisibleColor = GetVisibleTabColor(learnTabBackground);
+        _testTabVisibleColor = GetVisibleTabColor(testTabBackground);
+        _hasCachedTabColors = true;
+    }
+
+    private Color GetVisibleTabColor(Image tabBackground)
+    {
+        // Active State in der finalen Navigation: #FFFFFF mit 40 Prozent Deckkraft.
+        return activeTabColor;
+    }
+
+    private void SetTabBackgroundVisible(Image tabBackground, Color visibleColor, bool isVisible)
+    {
+        if (tabBackground == null) return;
+
+        Color color = visibleColor;
+        color.a = isVisible ? visibleColor.a : inactiveTabColor.a;
+        tabBackground.color = color;
+
+        // Wichtig: Das Image bleibt aktiv, damit der Button weiter Ray/Poke-Events bekommt.
+        tabBackground.raycastTarget = true;
     }
 
     // =================================================================
@@ -175,6 +217,7 @@ public class MainMenuController : MonoBehaviour
             backgroundImage.sprite = data.planetImage;
         }
 
+        ShowStartExperienceButton();
         SetActionButtonText("Discover " + data.planetName);
     }
 
@@ -184,17 +227,307 @@ public class MainMenuController : MonoBehaviour
         _currentPlanet = null;
         _currentSelection = ExperienceSelection.SolarSystem;
 
-        if (sonnensystemHeadline != null && menuHeadline != null)
+        if (menuHeadline != null)
         {
-            menuHeadline.text = sonnensystemHeadline.text;
+            menuHeadline.text = sonnensystemHeadline != null ? sonnensystemHeadline.text : "Sonnensystem";
         }
 
-        if (sonnensystemDescription != null && descriptionText != null)
+        if (descriptionText != null)
         {
-            descriptionText.text = sonnensystemDescription.text;
+            descriptionText.text = sonnensystemDescription != null
+                ? sonnensystemDescription.text
+                : "Platziere das komplette Sonnensystem im Raum.";
         }
 
+        ShowStartExperienceButton();
         SetActionButtonText("Discover Solar System");
+    }
+
+    private void AutoBindMenuRoot()
+    {
+        if (autoBindMenuRoot == false) return;
+
+        Transform root = GetMenuRootTransform();
+        if (root == null) return;
+
+        Transform mainMenu = FindDeepChild(root, "MainMenu");
+        Transform mainPanel = FindDirectChild(mainMenu, "MainPanel");
+        Transform learnPanelTransform = FindDirectChild(mainMenu, "LearnPanel");
+
+        if (mainPanel != null)
+        {
+            learnPanel = mainPanel.gameObject;
+            menuHeadline = FindTextMeshPro(mainPanel, "Headline", menuHeadline);
+            descriptionText = FindTextMeshPro(mainPanel, "Description", descriptionText);
+            _startExperienceButton = FindDeepChild(mainPanel, "Button_Primary");
+            if (_startExperienceButton == null)
+            {
+                _startExperienceButton = FindDeepChild(mainPanel, "PrimaryButton_IconAndLabel_UnityUIButton");
+            }
+
+            actionButtonText = FindText(_startExperienceButton, null, actionButtonText);
+
+            TextMeshProUGUI actionButtonLabel = actionButtonText as TextMeshProUGUI;
+            if (actionButtonLabel != null)
+            {
+                startButtonLabel = actionButtonLabel;
+            }
+
+            BindStartExperienceButton();
+            HideStartExperienceButton();
+            BindPlanetButtons(mainPanel);
+            BindSolarSystemButton(mainPanel);
+        }
+
+        if (learnPanelTransform != null)
+        {
+            testPanel = learnPanelTransform.gameObject;
+            BindChallengeButtons(learnPanelTransform);
+        }
+
+        Transform navigation = FindDeepChild(root, "Navigation");
+        learnTabBackground = FindImage(FindDeepChild(navigation, "Tab Button Home"), learnTabBackground);
+        testTabBackground = FindImage(FindDeepChild(navigation, "Tab Button Learn"), testTabBackground);
+        BindButtonByName(navigation, "Tab Button Home", ShowLearnTab);
+        BindButtonByName(navigation, "Tab Button Learn", ShowTestTab);
+
+        if (_passthroughModeToggle == null)
+        {
+            _passthroughModeToggle = FindDeepChild(root, "Passthrough")?.GetComponent<Toggle>();
+        }
+    }
+
+    private Transform GetMenuRootTransform()
+    {
+        if (menuRoot != null) return menuRoot.transform;
+
+        if (GameManager.Instance != null && GameManager.Instance.mainMenuCanvas != null)
+        {
+            menuRoot = GameManager.Instance.mainMenuCanvas;
+            return menuRoot.transform;
+        }
+
+        GameObject foundRoot = GameObject.Find("MenuRoot");
+        if (foundRoot == null) return null;
+
+        menuRoot = foundRoot;
+        return menuRoot.transform;
+    }
+
+    private void BindStartExperienceButton()
+    {
+        if (_startExperienceButton == null) return;
+
+        Button button = _startExperienceButton.GetComponent<Button>();
+        if (button == null) button = _startExperienceButton.GetComponentInChildren<Button>(true);
+
+        BindClick(button, StartExperience);
+    }
+
+    private void HideStartExperienceButton()
+    {
+        SetStartExperienceButtonVisible(false);
+    }
+
+    private void ShowStartExperienceButton()
+    {
+        SetStartExperienceButtonVisible(true);
+    }
+
+    private void SetStartExperienceButtonVisible(bool isVisible)
+    {
+        if (_startExperienceButton == null) return;
+
+        _startExperienceButton.gameObject.SetActive(isVisible);
+    }
+
+    private void BindPlanetButtons(Transform mainPanel)
+    {
+        if (menuPlanetData == null || menuPlanetData.Count == 0) return;
+
+        Transform planetsContainer = FindDeepChild(mainPanel, "PlanetsContainer");
+        Transform content = FindDeepChild(planetsContainer, "Content");
+        if (content == null) return;
+
+        Button[] buttons = GetDirectChildButtons(content);
+        int count = Mathf.Min(buttons.Length, menuPlanetData.Count);
+
+        for (int i = 0; i < count; i++)
+        {
+            PlanetData data = menuPlanetData[i];
+            Button button = buttons[i];
+            if (button == null || data == null) continue;
+
+            SetButtonTexts(button.transform, data.planetName, data.subHeadline);
+            button.onClick.AddListener(() => SelectPlanet(data));
+        }
+    }
+
+    private void BindSolarSystemButton(Transform mainPanel)
+    {
+        Transform solarSystemContainer = FindDeepChild(mainPanel, "PlanetsContainer (1)");
+        Transform content = FindDeepChild(solarSystemContainer, "Content");
+        if (content == null) return;
+
+        Button[] buttons = GetDirectChildButtons(content);
+        if (buttons.Length == 0) return;
+
+        Button button = buttons[0];
+        SetButtonTexts(button.transform, "Sonnensystem", "Alle Planeten");
+        BindClick(button, SelectSolarSystem);
+    }
+
+    private void BindChallengeButtons(Transform learnPanelTransform)
+    {
+        Transform challengesContainer = FindDeepChild(learnPanelTransform, "ChallengesContainer");
+        if (challengesContainer == null) return;
+
+        Button[] buttons = GetDirectChildButtons(challengesContainer);
+
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            Button button = buttons[i];
+            if (button == null) continue;
+
+            string text = GetCombinedButtonText(button.transform).ToLowerInvariant();
+
+            if (text.Contains("size") || text.Contains("groesse") || text.Contains("größe"))
+            {
+                sizeButton = button;
+                sizeButtonLabel = button.GetComponentInChildren<TextMeshProUGUI>(true);
+                BindClick(button, StartSizeMinigame);
+                continue;
+            }
+
+            if (text.Contains("arrange") || text.Contains("order") || text.Contains("reihenfolge"))
+            {
+                reihenfolgeButton = button;
+                reihenfolgeButtonLabel = button.GetComponentInChildren<TextMeshProUGUI>(true);
+                BindClick(button, StartReihenfolgeMinigame);
+                continue;
+            }
+
+            gravityButton = button;
+            gravityButtonLabel = button.GetComponentInChildren<TextMeshProUGUI>(true);
+            BindClick(button, ShowGravityComingSoon);
+        }
+    }
+
+    private void BindButtonByName(Transform root, string buttonName, UnityEngine.Events.UnityAction action)
+    {
+        Transform buttonTransform = FindDeepChild(root, buttonName);
+        if (buttonTransform == null) return;
+
+        Button button = buttonTransform.GetComponent<Button>();
+        if (button == null) button = buttonTransform.GetComponentInChildren<Button>(true);
+        if (button == null) return;
+
+        BindClick(button, action);
+    }
+
+    private void BindClick(Button button, UnityEngine.Events.UnityAction action)
+    {
+        if (button == null || action == null) return;
+
+        button.onClick.RemoveListener(action);
+        button.onClick.AddListener(action);
+    }
+
+    private Button[] GetDirectChildButtons(Transform parent)
+    {
+        List<Button> buttons = new List<Button>();
+        if (parent == null) return buttons.ToArray();
+
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            Button button = parent.GetChild(i).GetComponent<Button>();
+            if (button != null)
+            {
+                buttons.Add(button);
+            }
+        }
+
+        return buttons.ToArray();
+    }
+
+    private void SetButtonTexts(Transform buttonTransform, string title, string subtitle)
+    {
+        if (buttonTransform == null) return;
+
+        TMP_Text[] texts = buttonTransform.GetComponentsInChildren<TMP_Text>(true);
+        if (texts.Length > 0) texts[0].text = title;
+        if (texts.Length > 1) texts[1].text = subtitle;
+    }
+
+    private string GetCombinedButtonText(Transform buttonTransform)
+    {
+        if (buttonTransform == null) return "";
+
+        TMP_Text[] texts = buttonTransform.GetComponentsInChildren<TMP_Text>(true);
+        string combinedText = "";
+
+        for (int i = 0; i < texts.Length; i++)
+        {
+            if (texts[i] != null)
+            {
+                combinedText += " " + texts[i].text;
+            }
+        }
+
+        return combinedText;
+    }
+
+    private TMP_Text FindText(Transform root, string childName, TMP_Text fallback)
+    {
+        Transform target = string.IsNullOrWhiteSpace(childName) ? root : FindDeepChild(root, childName);
+        if (target == null) return fallback;
+
+        TMP_Text text = target.GetComponent<TMP_Text>();
+        if (text == null) text = target.GetComponentInChildren<TMP_Text>(true);
+        return text != null ? text : fallback;
+    }
+
+    private TextMeshProUGUI FindTextMeshPro(Transform root, string childName, TextMeshProUGUI fallback)
+    {
+        TMP_Text text = FindText(root, childName, fallback);
+        TextMeshProUGUI textMeshPro = text as TextMeshProUGUI;
+        return textMeshPro != null ? textMeshPro : fallback;
+    }
+
+    private Image FindImage(Transform root, Image fallback)
+    {
+        if (root == null) return fallback;
+
+        Image image = root.GetComponent<Image>();
+        return image != null ? image : fallback;
+    }
+
+    private Transform FindDirectChild(Transform parent, string childName)
+    {
+        if (parent == null) return null;
+
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            Transform child = parent.GetChild(i);
+            if (child.name == childName) return child;
+        }
+
+        return null;
+    }
+
+    private Transform FindDeepChild(Transform parent, string childName)
+    {
+        if (parent == null || string.IsNullOrWhiteSpace(childName)) return null;
+
+        if (parent.name == childName) return parent;
+
+        for (int i = 0; i < parent.childCount; i++)
+        {
+            Transform result = FindDeepChild(parent.GetChild(i), childName);
+            if (result != null) return result;
+        }
+
+        return null;
     }
 
     // =================================================================

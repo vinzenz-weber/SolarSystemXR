@@ -14,9 +14,14 @@ public class PlanetInfoPanelManager : MonoBehaviour
     [Header("Position")]
     [Tooltip("Wenn leer, wird Camera.main benutzt.")]
     public Transform userCamera;
-    public float distanceInFront = 1.1f;
-    public float sideOffset = 0.45f;
-    public float heightOffset = -0.1f;
+    [Tooltip("Meter vor dem Spieler, auf Basis der horizontalen Blickrichtung.")]
+    public float distanceInFront = 0.45f;
+
+    [Tooltip("Meter zur Seite. Negative Werte liegen links vom Spieler.")]
+    public float sideOffset = -0.45f;
+
+    [Tooltip("Hoehenoffset relativ zur Kopfkamera. -0.55m liegt etwa leicht ueber Huefthoehe.")]
+    public float heightOffset = -0.6f;
 
     private PlanetData _currentPlanetData;
 
@@ -29,10 +34,13 @@ public class PlanetInfoPanelManager : MonoBehaviour
         }
 
         Instance = this;
+        UsePlanetDetailRootIfAvailable();
     }
 
     private void Start()
     {
+        UsePlanetDetailRootIfAvailable();
+
         if (infoPanel != null)
         {
             infoPanel.gameObject.SetActive(false);
@@ -41,6 +49,8 @@ public class PlanetInfoPanelManager : MonoBehaviour
 
     public void ShowPlanet(PlanetData data)
     {
+        UsePlanetDetailRootIfAvailable();
+
         if (data == null)
         {
             Debug.LogWarning("PlanetInfoPanelManager: Kein PlanetData uebergeben.");
@@ -128,12 +138,22 @@ public class PlanetInfoPanelManager : MonoBehaviour
         Transform cameraTransform = GetUserCamera();
         if (cameraTransform == null) return;
 
+        Vector3 forward = Vector3.ProjectOnPlane(cameraTransform.forward, Vector3.up).normalized;
+        if (forward.sqrMagnitude < 0.001f)
+        {
+            forward = Vector3.ProjectOnPlane(cameraTransform.parent != null ? cameraTransform.parent.forward : Vector3.forward, Vector3.up).normalized;
+        }
+
+        Vector3 right = Vector3.Cross(Vector3.up, forward).normalized;
+
         Vector3 position = cameraTransform.position
-            + cameraTransform.forward * distanceInFront
-            + cameraTransform.right * sideOffset
+            + forward * distanceInFront
+            + right * sideOffset
             + Vector3.up * heightOffset;
 
-        Quaternion rotation = Quaternion.LookRotation(position - cameraTransform.position);
+        // Das Panel bleibt aufrecht und orientiert sich zur horizontalen Spielerposition.
+        Vector3 lookDirection = Vector3.ProjectOnPlane(position - cameraTransform.position, Vector3.up).normalized;
+        Quaternion rotation = Quaternion.LookRotation(lookDirection);
         infoPanel.transform.SetPositionAndRotation(position, rotation);
     }
 
@@ -142,6 +162,25 @@ public class PlanetInfoPanelManager : MonoBehaviour
         if (userCamera != null) return userCamera;
         if (Camera.main != null) return Camera.main.transform;
         return null;
+    }
+
+    private void UsePlanetDetailRootIfAvailable()
+    {
+        GameObject detailRoot = GameObject.Find("PlanetDetailRoot");
+        if (detailRoot == null) return;
+
+        PlanetInfoPanel detailPanel = detailRoot.GetComponentInChildren<PlanetInfoPanel>(true);
+        if (detailPanel == null)
+        {
+            detailPanel = detailRoot.AddComponent<PlanetInfoPanel>();
+        }
+
+        if (infoPanel != null && infoPanel != detailPanel)
+        {
+            infoPanel.gameObject.SetActive(false);
+        }
+
+        infoPanel = detailPanel;
     }
 
     private ImmersiveModeController GetImmersiveModeController()

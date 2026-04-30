@@ -25,6 +25,47 @@
 
 ## Iterationen & Änderungen
 
+### Einzelplanet-Placement: direktes Planet-Prefab -> generischer Interactable-Wrapper
+
+- **Datum:** 2026-04-30
+- **Vorher:** Die Doku beschrieb das Einzelplanet-Placement noch so, als wuerde `PlacementManager.SelectPlanet(PlanetData)` direkt das eigentliche `PlanetData.planetPrefab` platzieren. Der aktuelle Aufbau nutzt aber bereits ein generisches `planetInteractable.prefab`, das per `InteractablePlanetVisual` auf das eigentliche Planet-Prefab zugreift.
+- **Problem:** Wenn Doku und Szene unterschiedliche Prefab-Ebenen beschreiben, ist unklar, wo Collider, Meta-Interactables, `PlanetData` und visuelle Planet-Prefabs gepflegt werden muessen. Ausserdem war die Ray-Auswahl zu eng an `PlanetSelectable`/`PlanetBody` und einen Trigger gebunden.
+- **Nachher:** `PlacementManager` waehlt fuer Einzelplaneten zuerst `PlanetData.interactablePlanetPrefab`, dann das gemeinsame `PlacementManager.interactablePlanetPrefab`, und erst als Fallback direkt `PlanetData.planetPrefab`. Beim generischen Wrapper setzt `SetupPlacedPlanetVisual(...)` das passende `PlanetData` auf `InteractablePlanetVisual` und laedt das echte Visual unter `VisualRoot`. `PlanetRaySelector` akzeptiert beide Index-Trigger plus optional Raw-Trigger und kann Daten aus `PlanetSelectable`, `InteractablePlanetVisual` oder `PlanetBody` lesen, sodass ein angeklickter Planet das globale `PlanetDetailRoot` aktualisiert. Falls die Szene noch eine alte Planet-Layer-Maske hat, prueft der Selector als Fallback alle Layer und nimmt trotzdem nur Treffer mit `PlanetData`.
+- **Grund:** Die Meta-Interactable-Komponenten gehoeren in einen wiederverwendbaren Wrapper; planetenspezifisch bleiben nur Daten und Visual-Prefab im `PlanetData`-Asset.
+- **Erkenntnisse:**
+  - Bei Interactable-Wrappern muss die Auswahl-Logik die Datenquelle am Wrapper erkennen, nicht nur am sichtbaren Planet-Child.
+  - Ein gemeinsames Interactable-Prefab reduziert Inspector-Pflege, solange `PlanetData.planetPrefab` weiterhin die einzige Quelle fuer das visuelle Planetmodell bleibt.
+  - Layer-Masken sind bei Prefab-Wechseln ein typischer stiller Fehler: Der Ray trifft nichts, obwohl Collider vorhanden sind. Ein datenbasierter Fallback beim Klick ist hier robuster als planetenspezifische Layer-Sonderfaelle.
+
+### Finales UI-System: altes Main Menu -> MenuRoot + datenbasiertes PlanetDetailRoot
+
+- **Datum:** 2026-04-30
+- **Vorher:** In der `MainScene` existierten parallel das alte `Main Menu`/`MainMenuCanvas` und das neue finale `MenuRoot`. Dadurch waren viele `MainMenuController`-Referenzen auf das alte UI ausgerichtet, waehrend die finalen Buttons und Tabs im neuen Layout lagen. Das Detailpanel war ebenfalls noch als altes `PlanetInfoPanel Root` dokumentiert, obwohl in der Szene bereits ein neues `PlanetDetailRoot` existierte.
+- **Problem:** Zwei UI-Systeme fuer denselben Flow fuehren zu falschen Referenzen, doppelten Zustandswechseln und schwer nachvollziehbarem Inspector-Setup. Besonders im neuen `MenuRoot` waren viele Buttons Prefab-Instanzen ohne manuelle OnClick-Verkabelung; das alte Referenzmodell passte daher nicht mehr.
+- **Nachher:** `GameManager.mainMenuCanvas` zeigt auf `MenuRoot`, das alte `Main Menu`/`MainMenuCanvas` wurde aus der Szene entfernt. `MainMenuController` bindet das neue Layout zur Laufzeit automatisch: Navigation, Planet-Buttons, Sonnensystem-Button, Challenge-Buttons und Start-Experience-Button. Der Start-Button ist initial versteckt und erscheint erst nach Auswahl eines Planeten oder des Sonnensystems. `PlanetInfoPanelManager` bevorzugt automatisch `PlanetDetailRoot`; `PlanetInfoPanel` fuellt dessen Karten aus `PlanetData`.
+- **Grund:** Das finale UI-Layout soll die einzige Quelle fuer den User-Flow sein. Die Logik bleibt generisch und datenbasiert, statt fuer einzelne Planeten oder einzelne UI-Instanzen Sondercode zu bauen.
+- **Erkenntnisse:**
+  - Bei finalen UI-Rebuilds ist es stabiler, die alte Hierarchie konsequent zu entfernen, statt beide Systeme parallel aktiv zu halten.
+  - Neue UI-Hierarchien koennen runtime automatisch gebunden werden, solange die Namen stabil bleiben und die Datenquelle klar ist.
+  - `PlanetData` bleibt die zentrale Erweiterungsstelle: neue Planeten brauchen Daten, Prefabs und Kurztexte im ScriptableObject, keine neuen UI-Methoden.
+  - Leere Detail-Kurztexte sollten sichtbar auffallen. Der Lorem-Ipsum-Fallback macht fehlende Inhalte im Headset sofort erkennbar.
+
+### PlanetDetail-Position: Kamera-Forward -> horizontale View Direction
+
+- **Datum:** 2026-04-30
+- **Vorher:** Das Detailpanel wurde relativ zu `cameraTransform.forward` positioniert. Dadurch floss auch Kopfneigung nach oben/unten in die Panelposition ein. Das Panel konnte zu nah, zu hoch/tief oder unguenstig vor dem User erscheinen.
+- **Nachher:** `PlanetInfoPanelManager.PositionPanelNextToUser()` nutzt die horizontale Blickrichtung des Spielers: `Vector3.ProjectOnPlane(cameraTransform.forward, Vector3.up)`. Das Panel spawnt links-vorne relativ zur aktuellen View Direction, bleibt aufrecht und liegt auf greifbarer Distanz.
+- **Grund:** XR-Panels sollen sich an der Blickrichtung/Yaw des Users orientieren, nicht an der vertikalen Kopfneigung. Fuer Greifbarkeit und Lesbarkeit ist eine stabile horizontale Position wichtiger als exakte Headset-Forward-Richtung.
+- **Erkenntnisse:** Bei World-Space-UI in XR ist "vor dem Spieler" fast immer die horizontale Blickrichtung. Direktes `camera.forward` ist fuer UI-Positionierung zu empfindlich, weil schon leichtes Nach-unten-Schauen das Panel in den Bodenbereich verschiebt.
+
+### Placement-Input: ein Trigger -> beide Controller-Trigger + Raw-Fallback
+
+- **Datum:** 2026-04-30
+- **Vorher:** `PlacementManager` platzierte nur bei `OVRInput.Button.SecondaryIndexTrigger`. Wenn der Ghost sichtbar war, aber der User mit der anderen Hand bzw. einem anders gemappten Ray/Controller platzieren wollte, passierte nichts.
+- **Nachher:** `PlacementManager` akzeptiert `SecondaryIndexTrigger`, `PrimaryIndexTrigger` und optional die RawButtons `RIndexTrigger` und `LIndexTrigger`. Zusaetzlich wurde die horizontale Flaechenpruefung auf `horizontalSurfaceThreshold = 0.75` parametrisiert und ein Debug-Log ergaenzt, falls ein Trigger gedrueckt wird, aber die Flaeche nicht horizontal genug ist.
+- **Grund:** Sichtbarer Ghost bedeutet, dass Auswahl und Raycast funktionieren. Wenn das finale Platzieren ausbleibt, ist der naheliegendste Bruchpunkt der Input-Button oder die Surface-Validierung.
+- **Erkenntnisse:** XR-Input sollte nicht starr auf eine Hand kodiert sein, solange die Szene mehrere Ray-/Controller-Setups haben kann. Ein kurzer Debug-Log bei blockierter Platzierung spart Headset-Testzeit, weil sofort klar wird, ob Input erkannt wurde oder die Flaeche abgelehnt wird.
+
 ### Immersive Mode: Raumstation/Szenenwechsel -> MainScene-Dissolve mit Natur-Root
 
 - **Datum:** 2026-04-28

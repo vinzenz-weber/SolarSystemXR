@@ -40,6 +40,20 @@ public class PlacementManager : MonoBehaviour
 
     public float planetHeight = 0.15f;
 
+    [Header("Platzieren")]
+    [Tooltip("Standard-Button zum Platzieren. SecondaryIndexTrigger ist normalerweise der rechte Zeigefinger-Trigger.")]
+    public OVRInput.Button placeButton = OVRInput.Button.SecondaryIndexTrigger;
+
+    [Tooltip("Zweiter Button zum Platzieren. PrimaryIndexTrigger deckt die andere Controller-Hand ab.")]
+    public OVRInput.Button alternatePlaceButton = OVRInput.Button.PrimaryIndexTrigger;
+
+    [Tooltip("Zusaetzlich RawButtons pruefen. Hilft, wenn OVRInput.Button je nach Rig/Hand nicht sauber feuert.")]
+    public bool acceptRawIndexTriggers = true;
+
+    [Tooltip("Wie stark die Flaeche nach oben zeigen muss. 1 = exakt horizontal, 0.75 erlaubt leicht schraege Flaechen.")]
+    [Range(0f, 1f)]
+    public float horizontalSurfaceThreshold = 0.75f;
+
     [Header("Editor-Fallback ohne Depth API")]
     [Tooltip("Im Unity Editor wird die Depth API komplett umgangen. Das Objekt erscheint stattdessen in fixer Distanz am Controller-Ray.")]
     public bool useEditorFallbackPlacement = true;
@@ -204,8 +218,14 @@ public class PlacementManager : MonoBehaviour
             visualizerInstance.transform.position = hitPoint;
 
             // --- PLATZIEREN ---
-            if (canPlace == true && OVRInput.GetDown(OVRInput.Button.SecondaryIndexTrigger))
+            if (HasPlaceInputDown())
             {
+                if (canPlace == false)
+                {
+                    Debug.Log("PlacementManager: Platzieren blockiert, weil die getroffene Flaeche nicht horizontal genug ist. Normal=" + hitNormal);
+                    return;
+                }
+
                 if (_isSolarSystemMode == true)
                 {
                     // Neu: Sonnensystem ersetzt alle einzeln platzierten Planeten.
@@ -258,11 +278,24 @@ public class PlacementManager : MonoBehaviour
     bool IsHorizontal(Vector3 normal)
     {
         float similarity = Vector3.Dot(normal.normalized, Vector3.up);
-        if (similarity > 0.85f)
+        if (similarity >= horizontalSurfaceThreshold)
         {
             return true;
         }
         return false;
+    }
+
+    private bool HasPlaceInputDown()
+    {
+        if (OVRInput.GetDown(placeButton) || OVRInput.GetDown(alternatePlaceButton))
+        {
+            return true;
+        }
+
+        if (acceptRawIndexTriggers == false) return false;
+
+        return OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger)
+            || OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger);
     }
 
     private bool TryGetPlacementPoint(Ray ray, out Vector3 point, out Vector3 normal)
@@ -335,6 +368,8 @@ public class PlacementManager : MonoBehaviour
         visualLoader.RefreshVisual();
         visualLoader.RefreshOnStart = false;
     }
+
+
 
     private void RegisterSelectablePlanet(GameObject planetObject, PlanetData data)
     {

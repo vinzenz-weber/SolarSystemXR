@@ -1,6 +1,6 @@
 # Dokumentation: Sonnensystem XR
 
-> **Letzte Aktualisierung:** 2026-04-28
+> **Letzte Aktualisierung:** 2026-04-30
 
 ---
 
@@ -22,9 +22,9 @@
 
 - Aktuelle Arbeitsgrundlage ist `ROADMAP.md`: Main Menu Umbau auf `Learn` / `Test` mit spaeteren Minispielen.
 - Architektur-Entscheidung bleibt: alles in `MainScene.unity`, kein Scene-Loading. Modi werden ueber Container-GameObjects, `SetActive` und Prefab-Instanziierung gesteuert.
-- Phase 1 ist erledigt: 8 Planeten-`PlanetData`-Assets sind vorhanden.
+- Phase 1 ist erledigt: 8 Planeten-`PlanetData`-Assets sind vorhanden, dazu ein `Sonne.asset` fuer die Zentralsonne im Sonnensystem.
 - Phase 2 ist code-seitig weitgehend vorbereitet, Editor-Verkabelung und Headset-Verifikation sind noch offen.
-- Phase 3 ist in Umsetzung: Learn-Tab mit `Planets` und `SolarSystem`, globales Planet-InfoPanel, Sonnensystem-Slider-UI.
+- Phase 3 ist in Umsetzung: finales datenbasiertes `MenuRoot`, `Planets` und `SolarSystem`, neues `PlanetDetailRoot`, globales Planet-InfoPanel, Sonnensystem-Slider-UI.
 - Zusatzmodus fuer Phase 3 ist in Umsetzung: Immersive Mode zeigt den ausgewaehlten Planeten in einer VR-Natur-/Nachtszene am Mond-Ort.
 - Phase 4 ist erledigt: Test-Tab startet Minigame-Prefabs, Abschliessen/Beenden funktionieren, Quiz-Fortschritt kann im Main Menu zurueckgesetzt werden.
 - Phase 6 ist in Umsetzung: `Size` nutzt jetzt einen eigenen Manager, Prefab-World-Layout, Live-Auswertung und planetenspezifisches Groessen-Feedback.
@@ -45,28 +45,41 @@
 
 ### Sonnensystem-Slider-UI
 
-- **Status:** Script fertig, Prefab/Editor-Setup offen.
+- **Status:** Script fertig, Prefab/Editor-Setup offen. Script-Inhalte muessen noch an das finale Figma-Design angepasst werden, bevor das Prefab gebaut wird.
 - **Beschreibung:** Ein World-Space-Slider-Panel erscheint nach dem Platzieren des Sonnensystems neben dem User und steuert genau die frisch platzierte Sonnensystem-Instanz.
 - **Umsetzung:**
   - `SonnensystemUI.cs` hat `Bind(SolarSystemManager)` und sucht den Manager nur als Fallback.
   - `PlacementManager.cs` findet nach dem Placement den `SolarSystemManager` im platzierten Prefab und bindet das UI automatisch.
   - Optional kann ein `SonnensystemUI` bereits im Sonnensystem-Prefab liegen; alternativ wird ein `sonnensystemUIPrefab` aus dem `PlacementManager` instanziiert.
-  - Slider: Distanz, Groesse, Zeit und Exzentrizitaet.
-- **Editor-Aufgabe:** `SonnensystemUIPanel.prefab` mit 4 Slidern bauen und im `PlacementManager` referenzieren.
+  - Aktuelle Slider-Implementierung in `SonnensystemUI.cs`: Distanz (`distanceScale`), Groesse (`planetSizeScale`), Zeit (`timeScale`), Exzentrizitaet (`exzentrizitaetMultiplikator`).
+- **Finales Design (aus Figma):** Das Sonnensystem-Panel soll "Our Solar System" heissen und 6 Controls enthalten:
+  - **Spacing Mode** (Toggle) – "Diameter from side to side"; zeigt bei echter Skalierung eine Warnung ("outer planets may be far outside the room").
+  - **Planet Scale** (Slider) – "Size of each planet relative to the others"
+  - **Orbital Speed** (Slider) – "How fast planets travel around the Sun"
+  - **Axial Tilt** (Slider) – "How strongly each planet leans on its axis"
+  - **Orbital Distance** (Slider) – "Space between planets and the Sun"
+  - **Eccentricity** (Slider) – "How oval the orbits appear"
+  - Alle Slider zeigen ihren aktuellen Prozentwert unter dem Slider-Label.
+- **Wichtig:** `SonnensystemUI.cs` muss vor dem Prefab-Bau auf das Figma-Design angepasst werden: neues Toggle-Feld fuer Spacing Mode, neue Slider-Felder, englische Labels.
+- **Editor-Aufgabe:** `SonnensystemUIPanel.prefab` nach finalem Figma-Design bauen und im `PlacementManager` referenzieren.
 
-### Globales Planet-InfoPanel
+### Globales Planet-InfoPanel / PlanetDetailRoot
 
-- **Status:** Aktiv genutzt; Immersive-Button ergaenzt, finale Headset-Verifikation offen.
-- **Beschreibung:** Es gibt ein einziges globales InfoPanel. Es wird neben dem User angezeigt und zeigt immer die Daten des aktuell ausgewaehlten Planeten.
+- **Status:** Neues `PlanetDetailRoot` ist als bevorzugtes Detailpanel angebunden; Headset-Verifikation offen.
+- **Beschreibung:** Es gibt ein einziges globales Detailpanel. Es wird neben dem User angezeigt und zeigt immer die Daten des aktuell ausgewaehlten Planeten.
 - **Umsetzung:**
-  - `PlanetInfoPanel.cs`: `Bind(PlanetData)` fuellt Headline, Subheadline, Beschreibung, Fakten, Durchmesser, Schwerkraft und optional Bild.
-  - `PlanetInfoPanelManager.cs`: verwaltet das eine Panel, zeigt/versteckt es und positioniert es neben dem User.
-  - Das Panel enthaelt einen Button fuer den Immersive Mode. Im normalen Zustand heisst er `Immersive Mode`, im Immersive Mode wechselt er zu `Leave Immersive Mode`.
-  - `PlanetInfoPanelManager.ToggleImmersiveMode(PlanetData)` leitet den aktuellen Planeten an den `ImmersiveModeController` weiter oder beendet den aktiven Immersive Mode.
-  - `PlanetSelectable.cs`: generische Komponente auf Planet-Objekten, die ihr `PlanetData` ans Panel meldet.
-  - `PlanetRaySelector.cs`: Controller-Ray-Auswahl per Trigger im `WORLD`-State.
-  - `PlacementManager.cs`: fuegt nach Einzelplanet-Placement automatisch `PlanetSelectable` hinzu und zeigt das InfoPanel direkt mit den Daten des platzierten Planeten.
+  - `PlanetInfoPanelManager.cs`: sucht automatisch `PlanetDetailRoot` und nutzt dieses Panel statt dem alten `PlanetInfoPanel Root`.
+  - `PlanetInfoPanel.cs`: `Bind(PlanetData)` fuellt das neue Layout automatisch aus der Hierarchie (`ContentText`, `ContentRotSpeed`, `ContentRelSize`).
+  - Anzeigen im neuen Layout: Name, Beschreibung, Planet Size/Durchmesser, Orbital Distance, Orbital Speed, Axial Tilt, Eccentricity und Planet Scale.
+  - `PlanetData` enthaelt zusaetzliche Kurztextfelder fuer die Detailkarten: `planetSizeInfoText`, `orbitalDistanceInfoText`, `orbitalSpeedInfoText`, `axialTiltInfoText`, `eccentricityInfoText`, `planetScaleInfoText`, `gravityInfoText`.
+  - Leere Kurztextfelder werden im Panel als `Lorem ipsum dolor sit amet.` angezeigt, damit fehlende Inhalte sichtbar bleiben.
+  - `PlanetInfoPanelManager.PositionPanelNextToUser()` positioniert das Panel links-vorne relativ zur horizontalen Blickrichtung des Users, nicht relativ zur Kopfneigung. Aktuelle Werte: `distanceInFront = 0.45`, `sideOffset = -0.45`, `heightOffset = -0.6`.
+  - Einzelplaneten werden nach dem Placement bevorzugt als generisches `planetInteractable.prefab` platziert. `InteractablePlanetVisual` setzt darunter im `VisualRoot` das eigentliche `PlanetData.planetPrefab` ein.
+  - `PlanetSelectable.cs`: generische Komponente auf Planet-Objekten, die ihr `PlanetData` ans Panel meldet und als Fallback Daten aus `InteractablePlanetVisual` oder `PlanetBody` lesen kann.
+  - `PlanetRaySelector.cs`: Controller-Ray-Auswahl per Trigger im `WORLD`-State. Treffer auf `PlanetSelectable`, `InteractablePlanetVisual` oder `PlanetBody` aktualisieren das globale `PlanetDetailRoot`; bei alter Layer-Maske faellt die Auswahl auf alle Layer zurueck und filtert trotzdem nur Objekte mit `PlanetData`.
+  - `PlacementManager.cs`: fuegt nach Einzelplanet-Placement automatisch `PlanetSelectable` hinzu und zeigt das Detailpanel direkt mit den Daten des platzierten Planeten.
 - **Entscheidung:** Kein eigenes Panel pro Planet. Layout und Logik bleiben zentral, Inhalte kommen aus `PlanetData`.
+- **Datenbasiertes Prinzip:** Das Detailpanel soll ohne planetenspezifischen Code erweiterbar bleiben. Neue Planeten bekommen nur ein `PlanetData`-Asset mit Daten und Texten; UI und Placement reagieren generisch auf dieses Asset.
 
 ### Immersive Mode: Planet am Mond-Ort
 
@@ -99,31 +112,47 @@
   - `TEST_*`: Hauptmenue ausgeblendet, aktives Minigame-Prefab ist sichtbar; Options-Taste beendet das Minigame und fuehrt ins Test-Menue zurueck.
 - **Hinweis:** `PlanetRaySelector` reagiert nur im `WORLD`-State, damit er nicht mit dem Placement-Trigger kollidiert.
 
+### Passthrough / VR Toggle
+
+- **Status:** Aktiv implementiert im Main Menu.
+- **Beschreibung:** Der User kann im Hauptmenue ueber einen Toggle zwischen AR-Modus (Passthrough: sieht den echten Raum) und VR-Modus (schwarzer Hintergrund) wechseln. Das Panel bleibt im Raum stehen; nur der Hintergrund der Welt wechselt.
+- **Umsetzung:**
+  - `MainMenuController.cs` hat `_passthroughModeToggle` (Unity Toggle), `_passthroughDissolver` (MR Motifs `PassthroughDissolver`) und `_isPassthroughOnAtStart` (Startzustand).
+  - `SetPassthroughMode(bool isActive)` ruft `_passthroughDissolver.SetPassthroughActive(isActive)` auf.
+  - Das Toggle-Objekt wird automatisch aus dem `MenuRoot` gesucht (Name: "Passthrough"); alternativ im Inspector zuweisbar.
+  - Der `PassthroughDissolver` stammt aus dem MR Motifs-Paket und koordiniert OVR-Passthrough-Layer und Kamera-Flags.
+  - `_isPassthroughOnAtStart` steuert den Zustand beim App-Start (Standard: AR-Modus).
+- **Hinweis:** Der `PassthroughDissolver` muss in der MainScene als Komponente vorhanden sein; `MainMenuController` sucht ihn per `FindFirstObjectByType` als Fallback.
+
 ### Platzierung per Depth API
 
-- **Status:** Code fertig; Editor-Playmode nutzt einen Depth-freien Fallback.
+- **Status:** Code fertig; Editor-Playmode nutzt einen Depth-freien Fallback; Headset-Input wurde robuster gemacht.
 - **Beschreibung:** Im `PLACEMENT`-State folgt eine Vorschau dem Controller-Ray. Eine horizontale Flaeche wird ueber die Hit-Normal erkannt; Trigger platziert das Objekt.
 - **Umsetzung:** `PlacementManager.cs`
   - Quest-Build: Raycast ueber `EnvironmentRaycastManager.Raycast(Ray, out hit)`.
   - Unity Editor: `useEditorFallbackPlacement` setzt den Hitpunkt in fixer Distanz vor den Controller-Ray und deaktiviert den `EnvironmentRaycastManager`, damit die Depth API im Playmode nicht laeuft.
-  - `IsHorizontal(normal)`: `Vector3.Dot(normal, Vector3.up) > 0.85`.
-  - `SelectPlanet(PlanetData)`: Vorschau und echtes Planet-Prefab aus `PlanetData`, Groessenskalierung relativ zur Erde.
+  - `IsHorizontal(normal)`: `Vector3.Dot(normal, Vector3.up) >= horizontalSurfaceThreshold`, aktuell `0.75`.
+  - Placement akzeptiert rechten und linken Index-Trigger (`SecondaryIndexTrigger`, `PrimaryIndexTrigger`) sowie optional Raw-Trigger (`RIndexTrigger`, `LIndexTrigger`).
+  - Wenn der Trigger gedrueckt wird, die Flaeche aber nicht horizontal genug ist, loggt der `PlacementManager` die blockierende Normal.
+  - `SelectPlanet(PlanetData)`: Vorschau aus `PlanetData.previewPrefab`; das echte Objekt kommt ueber `PlanetData.interactablePlanetPrefab`, sonst ueber das gemeinsame `PlacementManager.interactablePlanetPrefab`, sonst als Fallback direkt aus `PlanetData.planetPrefab`.
+  - `SetupPlacedPlanetVisual(...)`: bindet beim generischen Interactable-Wrapper `InteractablePlanetVisual.PlanetData` an den gewaehlten Planeten und laedt dessen echtes `planetPrefab` in den `VisualRoot`.
   - `SelectSolarSystem(GameObject)`: Sonnensystem-Prefab ohne Laufzeit-Skalierung.
   - Beim Platzieren eines Planeten wird das globale InfoPanel aktualisiert.
   - Beim Platzieren eines Sonnensystems wird die Sonnensystem-Slider-UI gebunden und das Planet-InfoPanel versteckt.
 
-### Main Menu Learn/Test
+### Main Menu / MenuRoot
 
-- **Status:** Learn-Flow weiter in Arbeit; Test-Tab-Skelett fuer Phase 4 fertig.
-- **Beschreibung:** Das Hauptmenue wird auf die Roadmap-Struktur umgebaut:
-  - `Learn`: `Planets` und `SolarSystem`
-  - `Test`: `Reihenfolge`, `Size`, `Gravity`
+- **Status:** Finales `MenuRoot` ist aktiv angebunden; altes `Main Menu`/`MainMenuCanvas` wurde aus der `MainScene` entfernt.
+- **Beschreibung:** Das Hauptmenue nutzt das neue `MenuRoot` mit Tab-System. Inaktive Tabs blenden nur ihren Background aus.
 - **Umsetzung:**
-  - `MainMenuController.cs` verwaltet Auswahl zwischen Planet und Sonnensystem und startet Placement.
-  - `PlanetMenuButton.cs` befuellt Planet-Buttons aus `PlanetData` und ruft `SelectPlanet(data)` auf.
-  - `MainMenuController.cs` startet die Minigames ueber `MinigameManager` und faerbt Quiz-Buttons bei abgeschlossenem Quiz um.
-  - `GameManager` blendet das Menue beim Placement/WORLD/TEST-State aus.
-- **Offen:** Die sichtbare Learn-Canvas-Struktur in `MainScene.unity` muss im Editor final auf `Planets` + `SolarSystem` angepasst werden.
+  - `GameManager.mainMenuCanvas` zeigt auf `MenuRoot`.
+  - `MainMenuController.cs` bindet `MenuRoot` zur Laufzeit automatisch: Navigation, Hauptpanel, Planet-Buttons, Sonnensystem-Button und Challenge-Buttons.
+  - Planet-Buttons werden aus `menuPlanetData` in Button-Reihenfolge befuellt und rufen generisch `SelectPlanet(PlanetData)` auf.
+  - Der `Start Experience`-Button ist initial versteckt und wird erst nach Auswahl eines Planeten oder des Sonnensystems eingeblendet.
+  - Active Tab Background: `#FFFFFF` mit Alpha `0.4`; inactive: Alpha `0`.
+  - `MainMenuController.cs` startet Minigames ueber `MinigameManager` und faerbt Quiz-Buttons bei abgeschlossenem Quiz um.
+  - `GameManager` blendet `MenuRoot` beim Placement/WORLD/TEST-State aus.
+- **Datenbasiertes Prinzip:** Das Menue soll ebenfalls datenbasiert bleiben. Neue Planeten werden ueber `PlanetData` und die `menuPlanetData`-Liste ergaenzt, nicht durch planetenspezifische UI-Methoden.
 
 ### Test-Tab / Minigame-Skelett
 
@@ -203,13 +232,19 @@
 | Konvention | Detail |
 |---|---|
 | Datenquelle Planeten | Planetenspezifische Daten liegen in `PlanetData`, nicht in UI- oder Interaktionsscripts. |
-| Globales InfoPanel | Ein `PlanetInfoPanel` fuer alle Planeten; Umschalten per `Bind(PlanetData)`. |
+| Datenbasierte UI | Menue und Detailpanel lesen Daten aus `PlanetData` und sollen ohne planetenspezifischen Code erweiterbar bleiben. |
+| Globales InfoPanel | Ein `PlanetInfoPanel` fuer alle Planeten; Umschalten per `Bind(PlanetData)`. Das neue `PlanetDetailRoot` wird bevorzugt. |
+| PlanetDetail-Kurztexte | Detailkarten nutzen Kurztextfelder in `PlanetData`; leere Felder fallen sichtbar auf Lorem Ipsum zurueck. |
+| Interactable-Einzelplaneten | Platzierte Einzelplaneten nutzen bevorzugt das gemeinsame `planetInteractable.prefab`; das echte visuelle Planet-Prefab wird per `InteractablePlanetVisual` aus `PlanetData.planetPrefab` eingesetzt. |
+| Detailpanel-Position | Das Detailpanel spawnt links-vorne relativ zur horizontalen Blickrichtung des Users, nicht relativ zur Kopfneigung. |
 | Immersive Mode | Kein Scene-Loading; Immersive-Environment bleibt Teil der MainScene und wird ueber Root-GameObject + Dissolve aktiviert. |
 | Immersive Spawn | Planet wird am referenzierten SpawnPoint angezeigt; bei grosser Distanz berechnet `ImmersiveModeController` die Mond-Scheingroesse aus dem Spawn-Abstand. |
+| Passthrough Toggle | Der AR/VR-Toggle im Main Menu steuert den `PassthroughDissolver` (MR Motifs). Das Toggle-Objekt in `MenuRoot` heisst "Passthrough". Der Startzustand ist per `_isPassthroughOnAtStart` im Inspector steuerbar. |
 | Sonnensystem-UI | Das Slider-Panel referenziert den `SolarSystemManager` nicht im Prefab, sondern bekommt ihn nach Placement ueber `Bind(SolarSystemManager)`. |
 | Depth API fuer Platzierung | Im Quest-Build liefert `EnvironmentRaycastManager.Raycast(Ray, out hit)` Position und Normal aus dem Depth-Mesh. |
 | Editor-Placement | Im Unity Editor ist die Depth API deaktiviert; die Platzierung nutzt einen festen Punkt vor dem Controller-Ray. |
-| Horizontalitaet | Boden/Tisch wird ueber `Vector3.Dot(normal, Vector3.up) > 0.85` erkannt. |
+| Horizontalitaet | Boden/Tisch wird ueber `Vector3.Dot(normal, Vector3.up) >= horizontalSurfaceThreshold` erkannt; aktuell `0.75`. |
+| Placement-Input | Placement akzeptiert beide Index-Trigger plus optional Raw-Index-Trigger, damit linke/rechte Controller-Hand nicht blockiert. |
 | Skalierung Einzelplanet | `vrScale = (diameter / earthDiameterInKm) * earthDiameterInVR`. |
 | Skalierung Sonnensystem | Das Sonnensystem-Prefab bleibt in eigener VR-Groesse; Runtime-Slider veraendern interne Manager-Werte. |
 | State-Grenze | Placement-Trigger und Planet-Auswahl werden durch `GameState.PLACEMENT` vs. `GameState.WORLD` getrennt. |
@@ -243,6 +278,12 @@
 | 2026-04-28 | Korrekt platzierte Size-Planeten skalieren am `VisualRoot` | Das sichtbare Planet-Visual liegt im Interactable-Prefab unter `InteractablePlanetVisual`; Root-Skalierung allein ist fuer das unmittelbare Feedback zu unzuverlaessig |
 | 2026-04-28 | Immersive Mode bleibt in der MainScene und nutzt Dissolve statt Scene-Loading | Fruehere Raumstations-/Szenenwechsel-Ansatz fuehrte zu schwarzem Bildschirm, Ruckeln und komplexem XR-State; Root-Activation + Passthrough-Dissolve ist stabiler |
 | 2026-04-28 | Immersive-Planet wird ueber scheinbare Mondgroesse skaliert | Echte Planetengroessen sind unbrauchbar; die visuelle Lernidee ist die korrekte scheinbare Groesse am Mond-Ort |
+| 2026-04-30 | Passthrough/VR Toggle im Main Menu ueber `PassthroughDissolver` | Nutzer sollen wählen können, ob sie das Sonnensystem in AR (Raum sichtbar) oder VR (schwarzer Hintergrund) erleben; MR Motifs-Dissolver löst den Übergang bereits sauber |
+| 2026-04-30 | Finales `MenuRoot` ersetzt altes `Main Menu` | Finales UI-Layout soll die Quelle sein; alte UI-Hierarchie erzeugte doppelte Systeme und falsche Referenzen |
+| 2026-04-30 | `PlanetDetailRoot` nutzt bestehendes globales `PlanetInfoPanel` | Kein zweites InfoPanel-System; vorhandener Manager bleibt zentrale Stelle, neues Layout wird automatisch gebunden |
+| 2026-04-30 | Planet-Detailsystem bleibt datenbasiert ueber `PlanetData` | Erweiterbarkeit: neue Planeten brauchen Daten/Textfelder im ScriptableObject, keine neuen UI-Scripts |
+| 2026-04-30 | Placement-Input akzeptiert beide Controller-Trigger | Ghost war sichtbar, Placement konnte aber je nach Hand/Rig am falschen Trigger-Button haengen bleiben |
+| 2026-04-30 | Einzelplanet-Placement nutzt generisches `planetInteractable.prefab` | Meta-Interactable-Komponenten bleiben zentral im Wrapper; das eigentliche Planet-Visual wird datenbasiert aus `PlanetData.planetPrefab` geladen |
 
 ---
 
@@ -250,19 +291,22 @@
 
 | Aufgabe | Status |
 |---|---|
-| `PlanetInfoPanelSystem` in `MainScene` anlegen und `PlanetInfoPanelManager` verkabeln | Fertig, Inspector-Referenzen weiter pruefen |
-| `PlanetInfoPanel` World-Space-Canvas/Prefab mit TMP-Feldern bauen | Fertig, Lesbarkeit im Headset pruefen |
+| `MenuRoot` als alleiniges Hauptmenue in `MainScene` nutzen | Fertig, Headset-Test offen |
+| Planet-Buttons in `menuPlanetData` gegen sichtbare Button-Reihenfolge pruefen | Offen |
+| `PlanetInfoPanelSystem` in `MainScene` anlegen und `PlanetInfoPanelManager` verkabeln | Fertig, Manager bevorzugt automatisch `PlanetDetailRoot` |
+| `PlanetDetailRoot` World-Space-Canvas mit TMP-Feldern an neues Datenbinding anbinden | Fertig, Lesbarkeit/Position im Headset pruefen |
+| Neue `PlanetData`-Kurztexte fuer Detailkarten befuellen | Offen |
 | `PlacementManager.planetInfoPanelManager` zuweisen | Fertig, Headset-Test offen |
 | Immersive-Root/Environment in der `MainScene` final organisieren | In Arbeit |
 | Immersive-SpawnPoint pruefen: Name/Referenz, Entfernung, Sichtbarkeit, Far Clip und Skalierung | In Arbeit |
 | Build Settings pruefen: App-Flow muss aus `MainScene.unity` starten; reine `OutdoorScene` ist nur Environment/Test | Offen |
 | Headset-Test: Planet platzieren -> InfoPanel -> Immersive Mode -> Planet am SpawnPoint sichtbar | Offen |
 | Headset-Test: InfoPanel bleibt im Immersive Mode sichtbar und Button verlaesst den Modus | Offen |
-| `PlanetRaySelector` mit richtigem Controller-`rayOrigin` in der Szene verkabeln | Offen |
-| `SonnensystemUIPanel.prefab` mit 4 Slidern bauen | Offen |
+| `PlanetRaySelector` mit richtigem Controller-`rayOrigin` in der Szene verkabeln | Vorhanden; Code-seitig fertig fuer beide Trigger, Interactable-Wrapper und Layer-Fallback. Headset-Verkabelung pruefen |
+| `SonnensystemUI.cs` an Figma-Design anpassen: Spacing Mode Toggle + 5 Slider statt 4 Slider, englische Labels | Offen |
+| `SonnensystemUIPanel.prefab` nach finalem Figma-Design bauen | Offen |
 | `PlacementManager.sonnensystemUIPrefab` zuweisen | Offen |
-| `MainMenuController`-Felder fuer Learn/Test und SolarSystem-Prefab im Inspector pruefen | Offen |
-| Learn-Panel im Editor auf `Planets` + `SolarSystem` umbauen | Offen |
+| `MainMenuController`-Felder fuer `MenuRoot`, `menuPlanetData`, Minigames und SolarSystem-Prefab im Inspector pruefen | Offen |
 | Test-Panel Phase 4: Buttons, Minigame-Prefabs, Abschliessen/Beenden, Reset-Fortschritt | Fertig |
 | Reihenfolge-Prefab: alle Planeten, SnapInteractor und OrbitSlots final im Inspector pruefen | In Arbeit |
 | Size-Prefab: Planeten-`SnapInteractor`s auf `List > SnapInteractable` als `Default Interactable` und `Time Out Interactable` pruefen | In Arbeit |
@@ -272,8 +316,9 @@
 | Headset-Test: Reihenfolge mit Controller greifen, snappen, Ring-Feedback und Abschluss pruefen | Offen |
 | `UISetExamples.unity` und `PanelWithManipulators.unity` als Vorlage fuer VR-UI/Panel pruefen | Offen |
 | Headset-Test: Erde platzieren -> InfoPanel sichtbar und lesbar | Offen |
+| Headset-Test: Venus/Planet platzieren -> Ghost sichtbar -> beide Trigger platzieren korrekt | Offen |
 | Headset-Test: Sonnensystem platzieren -> Slider sichtbar und wirksam | Offen |
-| Collider auf Planet-Prefabs pruefen, damit `PlanetRaySelector` sie treffen kann | Offen |
+| Collider/Layer auf `planetInteractable.prefab` pruefen, damit `PlanetRaySelector` sie treffen kann | Code-Fallback vorhanden; Prefab-Layer im Headset trotzdem pruefen |
 | `StartPhase.cs`, `SpielerBewegung.cs`, `InfoPunkt.cs` auf Altlasten pruefen | Offen |
 
 ---
@@ -285,4 +330,6 @@
 - **2026-04-27:** Phase-4-Test-Flow im Playmode verifiziert: Quiz-Buttons starten passende Panels, Abschliessen speichert Erfolg, Beenden speichert nicht, Main-Menu-Reset loescht Fortschritt.
 - **2026-04-28:** Size-Minispiel nach Phase-6-Integration kompiliert: `dotnet build Assembly-CSharp.csproj --no-restore` erfolgreich.
 - **2026-04-28:** Immersive Mode nach InfoPanel-/SpawnPoint-/Dissolve-Integration kompiliert: `dotnet build Assembly-CSharp.csproj --no-restore` erfolgreich.
+- **2026-04-30:** `MenuRoot`, `PlanetDetailRoot`, datenbasierte `PlanetData`-Detailtexte und Placement-Input-Fix kompiliert: `dotnet build Assembly-CSharp.csproj --no-restore` erfolgreich.
+- **2026-04-30:** Interactable-Wrapper-Auswahl und `PlanetDetailRoot`-Update bei Planet-Klick kompiliert: `dotnet build Assembly-CSharp.csproj --no-restore` erfolgreich.
 - Warnungen bleiben aus bestehenden UISet/OpenXR/Altlasten, keine neuen Compile-Fehler.

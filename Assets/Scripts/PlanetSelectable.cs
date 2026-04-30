@@ -7,7 +7,9 @@ public class PlanetSelectable : MonoBehaviour
 
     public void Select()
     {
-        if (planetData == null)
+        PlanetData selectedPlanetData = GetPlanetData();
+
+        if (selectedPlanetData == null)
         {
             Debug.LogWarning("PlanetSelectable: Kein PlanetData auf " + gameObject.name + " zugewiesen.");
             return;
@@ -19,6 +21,28 @@ public class PlanetSelectable : MonoBehaviour
             return;
         }
 
-        PlanetInfoPanelManager.Instance.ShowPlanet(planetData);
+        PlanetInfoPanelManager.Instance.ShowPlanet(selectedPlanetData);
+    }
+
+    public PlanetData GetPlanetData()
+    {
+        if (planetData != null)
+        {
+            return planetData;
+        }
+
+        InteractablePlanetVisual interactableVisual = GetComponentInChildren<InteractablePlanetVisual>(true);
+        if (interactableVisual != null && interactableVisual.PlanetData != null)
+        {
+            return interactableVisual.PlanetData;
+        }
+
+        PlanetBody planetBody = GetComponentInChildren<PlanetBody>(true);
+        if (planetBody != null && planetBody.data != null)
+        {
+            return planetBody.data;
+        }
+
+        return null;
     }
 }
