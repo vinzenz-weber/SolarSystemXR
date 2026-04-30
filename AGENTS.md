@@ -6,6 +6,18 @@ Eine XR-App für die Meta Quest 3 (Standalone), in der der User das Sonnensystem
 
 ---
 
+## Wissenschaftlicher Fokus der Masterarbeit
+
+Der theoretische Kern der Masterarbeit liegt auf:
+
+- **Wissensvermittlung in XR** und XR in Bildungskontexten
+- **Gamification** als Motivations- und Vermittlungsstrategie
+- **Wissenschaftlich korrekte Darstellung** der Planeten und des Sonnensystems
+
+Bei neuen Features, Texten und Interaktionen soll geprüft werden, wie sie diese drei Schwerpunkte unterstützen. Lerninhalte sollen verständlich, motivierend und fachlich korrekt bleiben. Wenn astronomische Fakten verwendet werden, sollen sie nach Möglichkeit aus belastbaren Quellen stammen und nicht frei erfunden oder nur aus Erinnerung ergänzt werden.
+
+---
+
 ## Technisches Setup
 
 - **Unity Version:** 6000.3.10f1
@@ -160,17 +172,39 @@ Fokus auf Optimierung – die App soll visuell gut aussehen und gleichzeitig fl�
 
 ## Dokumentations-Workflow (Masterarbeit)
 
-Es gibt zwei Dokumentationsdateien im Projekt, die den Fortschritt der Masterarbeit festhalten:
+Es gibt drei zentrale Dokumentationsdateien im Projekt, die unterschiedliche Aufgaben für Masterarbeit und Projektverlauf erfüllen:
 
-**Ablageort:** Beide Dateien liegen versteckt im Projektordner `.claude/`:
+**Ablageort:** Alle drei Dateien liegen versteckt im Projektordner `.claude/`:
 - `.claude/DOKU.md`
 - `.claude/ARCHIV.md`
+- `.claude/WERKSTÜCK.md`
 
 ### `DOKU.md` – Aktueller Stand
 Enthält nur den **aktuellen, lebendigen Stand** des Projekts: aktive Features, technische Entscheidungen, bekannte Probleme.
 
 ### `ARCHIV.md` – Verworfenes & Iterationen
 Enthält alles, was aus der DOKU entfernt wurde: verworfene Features, gescheiterte Experimente, grundlegende Umbauten. Dient als Grundlage für das **Progress-Kapitel** der Masterarbeit.
+
+### `WERKSTÜCK.md` – Projekt- und Prozesskapitel der Masterarbeit
+Enthält den wachsenden Schreibstand für die Kapitel, die den Entwicklungsprozess und das konkrete Projekt „Sonnensystem XR“ beschreiben. Der theoretische Hintergrund der Masterarbeit ist separat in Word geschrieben und wird in `WERKSTÜCK.md` nicht erneut gesammelt.
+
+Beim Ergänzen von Kapiteln gilt:
+- Fokus auf Projektverlauf, Konzept, technische Entscheidungen, Umsetzung, Probleme, Iterationen und Reflexion.
+- Theoretische Grundlagen nur kurz aufgreifen, wenn sie für eine konkrete Projektentscheidung relevant sind.
+- Bei Theoriebezügen auf den bereits geschriebenen Word-Teil verweisen oder TODO-Verweise setzen, statt neue Theoriekapitel in `WERKSTÜCK.md` aufzubauen.
+- Wissenschaftliche Aussagen klar von eigenen Designentscheidungen trennen.
+- Fachliche Behauptungen, astronomische Daten und didaktische Aussagen möglichst mit Quellenhinweisen oder TODO-Quellenmarkierungen versehen.
+- Keine veralteten Projektannahmen aus `DOKU.md` übernehmen, ohne sie gegen den aktuellen Stand zu prüfen.
+- `DOKU.md` beschreibt den aktuellen Projektstand, `ARCHIV.md` die Entwicklungsgeschichte, `WERKSTÜCK.md` den ausformulierten bzw. vorzubereitenden Projekt- und Prozessbericht der Masterarbeit.
+
+Wenn der User sagt, dass ein Kapitel oder Unterkapitel **"ausformuliert"** werden soll:
+- Bei inhaltlichen Unklarheiten zuerst gezielt nachfragen, bevor Text ergänzt wird. Das gilt z.B., wenn unklar ist, ob ein Aspekt ins Kapitel gehört, wie stark ein Thema gewichtet werden soll, ob ein Feature aktuell oder verworfen ist, oder ob ein Punkt eher in Theorie, Projektbeschreibung, Reflexion oder Archiv gehört.
+- Die Rückfragen sollen knapp und konkret sein, damit der User schnell entscheiden kann.
+- Der Text in `WERKSTÜCK.md` soll dann bevorzugt als **ausführliche Stichpunkte** geschrieben werden, nicht als stark verdichteter Fließtext. Der User formuliert daraus später selbst den finalen wissenschaftlichen Text.
+- Die Stichpunkte dürfen und sollen detailreich sein, damit genug Material für mehrere Seiten Masterarbeit entsteht.
+- Trotz ausführlicher Stichpunkte sollen unwichtige, redundante oder offensichtlich irrelevante Details weggelassen werden.
+- Wo sinnvoll, sollen die Stichpunkte bereits eine klare Argumentationslogik vorbereiten: Ausgangslage, Entscheidung, Umsetzung, Problem, Lösung, Begründung, Reflexion, Bezug zu Wissensvermittlung/XR/Gamification/wissenschaftlicher Korrektheit.
+- Offene Fakten, fehlende Quellen, unsichere Projektstände oder mögliche Dopplungen zu anderen Kapiteln werden als TODO markiert.
 
 ### Befehle
 
@@ -179,11 +213,14 @@ Enthält alles, was aus der DOKU entfernt wurde: verworfene Features, gescheiter
 | **"Update DOKU"** | DOKU.md wird mit dem aktuellen Stand aktualisiert. Gleichzeitig wird ARCHIV.md automatisch ergänzt: alles was sich seit dem letzten Stand verändert hat (umgebaute Features, verworfene Ansätze, behobene Bugs mit nicht-offensichtlicher Ursache) wird unter "Iterationen & Änderungen" eingetragen. |
 | **"Feature X verworfen, Grund: Y"** | Feature wird aus DOKU.md gelöscht und mit Datum + Begründung ins ARCHIV.md verschoben. |
 | **"Feature X umgebaut"** | DOKU.md wird aktualisiert, die alte Version wird unter "Iterationen & Änderungen" ins ARCHIV.md eingetragen. |
+| **"Update WERKSTÜCK"** | WERKSTÜCK.md wird mit dem gewünschten Kapitel, Abschnitt oder Stichpunktstand ergänzt oder überarbeitet. DOKU/ARCHIV bleiben davon unberührt, außer es entstehen neue technische Projektentscheidungen. |
+| **"Kapitel X in WERKSTÜCK ergänzen"** | Das genannte Kapitel wird als Arbeitsfassung ergänzt. Offene Quellen, Begriffe oder Argumentationslücken werden als TODO markiert. |
 
 ### Wichtig
 - Beim Verschieben ins Archiv immer **Datum**, **Begründung** und **Erkenntnisse** festhalten.
 - DOKU.md soll immer nur den tatsächlichen Ist-Zustand zeigen – nichts Veraltetes.
 - ARCHIV.md dokumentiert nicht nur verworfenes, sondern auch **Lernmomente**: nicht-offensichtliche Unity-Verhaltensweisen, Bugs deren Ursache überraschend war, und Architekturentscheidungen die sich als falsch herausgestellt haben.
+- WERKSTÜCK.md darf unfertige Abschnitte, Stichpunkte und TODOs enthalten, soll aber klar zwischen fertiger Formulierung, Rohnotizen und offenen Verweisen auf Projektstand, Archiv oder Word-Theorieteil unterscheiden.
 
 ---
 

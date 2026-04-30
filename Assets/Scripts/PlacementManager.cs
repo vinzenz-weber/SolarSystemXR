@@ -365,6 +365,7 @@ public class PlacementManager : MonoBehaviour
         if (visualLoader == null) return;
 
         visualLoader.PlanetData = data;
+        visualLoader.TargetVisualSize = 1f;
         visualLoader.RefreshVisual();
         visualLoader.RefreshOnStart = false;
     }
