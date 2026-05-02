@@ -8,6 +8,8 @@ using UnityEditor;
 // Du waehlst ein PlanetData aus, und das visuelle Planet-Prefab wird unter VisualRoot eingesetzt.
 public class InteractablePlanetVisual : MonoBehaviour
 {
+    private const string RetiredVisualRootName = "RuntimeRetiredVisuals";
+
     [Header("Daten")]
     public PlanetData PlanetData;
 
@@ -42,6 +44,14 @@ public class InteractablePlanetVisual : MonoBehaviour
     private void Reset()
     {
         VisualRoot = transform.Find("VisualRoot");
+    }
+
+    private void Awake()
+    {
+        if (Application.isPlaying && RefreshOnStart)
+        {
+            DeactivateVisualRootChildrenForRuntime();
+        }
     }
 
     private void Start()
@@ -94,13 +104,48 @@ public class InteractablePlanetVisual : MonoBehaviour
 
             if (Application.isPlaying)
             {
-                Destroy(child);
+                RetireRuntimeVisual(child);
             }
             else
             {
                 DestroyImmediate(child);
             }
         }
+    }
+
+    private void DeactivateVisualRootChildrenForRuntime()
+    {
+        if (VisualRoot == null) return;
+
+        for (int i = VisualRoot.childCount - 1; i >= 0; i--)
+        {
+            VisualRoot.GetChild(i).gameObject.SetActive(false);
+        }
+    }
+
+    private void RetireRuntimeVisual(GameObject child)
+    {
+        if (child == null) return;
+
+        Transform retiredRoot = GetOrCreateRetiredVisualRoot();
+
+        child.SetActive(false);
+        child.transform.SetParent(retiredRoot, false);
+    }
+
+    private Transform GetOrCreateRetiredVisualRoot()
+    {
+        Transform retiredRoot = transform.Find(RetiredVisualRootName);
+        if (retiredRoot != null)
+        {
+            retiredRoot.gameObject.SetActive(false);
+            return retiredRoot;
+        }
+
+        GameObject retiredObject = new GameObject(RetiredVisualRootName);
+        retiredObject.transform.SetParent(transform, false);
+        retiredObject.SetActive(false);
+        return retiredObject.transform;
     }
 
     private GameObject InstantiatePlanetPrefab()

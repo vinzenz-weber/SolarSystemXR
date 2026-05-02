@@ -210,8 +210,72 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 6000831239261222406}
+  - {fileID: 4196742971000376014}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3892892422381725096
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4196742971000376014}
+  - component: {fileID: 3761341112327550683}
+  m_Layer: 0
+  m_Name: PlanetFactAnchor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4196742971000376014
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3892892422381725096}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.05994, y: 0, z: -0.513}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2932084541131115298}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3761341112327550683
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3892892422381725096}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d8b76a298e7048249a5b07f25cb1e3af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::PlanetFactAnchor
+  factNumber: 1
+  planetDataOverride: {fileID: 0}
+  planetCenter: {fileID: 2932084541131115298}
+  meshSurfaceRoot: {fileID: 2932084541131115298}
+  useMeshNormal: 1
+  useDirectionFromPlanetCenter: 1
+  labelDistance: 0.2
+  labelLocalOffset: {x: 0, y: 0.12, z: 0}
+  textColor: {r: 1, g: 1, b: 1, a: 1}
+  fontSize: 0.19
+  textWorldScale: 0.6
+  maxTextWidth: 0.45
+  alignment: 514
+  lineColor: {r: 1, g: 1, b: 1, a: 1}
+  lineWidth: 0.003
+  lineMaterial: {fileID: 0}
+  showPreviewInEditor: 1
+  showMissingFactTextInEditor: 1
+  missingFactTextColor: {r: 1, g: 0.75, b: 0.2, a: 1}
 --- !u!1 &4561667075755556123
 GameObject:
   m_ObjectHideFlags: 0

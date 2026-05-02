@@ -825,8 +825,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 59dc9733b250d45c38ff3e2545592941, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SunPasser
-  planetMaterials:
-  - {fileID: 2100000, guid: a18d27758d89142a1a88ab05e95a65ee, type: 2}
+  planets: []
 --- !u!1 &5598998543278466494
 GameObject:
   m_ObjectHideFlags: 0
@@ -880,10 +879,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d04bf36a2e08a4af1ad81a979cf688a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::SolarSystemManager
+  planetenDaten: []
+  darstellungsModus: 1
   distanceScale: 0.006
   planetSizeScale: 0.002
+  minDistanceScale: 0.005
+  maxDistanceScale: 0.08
+  minPlanetSizeScale: 0.0005
+  maxPlanetSizeScale: 0.01
+  minTimeScale: 0
+  maxTimeScale: 100
+  minAxialTiltMultiplier: 0
+  maxAxialTiltMultiplier: 5
+  minEccentricityMultiplier: 0
+  maxEccentricityMultiplier: 5
   sunSizeRatio: 0.5
   timeScale: 500
+  currentSimulationDays: 0
+  exzentrizitaetMultiplikator: 1
+  inklinationMultiplikator: 0.99
+  achsenneigungMultiplikator: 1
+  orbitResolution: 100
+  lineWidth: 0.002
+  orbitGapAngle: 10
+  lineMaterial: {fileID: 0}
 --- !u!1 &7381354685431433286
 GameObject:
   m_ObjectHideFlags: 0

@@ -19,7 +19,7 @@ public class PlacementManager : MonoBehaviour
     public PlanetInfoPanelManager planetInfoPanelManager;
 
     [Header("Sonnensystem UI")]
-    [Tooltip("World-Space-UI mit SonnensystemUI und vier Slidern. Optional, wenn das UI schon im Sonnensystem-Prefab liegt.")]
+    [Tooltip("World-Space-UI mit SonnensystemUI und Sonnensystem-Steuerung. Optional, wenn das UI schon im Sonnensystem-Prefab liegt.")]
     public SonnensystemUI sonnensystemUIPrefab;
     private SonnensystemUI _currentSonnensystemUI;
 
@@ -242,8 +242,8 @@ public class PlacementManager : MonoBehaviour
 
                     GameObject spawnedPlanet = Instantiate(GetPlacementPrefab(currentPlanetData), previewInstance.transform.position, Quaternion.identity);
                     SetupPlacedPlanetVisual(spawnedPlanet, currentPlanetData);
-                    float vrScale = GetScaledSize(currentPlanetData.diameter);
-                    spawnedPlanet.transform.localScale = new Vector3(vrScale, vrScale, vrScale);
+                    float rootScale = GetInteractableRootScale(spawnedPlanet, currentPlanetData);
+                    spawnedPlanet.transform.localScale = new Vector3(rootScale, rootScale, rootScale);
                     RegisterSelectablePlanet(spawnedPlanet, currentPlanetData);
                     _placedPlanetObjects.Add(spawnedPlanet);
 
@@ -365,9 +365,61 @@ public class PlacementManager : MonoBehaviour
         if (visualLoader == null) return;
 
         visualLoader.PlanetData = data;
-        visualLoader.TargetVisualSize = 1f;
+        visualLoader.FitVisualToTargetSize = false;
         visualLoader.RefreshVisual();
         visualLoader.RefreshOnStart = false;
+    }
+
+    private float GetInteractableRootScale(GameObject planetObject, PlanetData data)
+    {
+        float targetWorldSize = GetScaledSize(data.diameter);
+        float visualSizeAtRootScaleOne = GetVisualSizeAtRootScaleOne(planetObject);
+
+        if (visualSizeAtRootScaleOne <= 0.0001f)
+        {
+            return targetWorldSize;
+        }
+
+        return targetWorldSize / visualSizeAtRootScaleOne;
+    }
+
+    private float GetVisualSizeAtRootScaleOne(GameObject planetObject)
+    {
+        if (planetObject == null) return 0f;
+
+        Vector3 originalScale = planetObject.transform.localScale;
+        planetObject.transform.localScale = Vector3.one;
+
+        InteractablePlanetVisual visualLoader = planetObject.GetComponentInChildren<InteractablePlanetVisual>(true);
+        Transform visualRoot = visualLoader != null && visualLoader.VisualRoot != null
+            ? visualLoader.VisualRoot
+            : planetObject.transform;
+
+        Renderer[] renderers = visualRoot.GetComponentsInChildren<Renderer>(true);
+        Bounds visualBounds = new Bounds();
+        bool hasBounds = false;
+
+        foreach (Renderer visualRenderer in renderers)
+        {
+            if (visualRenderer == null) continue;
+            if (visualRenderer.GetComponentInParent<PlanetFactAnchor>(true) != null) continue;
+
+            if (hasBounds == false)
+            {
+                visualBounds = visualRenderer.bounds;
+                hasBounds = true;
+            }
+            else
+            {
+                visualBounds.Encapsulate(visualRenderer.bounds);
+            }
+        }
+
+        planetObject.transform.localScale = originalScale;
+
+        if (hasBounds == false) return 0f;
+
+        return Mathf.Max(visualBounds.size.x, visualBounds.size.y, visualBounds.size.z);
     }
 
 

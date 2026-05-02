@@ -110,6 +110,6 @@ public class PlanetData : ScriptableObject
     [TextArea(1, 3)]
     public string gravityInfoText;
 
-    [Tooltip("3-5 kurze Stichpunkte, z.B. Durchmesser, Atmosphaere, Besonderheiten.")]
+    [Tooltip("3-5 kurze Stichpunkte. PlanetFactAnchor nutzt eine 1-basierte Nummerierung: Anchor 1 zeigt fakten[0].")]
     public string[] fakten;
 }

@@ -47,4 +47,5 @@ MonoBehaviour:
   eccentricityInfoText: 
   planetScaleInfoText: 
   gravityInfoText: 
-  fakten: []
+  fakten:
+  - Das ist FAKT!

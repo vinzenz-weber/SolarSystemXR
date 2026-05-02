@@ -74,11 +74,11 @@ public class SolarSystemManager : MonoBehaviour
                 float rotationDegreesPerDay = 360f / instance.data.rotationSpeed;
                 instance.currentRotationAngle += rotationDegreesPerDay * timeScale * Time.deltaTime;
                 instance.currentRotationAngle %= 360f;
-
-                Quaternion tilt = Quaternion.Euler(instance.data.axialTilt, 0f, 0f);
-                Quaternion spin = Quaternion.Euler(0f, -instance.currentRotationAngle, 0f);
-                instance.planetTransform.localRotation = tilt * spin;
             }
+
+            Quaternion tilt = Quaternion.Euler(instance.data.axialTilt, 0f, 0f);
+            Quaternion spin = Quaternion.Euler(0f, -instance.currentRotationAngle, 0f);
+            instance.planetTransform.localRotation = tilt * spin;
 
             // B) Umlaufbahn & Position & Dynamische Linie
             if (instance.data.semiMajorAxis > 0)
@@ -199,7 +199,7 @@ public class SolarSystemManager : MonoBehaviour
     private Vector3 CalculateKeplerPositionByAnomaly(PlanetData data, float trueAnomalyDegrees)
     {
         float a = data.semiMajorAxis;
-        float e = data.eccentricity * exzentrizitaetMultiplikator;
+        float e = Mathf.Clamp(data.eccentricity * exzentrizitaetMultiplikator, 0f, 0.95f);
         
         float rad = trueAnomalyDegrees * Mathf.Deg2Rad;
         float r = a * (1f - e * e) / (1f + e * Mathf.Cos(rad));
@@ -257,5 +257,47 @@ public class SolarSystemManager : MonoBehaviour
         lastEccMult = exzentrizitaetMultiplikator;
         lastIncMult = inklinationMultiplikator;
         lastMode = darstellungsModus;
+    }
+
+    public void SetPlanetScale(float neuerWert)
+    {
+        planetSizeScale = Mathf.Max(0f, neuerWert);
+    }
+
+    public void SetOrbitalSpeed(float neuerWert)
+    {
+        timeScale = Mathf.Max(0f, neuerWert);
+    }
+
+    public void SetInclinationMultiplier(float neuerWert)
+    {
+        inklinationMultiplikator = Mathf.Max(0f, neuerWert);
+    }
+
+    public void SetOrbitalDistance(float neuerWert)
+    {
+        distanceScale = Mathf.Max(0f, neuerWert);
+    }
+
+    public void SetEccentricityMultiplier(float neuerWert)
+    {
+        exzentrizitaetMultiplikator = Mathf.Max(0f, neuerWert);
+    }
+
+    public void SetSpacingMode(bool isCompactXrMode)
+    {
+        darstellungsModus = isCompactXrMode
+            ? DistanceScaleMode.WurzelKompakt_XR
+            : DistanceScaleMode.LinearRealistisch;
+    }
+
+    public void ResetPanelSettings()
+    {
+        SetOrbitalDistance(0.05f);
+        SetPlanetScale(0.002f);
+        SetOrbitalSpeed(1f);
+        SetInclinationMultiplier(1f);
+        SetEccentricityMultiplier(1f);
+        SetSpacingMode(true);
     }
 }
