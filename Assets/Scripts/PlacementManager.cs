@@ -50,7 +50,6 @@ public class PlacementManager : MonoBehaviour
     // Neu: Planeten und Sonnensystem getrennt merken, damit beim Platzieren
     // gezielt nur das jeweils andere System geloescht wird.
     private List<GameObject> _placedPlanetObjects = new List<GameObject>();
-    private Dictionary<GameObject, PlanetData> _placedPlanetDataByObject = new Dictionary<GameObject, PlanetData>();
     private GameObject _placedSolarSystemObject;
     private bool _hasSpawnedSunForPlanets;
     private bool _hasStoredPanelVisibilityForMainMenu;
@@ -197,7 +196,6 @@ public class PlacementManager : MonoBehaviour
         }
 
         _placedPlanetObjects.Clear();
-        _placedPlanetDataByObject.Clear();
         DeactivatePlanetSun();
 
         if (planetInfoPanelManager != null)
@@ -304,7 +302,6 @@ public class PlacementManager : MonoBehaviour
                     RegisterSelectablePlanet(spawnedPlanet, currentPlanetData);
                     RegisterInteractionSelectionBridge(spawnedPlanet);
                     _placedPlanetObjects.Add(spawnedPlanet);
-                    _placedPlanetDataByObject[spawnedPlanet] = currentPlanetData;
 
                     SpawnSunForFirstPlacedPlanet();
                     ShowPlanetInfo(currentPlanetData);
@@ -453,7 +450,7 @@ public class PlacementManager : MonoBehaviour
     {
         _useRelativePlanetSizes = useRelativeSizes;
         UpdateCurrentPlanetPreviewScale();
-        ApplyPlanetSizeModeToPlacedPlanets();
+        ClearPlacedPlanets();
     }
 
     public bool UsesRelativePlanetSizes()
@@ -467,45 +464,6 @@ public class PlacementManager : MonoBehaviour
 
         float targetDiameter = GetTargetPlanetWorldDiameter(currentPlanetData);
         previewInstance.transform.localScale = Vector3.one * targetDiameter;
-    }
-
-    private void ApplyPlanetSizeModeToPlacedPlanets()
-    {
-        for (int i = _placedPlanetObjects.Count - 1; i >= 0; i--)
-        {
-            GameObject planetObject = _placedPlanetObjects[i];
-
-            if (planetObject == null)
-            {
-                _placedPlanetObjects.RemoveAt(i);
-                continue;
-            }
-
-            PlanetData data = GetPlanetDataForPlacedObject(planetObject);
-            if (data == null) continue;
-
-            float rootScale = GetInteractableRootScale(planetObject, data);
-            planetObject.transform.localScale = Vector3.one * rootScale;
-        }
-    }
-
-    private PlanetData GetPlanetDataForPlacedObject(GameObject planetObject)
-    {
-        if (planetObject == null) return null;
-
-        if (_placedPlanetDataByObject.TryGetValue(planetObject, out PlanetData data) && data != null)
-        {
-            return data;
-        }
-
-        PlanetSelectable selectable = planetObject.GetComponent<PlanetSelectable>();
-        if (selectable != null && selectable.planetData != null)
-        {
-            _placedPlanetDataByObject[planetObject] = selectable.planetData;
-            return selectable.planetData;
-        }
-
-        return null;
     }
 
     private GameObject GetPlacementPrefab(PlanetData data)

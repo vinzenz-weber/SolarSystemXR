@@ -31,6 +31,7 @@ public class PlanetInfoPanel : MonoBehaviour
     [SerializeField] private bool autoBindPlanetDetailRoot = true;
 
     [Header("Immersive Mode")]
+    [SerializeField] private Toggle immersiveModeToggle;
     [SerializeField] private Button immersiveModeButton;
     [SerializeField] private TMP_Text immersiveModeButtonText;
 
@@ -39,6 +40,7 @@ public class PlanetInfoPanel : MonoBehaviour
     private DetailCard _relativeSizeCard;
     private bool _hasBoundPlanetDetailRoot;
     private bool _usesPlanetDetailRootLayout;
+    private bool _hasBoundImmersiveControl;
     private const string ImmersiveButtonLabel = "Immersive Mode";
     private const string LeaveImmersiveButtonLabel = "Leave Immersive Mode";
     private const string LoremIpsum = "Lorem ipsum dolor sit amet.";
@@ -48,12 +50,7 @@ public class PlanetInfoPanel : MonoBehaviour
 
     private void Awake()
     {
-        EnsureImmersiveButton();
-
-        if (immersiveModeButton != null)
-        {
-            immersiveModeButton.onClick.AddListener(OpenImmersiveMode);
-        }
+        BindImmersiveControlIfNeeded();
     }
 
     private void OnDestroy()
@@ -62,11 +59,17 @@ public class PlanetInfoPanel : MonoBehaviour
         {
             immersiveModeButton.onClick.RemoveListener(OpenImmersiveMode);
         }
+
+        if (immersiveModeToggle != null)
+        {
+            immersiveModeToggle.onValueChanged.RemoveListener(SetImmersiveModeFromToggle);
+        }
     }
 
     public void Bind(PlanetData data)
     {
         AutoBindPlanetDetailRoot();
+        BindImmersiveControlIfNeeded();
 
         if (data == null)
         {
@@ -318,28 +321,83 @@ public class PlanetInfoPanel : MonoBehaviour
         PlanetInfoPanelManager.Instance.ToggleImmersiveMode(_currentPlanetData);
     }
 
+    // Kann direkt im Toggle unter On Value Changed (bool) eingetragen werden.
+    public void SetImmersiveModeFromToggle(bool isActive)
+    {
+        if (_currentPlanetData == null)
+        {
+            Debug.LogWarning("PlanetInfoPanel: Kein Planet fuer den Immersive Mode gebunden.");
+            SetImmersiveModeActive(false);
+            return;
+        }
+
+        if (PlanetInfoPanelManager.Instance == null)
+        {
+            Debug.LogWarning("PlanetInfoPanel: Kein PlanetInfoPanelManager fuer den Immersive Mode gefunden.");
+            SetImmersiveModeActive(false);
+            return;
+        }
+
+        PlanetInfoPanelManager.Instance.SetImmersiveModeActive(isActive, _currentPlanetData);
+    }
+
     private void UpdateImmersiveButton(PlanetData data)
     {
-        if (immersiveModeButton == null) return;
+        if (immersiveModeButton == null && immersiveModeToggle == null) return;
 
         bool isSun = data != null && data.planetName == "Sonne";
-        immersiveModeButton.gameObject.SetActive(isSun == false);
-        immersiveModeButton.interactable = data != null && isSun == false;
+        bool isInteractable = data != null && isSun == false;
+
+        if (immersiveModeButton != null)
+        {
+            immersiveModeButton.gameObject.SetActive(isSun == false);
+            immersiveModeButton.interactable = isInteractable;
+        }
+
+        if (immersiveModeToggle != null)
+        {
+            immersiveModeToggle.gameObject.SetActive(isSun == false);
+            immersiveModeToggle.interactable = isInteractable;
+        }
 
         SetImmersiveModeActive(false);
     }
 
     public void SetImmersiveModeActive(bool isActive)
     {
+        if (immersiveModeToggle != null)
+        {
+            immersiveModeToggle.SetIsOnWithoutNotify(isActive);
+        }
+
         if (immersiveModeButtonText != null)
         {
             immersiveModeButtonText.text = isActive ? LeaveImmersiveButtonLabel : ImmersiveButtonLabel;
         }
     }
 
-    private void EnsureImmersiveButton()
+    private void EnsureImmersiveControl()
     {
-        if (immersiveModeButton != null) return;
+        if (immersiveModeToggle != null || immersiveModeButton != null) return;
+
+        Transform existingToggle = FindDeepChild(transform, "Toggle_ImmersiveMode");
+        if (existingToggle == null) existingToggle = FindDeepChild(transform, "ImmersiveModeToggle");
+        if (existingToggle == null) existingToggle = FindDeepChild(transform, "ToggleImmersiveMode");
+        if (existingToggle == null) existingToggle = FindDeepChild(transform, "Immersive Mode");
+        if (existingToggle != null)
+        {
+            immersiveModeToggle = existingToggle.GetComponent<Toggle>();
+            if (immersiveModeToggle == null) immersiveModeToggle = existingToggle.GetComponentInChildren<Toggle>(true);
+            immersiveModeButtonText = existingToggle.GetComponentInChildren<TMP_Text>(true);
+            if (immersiveModeToggle != null) return;
+        }
+
+        immersiveModeToggle = FindImmersiveModeToggle();
+        if (immersiveModeToggle != null)
+        {
+            immersiveModeButtonText = immersiveModeToggle.GetComponentInChildren<TMP_Text>(true);
+            return;
+        }
 
         Transform existingButton = FindDeepChild(transform, "Button_ImmersiveMode");
         if (existingButton != null)
@@ -385,6 +443,81 @@ public class PlanetInfoPanel : MonoBehaviour
         immersiveModeButtonText.fontSize = 28f;
         immersiveModeButtonText.alignment = TextAlignmentOptions.Center;
         immersiveModeButtonText.color = Color.white;
+    }
+
+    private Toggle FindImmersiveModeToggle()
+    {
+        Toggle[] toggles = GetComponentsInChildren<Toggle>(true);
+        for (int i = 0; i < toggles.Length; i++)
+        {
+            Toggle toggle = toggles[i];
+            if (toggle == null) continue;
+
+            string toggleName = toggle.name.ToLowerInvariant();
+            if (toggleName.Contains("immersive"))
+            {
+                return toggle;
+            }
+
+            TMP_Text label = toggle.GetComponentInChildren<TMP_Text>(true);
+            if (label != null && label.text.ToLowerInvariant().Contains("immersive"))
+            {
+                return toggle;
+            }
+
+            Transform current = toggle.transform.parent;
+            int parentDepth = 0;
+            while (current != null && current != transform && parentDepth < 4)
+            {
+                string parentName = current.name.ToLowerInvariant();
+                if (parentName.Contains("immersive"))
+                {
+                    return toggle;
+                }
+
+                TMP_Text[] parentTexts = current.GetComponentsInChildren<TMP_Text>(true);
+                for (int textIndex = 0; textIndex < parentTexts.Length; textIndex++)
+                {
+                    TMP_Text parentText = parentTexts[textIndex];
+                    if (parentText != null && parentText.text.ToLowerInvariant().Contains("immersive"))
+                    {
+                        return toggle;
+                    }
+                }
+
+                current = current.parent;
+                parentDepth++;
+            }
+        }
+
+        return null;
+    }
+
+    private void BindImmersiveControlIfNeeded()
+    {
+        EnsureImmersiveControl();
+
+        if (_hasBoundImmersiveControl) return;
+
+        if (immersiveModeToggle != null)
+        {
+            immersiveModeToggle.onValueChanged.RemoveListener(SetImmersiveModeFromToggle);
+            immersiveModeToggle.onValueChanged.AddListener(SetImmersiveModeFromToggle);
+            _hasBoundImmersiveControl = true;
+            Debug.Log("PlanetInfoPanel: Immersive-Mode-Toggle verbunden: " + immersiveModeToggle.name);
+            return;
+        }
+
+        if (immersiveModeButton != null)
+        {
+            immersiveModeButton.onClick.RemoveListener(OpenImmersiveMode);
+            immersiveModeButton.onClick.AddListener(OpenImmersiveMode);
+            _hasBoundImmersiveControl = true;
+            Debug.Log("PlanetInfoPanel: Immersive-Mode-Button verbunden: " + immersiveModeButton.name);
+            return;
+        }
+
+        Debug.LogWarning("PlanetInfoPanel: Kein Immersive-Mode-Toggle oder Button im PlanetDetailRoot gefunden.");
     }
 
     private void SetLayerRecursive(GameObject targetObject, int layer)

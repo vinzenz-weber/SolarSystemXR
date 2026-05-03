@@ -95,24 +95,49 @@ public class PlanetInfoPanelManager : MonoBehaviour
         EnterImmersiveMode(data);
     }
 
-    public void EnterImmersiveMode(PlanetData data)
+    public void SetImmersiveModeActive(bool isActive, PlanetData data)
+    {
+        if (isActive)
+        {
+            EnterImmersiveMode(data);
+            return;
+        }
+
+        ImmersiveModeController controller = GetImmersiveModeController();
+        if (controller != null && controller.IsImmersiveActive)
+        {
+            controller.ExitImmersiveMode();
+            return;
+        }
+
+        NotifyImmersiveModeClosed();
+    }
+
+    public bool EnterImmersiveMode(PlanetData data)
     {
         PlanetData targetData = data != null ? data : _currentPlanetData;
 
         if (targetData == null)
         {
             Debug.LogWarning("PlanetInfoPanelManager: Kein Planet fuer den Immersive Mode vorhanden.");
-            return;
+            NotifyImmersiveModeClosed();
+            return false;
         }
 
         ImmersiveModeController controller = GetImmersiveModeController();
         if (controller == null)
         {
             Debug.LogWarning("PlanetInfoPanelManager: Kein ImmersiveModeController gefunden.");
-            return;
+            NotifyImmersiveModeClosed();
+            return false;
         }
 
         controller.EnterImmersiveMode(targetData);
+        if (controller.IsImmersiveActive == false)
+        {
+            NotifyImmersiveModeClosed();
+            return false;
+        }
 
         if (infoPanel != null)
         {
@@ -121,6 +146,8 @@ public class PlanetInfoPanelManager : MonoBehaviour
             infoPanel.SetImmersiveModeActive(true);
             PositionPanelNextToUser();
         }
+
+        return true;
     }
 
     public void NotifyImmersiveModeClosed()

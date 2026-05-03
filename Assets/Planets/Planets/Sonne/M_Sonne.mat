@@ -21,7 +21,7 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: M_Sonne
-  m_Shader: {fileID: -6465566751694194690, guid: 39c668bf1657f7b459b6f485a22f3179, type: 3}
+  m_Shader: {fileID: -6465566751694194690, guid: c10444751a9070c42b32e884a5cbcf5b, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -97,7 +97,15 @@ Material:
         m_Texture: {fileID: 2800000, guid: f5f3551266eac46ba91a11c89cda618e, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_305c4d13677b48e3b9ad378d7e2b1fc3_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: f5f3551266eac46ba91a11c89cda618e, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
     - _SpecGlossMap:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _Triplanar_42a325eb7cf84a1492443cd38b1248e1_Texture_1_Texture2D:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -131,13 +139,16 @@ Material:
     - _Cull: 2
     - _Cutoff: 0.5
     - _DarkSide: 0.1
+    - _Density: 18.8
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _DstBlendAlpha: 0
+    - _Emission: 5
     - _EmissionIntensity: 4.56
     - _EnvironmentDepthBias: 0
     - _EnvironmentReflections: 1
+    - _FresStrength: 0.6
     - _Fresnel_Strength: 1
     - _GlossMapScale: 0
     - _Glossiness: 0
@@ -154,6 +165,7 @@ Material:
     - _Show_Atmosphere: 0
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
+    - _SolarFlare: 4.4
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _SrcBlendAlpha: 1
@@ -169,9 +181,11 @@ Material:
     m_Colors:
     - _Atmosphere_Inner: {r: 0.27307257, g: 1, b: 0, a: 1}
     - _Atmosphere_Outer: {r: 1, g: 0, b: 0.015401359, a: 1}
-    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
+    - _BaseColor: {r: 1, g: 0.19068366, b: 0, a: 1}
+    - _CELLcOLOR: {r: 1, g: 0.97438896, b: 0.13521993, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
+    - _FresCol: {r: 1, g: 0.04494583, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
     - _SunPosition: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []

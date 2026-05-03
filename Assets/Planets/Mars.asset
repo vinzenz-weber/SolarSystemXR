@@ -39,7 +39,7 @@ MonoBehaviour:
   windStaerke: 8
   windTurbulenz: 0.6
   windPartikelFarbe: {r: 0.8, g: 0.35, b: 0.1, a: 1}
-  beschreibung: 
+  beschreibung: Testbeschreibung
   planetSizeInfoText: 
   orbitalDistanceInfoText: 
   orbitalSpeedInfoText: 
