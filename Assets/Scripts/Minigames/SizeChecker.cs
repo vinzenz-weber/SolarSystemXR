@@ -53,12 +53,17 @@ public class SizeChecker : MonoBehaviour
     [Tooltip("Dauer der Rueckflug-Animation zur Liste.")]
     public float ReturnDuration = 0.45f;
 
+    [Header("Korrekte Platzierung - Visual Offset")]
+    [Tooltip("Optionale lokale Verschiebung einzelner Planeten-Visuals nach korrekter Platzierung.")]
+    public SizePlanetVisualOffset[] CorrectPlacementVisualOffsets;
+
     private bool _hasCompleted;
     private string _lastWrongOrderSignature = "";
     private Coroutine _wrongBlinkCoroutine;
     private SizeSlotState[] _slotStates;
     private List<Coroutine> _runningPlanetCoroutines = new();
     private Dictionary<Transform, Vector3> _initialVisualScales = new();
+    private Dictionary<Transform, Vector3> _initialVisualPositions = new();
     private bool _isReady;
 
     private void Reset()
@@ -126,8 +131,9 @@ public class SizeChecker : MonoBehaviour
         }
 
         ApplyWaitingPlanetSizeToVisualSettings();
+        RefreshPlanetVisuals();
         NormalizeWaitingPlanetScales();
-        CacheInitialVisualScales();
+        CacheInitialVisualTransforms();
         ResetGame();
         _isReady = true;
     }
@@ -358,6 +364,7 @@ public class SizeChecker : MonoBehaviour
                 if (wasAlreadyCorrect == false)
                 {
                     SetPlanetToRealSize(currentPlanet);
+                    ApplyCorrectPlacementVisualOffset(currentPlanet);
                     DisablePhysicsForCorrectPlanet(currentPlanet);
                 }
             }
@@ -451,6 +458,7 @@ public class SizeChecker : MonoBehaviour
         foreach (ReihenfolgePlanet planet in Planets)
         {
             SetPlanetToRealSize(planet);
+            ApplyCorrectPlacementVisualOffset(planet);
             DisablePhysicsForCorrectPlanet(planet);
         }
     }
@@ -483,6 +491,38 @@ public class SizeChecker : MonoBehaviour
         if (startSize <= 0.0001f) return;
 
         scaleRoot.localScale *= targetWorldSize / startSize;
+    }
+
+    private void ApplyCorrectPlacementVisualOffset(ReihenfolgePlanet planet)
+    {
+        Vector3 localOffset = GetCorrectPlacementVisualOffset(planet);
+        if (localOffset == Vector3.zero) return;
+
+        Transform scaleRoot = GetPlanetScaleRoot(planet);
+        if (scaleRoot == null) return;
+
+        if (_initialVisualPositions.TryGetValue(scaleRoot, out Vector3 initialPosition))
+        {
+            scaleRoot.localPosition = initialPosition + localOffset;
+            return;
+        }
+
+        scaleRoot.localPosition += localOffset;
+    }
+
+    private Vector3 GetCorrectPlacementVisualOffset(ReihenfolgePlanet planet)
+    {
+        if (planet == null || planet.PlanetData == null || CorrectPlacementVisualOffsets == null) return Vector3.zero;
+
+        foreach (SizePlanetVisualOffset visualOffset in CorrectPlacementVisualOffsets)
+        {
+            if (visualOffset.PlanetData == planet.PlanetData)
+            {
+                return visualOffset.LocalOffset;
+            }
+        }
+
+        return Vector3.zero;
     }
 
     private float GetPlanetWorldSize(Transform root)
@@ -604,6 +644,21 @@ public class SizeChecker : MonoBehaviour
         }
     }
 
+    private void RefreshPlanetVisuals()
+    {
+        if (Planets == null) return;
+
+        foreach (ReihenfolgePlanet planet in Planets)
+        {
+            if (planet == null) continue;
+
+            InteractablePlanetVisual visual = planet.GetComponent<InteractablePlanetVisual>();
+            if (visual == null || visual.RefreshOnStart == false) continue;
+
+            visual.RefreshVisual();
+        }
+    }
+
     private void NormalizeWaitingPlanetScales()
     {
         if (NormalizeWaitingPlanetSizes == false || Planets == null) return;
@@ -633,12 +688,18 @@ public class SizeChecker : MonoBehaviour
             {
                 scaleRoot.localScale = Vector3.one;
             }
+
+            if (_initialVisualPositions.TryGetValue(scaleRoot, out Vector3 initialPosition))
+            {
+                scaleRoot.localPosition = initialPosition;
+            }
         }
     }
 
-    private void CacheInitialVisualScales()
+    private void CacheInitialVisualTransforms()
     {
         _initialVisualScales.Clear();
+        _initialVisualPositions.Clear();
         if (Planets == null) return;
 
         foreach (ReihenfolgePlanet planet in Planets)
@@ -647,6 +708,7 @@ public class SizeChecker : MonoBehaviour
             if (scaleRoot != null && _initialVisualScales.ContainsKey(scaleRoot) == false)
             {
                 _initialVisualScales.Add(scaleRoot, scaleRoot.localScale);
+                _initialVisualPositions.Add(scaleRoot, scaleRoot.localPosition);
             }
         }
     }
@@ -879,5 +941,12 @@ public class SizeChecker : MonoBehaviour
         public bool IsCorrect;
         public bool HasReturnStarted;
         public float WrongSince;
+    }
+
+    [System.Serializable]
+    public struct SizePlanetVisualOffset
+    {
+        public PlanetData PlanetData;
+        public Vector3 LocalOffset;
     }
 }

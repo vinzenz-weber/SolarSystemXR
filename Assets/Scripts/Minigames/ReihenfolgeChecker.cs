@@ -1,5 +1,6 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 // Prueft laufend, welcher Planet auf welchem Orbit-Slot liegt.
 // Das ist bewusst einfach gehalten: Meta SDK snappt/bewegt, dieses Script wertet nur aus.
@@ -12,6 +13,8 @@ public class ReihenfolgeChecker : MonoBehaviour
     public ReihenfolgePlanet[] Planets;
     public Transform[] BenchPositions;
     public TMP_Text SuccessText;
+    public GameObject CompletionMenu;
+    public Button CompletionMenuButton;
 
     [Header("Farben")]
     public Color NeutralColor = new Color(0.25f, 0.65f, 1f, 0.65f);
@@ -36,7 +39,9 @@ public class ReihenfolgeChecker : MonoBehaviour
             CollectChildren();
         }
 
+        BindCompletionMenuButton();
         HideSuccessText();
+        HideCompletionMenu();
     }
 
     private void Update()
@@ -48,6 +53,7 @@ public class ReihenfolgeChecker : MonoBehaviour
     {
         _hasCompleted = false;
         HideSuccessText();
+        HideCompletionMenu();
 
         if (Slots != null)
         {
@@ -173,6 +179,8 @@ public class ReihenfolgeChecker : MonoBehaviour
             SuccessText.text = "Geschafft!";
         }
 
+        ShowCompletionMenu();
+
         if (MinigameManager.Instance != null)
         {
             MinigameManager.Instance.CompleteCurrentMinigame();
@@ -220,5 +228,75 @@ public class ReihenfolgeChecker : MonoBehaviour
     {
         Slots = GetComponentsInChildren<ReihenfolgeOrbitSlot>(true);
         Planets = GetComponentsInChildren<ReihenfolgePlanet>(true);
+        CollectCompletionMenuReferences();
+    }
+
+    private void CollectCompletionMenuReferences()
+    {
+        if (CompletionMenu == null)
+        {
+            Transform completionMenuTransform = FindDirectChild("Congrats");
+            if (completionMenuTransform == null)
+            {
+                completionMenuTransform = FindDirectChild("CompletionMenu");
+            }
+
+            if (completionMenuTransform != null)
+            {
+                CompletionMenu = completionMenuTransform.gameObject;
+            }
+        }
+
+        if (CompletionMenuButton == null && CompletionMenu != null)
+        {
+            CompletionMenuButton = CompletionMenu.GetComponentInChildren<Button>(true);
+        }
+    }
+
+    private void BindCompletionMenuButton()
+    {
+        CollectCompletionMenuReferences();
+        if (CompletionMenuButton == null) return;
+
+        CompletionMenuButton.onClick.RemoveListener(EndMinigame);
+        CompletionMenuButton.onClick.AddListener(EndMinigame);
+    }
+
+    private void ShowCompletionMenu()
+    {
+        if (CompletionMenu != null)
+        {
+            CompletionMenu.SetActive(true);
+        }
+    }
+
+    private void HideCompletionMenu()
+    {
+        if (CompletionMenu != null)
+        {
+            CompletionMenu.SetActive(false);
+        }
+    }
+
+    private void EndMinigame()
+    {
+        if (MinigameManager.Instance != null)
+        {
+            MinigameManager.Instance.EndMinigame();
+        }
+    }
+
+    private Transform FindDirectChild(string childName)
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Transform child = transform.GetChild(i);
+            if (child.name == childName)
+            {
+                return child;
+            }
+        }
+
+        return null;
     }
 }

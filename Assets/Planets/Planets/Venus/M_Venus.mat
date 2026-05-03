@@ -175,6 +175,6 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Finetuning_cloud: {r: -51, g: 41.5, b: 81.67, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _SunPosition: {r: -0.0037782192, g: 0.87043935, b: -1.8329499, a: 0}
+    - _SunPosition: {r: -0.3242001, g: -0.3158899, b: 1.1534588, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

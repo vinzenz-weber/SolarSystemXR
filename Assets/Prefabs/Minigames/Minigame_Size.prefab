@@ -95,10 +95,15 @@ MonoBehaviour:
   CorrectColor: {r: 0.1, g: 0.9, b: 0.35, a: 1}
   WrongColor: {r: 1, g: 0.18, b: 0.12, a: 1}
   WrongBlinkDuration: 0.45
+  NormalizeWaitingPlanetSizes: 1
+  WaitingPlanetSizeMeters: 0.03
   EarthSizeMeters: 0.04
   EarthDiameterKm: 12742
   WrongReturnDelay: 2
   ReturnDuration: 0.45
+  CorrectPlacementVisualOffsets:
+  - PlanetData: {fileID: 11400000, guid: 36b6496f0a7c441b782cae9d45df6106, type: 2}
+    LocalOffset: {x: 0, y: 0, z: 0.15}
 --- !u!114 &6612349012345680602
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5118,7 +5123,7 @@ MonoBehaviour:
   DisableVisualColliders: 1
   DisableVisualRigidbodies: 1
   FitVisualToTargetSize: 1
-  TargetVisualSize: 0.05
+  TargetVisualSize: 0.03
 --- !u!114 &8581628104681123550
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5378,8 +5383,8 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 330109a151cd71c4d85d95ee12792b09, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
-  _defaultSize: 0.06
+  m_EditorClassIdentifier: Oculus.Interaction::Oculus.Interaction.ListSnapPoseDelegate
+  _defaultSize: 0.07
 --- !u!1 &3248287174983659797
 GameObject:
   m_ObjectHideFlags: 0
@@ -13474,7 +13479,7 @@ MonoBehaviour:
   DisableVisualColliders: 1
   DisableVisualRigidbodies: 1
   FitVisualToTargetSize: 1
-  TargetVisualSize: 0.04
+  TargetVisualSize: 0.03
 --- !u!114 &1580651945998374700
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -16149,15 +16154,15 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 6947578851426231844, guid: 70ef21b87131b5c4ba6ce6f38ac78058, type: 3}
       propertyPath: m_LocalScale.x
-      value: 0.024999991
+      value: 0.02854056
       objectReference: {fileID: 0}
     - target: {fileID: 6947578851426231844, guid: 70ef21b87131b5c4ba6ce6f38ac78058, type: 3}
       propertyPath: m_LocalScale.y
-      value: 0.024999991
+      value: 0.02854056
       objectReference: {fileID: 0}
     - target: {fileID: 6947578851426231844, guid: 70ef21b87131b5c4ba6ce6f38ac78058, type: 3}
       propertyPath: m_LocalScale.z
-      value: 0.024999991
+      value: 0.02854056
       objectReference: {fileID: 0}
     - target: {fileID: 6947578851426231844, guid: 70ef21b87131b5c4ba6ce6f38ac78058, type: 3}
       propertyPath: m_LocalPosition.x
