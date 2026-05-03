@@ -130,7 +130,7 @@ Material:
     - _Cloud_03_Speed: 0.1
     - _Cull: 2
     - _Cutoff: 0.5
-    - _DarkSide: 0.02
+    - _DarkSide: 0.1
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0

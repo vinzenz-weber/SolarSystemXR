@@ -198,7 +198,7 @@ public class SonnensystemUI : MonoBehaviour
         if (exzentrizitaetLabel == null) exzentrizitaetLabel = FindeWertLabelBeiLabel("Eccentricity");
 
         if (spacingModeToggle == null) spacingModeToggle = FindeToggleBeiLabel("Spacing Mode");
-        if (spacingModeButton == null) spacingModeButton = FindeButtonBeiLabel("Spacing Mode");
+        if (spacingModeToggle == null && spacingModeButton == null) spacingModeButton = FindeButtonBeiLabel("Spacing Mode");
         if (spacingModeBackground == null) spacingModeBackground = FindeGraphicMitName("ToggleBG");
         if (spacingModeHandle == null) spacingModeHandle = FindeRectTransformMitName("ToggleHandle");
         if (spacingModeButton == null && spacingModeHandle != null) spacingModeButton = spacingModeHandle.GetComponent<Button>();

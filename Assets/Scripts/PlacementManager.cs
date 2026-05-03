@@ -50,6 +50,7 @@ public class PlacementManager : MonoBehaviour
     // Neu: Planeten und Sonnensystem getrennt merken, damit beim Platzieren
     // gezielt nur das jeweils andere System geloescht wird.
     private List<GameObject> _placedPlanetObjects = new List<GameObject>();
+    private Dictionary<GameObject, PlanetData> _placedPlanetDataByObject = new Dictionary<GameObject, PlanetData>();
     private GameObject _placedSolarSystemObject;
     private bool _hasSpawnedSunForPlanets;
     private bool _hasStoredPanelVisibilityForMainMenu;
@@ -83,6 +84,10 @@ public class PlacementManager : MonoBehaviour
 
     [Header("Scaling")]
     public float earthDiameterInVR = 0.2f; // 0.2 Meter = 20 cm fuer die Erde
+    [Tooltip("Aktiv = Planeten werden relativ zur echten Groesse skaliert. Inaktiv = alle Einzelplaneten haben fixedPlanetDiameterMeters Durchmesser.")]
+    [SerializeField] private bool _useRelativePlanetSizes = true;
+    [Tooltip("Durchmesser fuer Einzelplaneten, wenn relative Planetengroessen ausgeschaltet sind.")]
+    [SerializeField] private float fixedPlanetDiameterMeters = 0.5f;
     private const float earthDiameterInKm = 12742f;
 
     private void Start()
@@ -102,7 +107,7 @@ public class PlacementManager : MonoBehaviour
         currentPlanetData = data;
 
         previewInstance = Instantiate(currentPlanetData.previewPrefab);
-        float vrScale = GetScaledSize(currentPlanetData.diameter);
+        float vrScale = GetTargetPlanetWorldDiameter(currentPlanetData);
         previewInstance.transform.localScale = new Vector3(vrScale, vrScale, vrScale);
 
         visualizerInstance = Instantiate(placementVisualizerPrefab);
@@ -192,6 +197,7 @@ public class PlacementManager : MonoBehaviour
         }
 
         _placedPlanetObjects.Clear();
+        _placedPlanetDataByObject.Clear();
         DeactivatePlanetSun();
 
         if (planetInfoPanelManager != null)
@@ -298,6 +304,7 @@ public class PlacementManager : MonoBehaviour
                     RegisterSelectablePlanet(spawnedPlanet, currentPlanetData);
                     RegisterInteractionSelectionBridge(spawnedPlanet);
                     _placedPlanetObjects.Add(spawnedPlanet);
+                    _placedPlanetDataByObject[spawnedPlanet] = currentPlanetData;
 
                     SpawnSunForFirstPlacedPlanet();
                     ShowPlanetInfo(currentPlanetData);
@@ -430,6 +437,77 @@ public class PlacementManager : MonoBehaviour
         return (realSizeInKm / earthDiameterInKm) * earthDiameterInVR;
     }
 
+    private float GetTargetPlanetWorldDiameter(PlanetData data)
+    {
+        if (_useRelativePlanetSizes == false)
+        {
+            return Mathf.Max(0.001f, fixedPlanetDiameterMeters);
+        }
+
+        if (data == null) return Mathf.Max(0.001f, fixedPlanetDiameterMeters);
+
+        return GetScaledSize(data.diameter);
+    }
+
+    public void SetUseRelativePlanetSizes(bool useRelativeSizes)
+    {
+        _useRelativePlanetSizes = useRelativeSizes;
+        UpdateCurrentPlanetPreviewScale();
+        ApplyPlanetSizeModeToPlacedPlanets();
+    }
+
+    public bool UsesRelativePlanetSizes()
+    {
+        return _useRelativePlanetSizes;
+    }
+
+    private void UpdateCurrentPlanetPreviewScale()
+    {
+        if (previewInstance == null || currentPlanetData == null || _isSolarSystemMode == true) return;
+
+        float targetDiameter = GetTargetPlanetWorldDiameter(currentPlanetData);
+        previewInstance.transform.localScale = Vector3.one * targetDiameter;
+    }
+
+    private void ApplyPlanetSizeModeToPlacedPlanets()
+    {
+        for (int i = _placedPlanetObjects.Count - 1; i >= 0; i--)
+        {
+            GameObject planetObject = _placedPlanetObjects[i];
+
+            if (planetObject == null)
+            {
+                _placedPlanetObjects.RemoveAt(i);
+                continue;
+            }
+
+            PlanetData data = GetPlanetDataForPlacedObject(planetObject);
+            if (data == null) continue;
+
+            float rootScale = GetInteractableRootScale(planetObject, data);
+            planetObject.transform.localScale = Vector3.one * rootScale;
+        }
+    }
+
+    private PlanetData GetPlanetDataForPlacedObject(GameObject planetObject)
+    {
+        if (planetObject == null) return null;
+
+        if (_placedPlanetDataByObject.TryGetValue(planetObject, out PlanetData data) && data != null)
+        {
+            return data;
+        }
+
+        PlanetSelectable selectable = planetObject.GetComponent<PlanetSelectable>();
+        if (selectable != null && selectable.planetData != null)
+        {
+            _placedPlanetDataByObject[planetObject] = selectable.planetData;
+            return selectable.planetData;
+        }
+
+        return null;
+    }
+
     private GameObject GetPlacementPrefab(PlanetData data)
     {
         if (data == null) return null;
@@ -456,7 +534,7 @@ public class PlacementManager : MonoBehaviour
 
     private float GetInteractableRootScale(GameObject planetObject, PlanetData data)
     {
-        float targetWorldSize = GetScaledSize(data.diameter);
+        float targetWorldSize = GetTargetPlanetWorldDiameter(data);
         float visualSizeAtRootScaleOne = GetVisualSizeAtRootScaleOne(planetObject);
 
         if (visualSizeAtRootScaleOne <= 0.0001f)

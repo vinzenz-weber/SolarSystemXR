@@ -91,6 +91,24 @@ public class MainMenuController : MonoBehaviour
     [Tooltip("Startzustand: aktiv = Passthrough, inaktiv = VR.")]
     [SerializeField] private bool _isPassthroughOnAtStart;
 
+    [Header("Planetengroesse im Placement")]
+    [Tooltip("Toggle im MainMenu: aktiv = relative Planetengroessen, inaktiv = alle Einzelplaneten 50 cm Durchmesser.")]
+    [SerializeField] private Toggle _planetSizeModeToggle;
+    [Tooltip("Fallback, falls der Planetengroessen-Modus als Button statt Toggle gebaut ist.")]
+    [SerializeField] private Button _planetSizeModeButton;
+    [Tooltip("Hintergrund des selbstgebauten Toggles, z.B. ToggleBG.")]
+    [SerializeField] private Graphic _planetSizeModeBackground;
+    [Tooltip("Beweglicher Knopf des selbstgebauten Toggles, z.B. ToggleHandle.")]
+    [SerializeField] private RectTransform _planetSizeModeHandle;
+    [Tooltip("Position des ToggleHandle, wenn relative Planetengroessen aktiv sind.")]
+    [SerializeField] private float _planetSizeHandleOnX = -4f;
+    [Tooltip("Position des ToggleHandle, wenn alle Planeten 50 cm Durchmesser haben.")]
+    [SerializeField] private float _planetSizeHandleOffX = -24f;
+    [SerializeField] private Color _planetSizeModeOnColor = new Color(0.188f, 0.82f, 0.345f, 1f);
+    [SerializeField] private Color _planetSizeModeOffColor = new Color(1f, 1f, 1f, 0.4f);
+    [Tooltip("Startzustand: aktiv = Planetengroessen bleiben wie bisher.")]
+    [SerializeField] private bool _useRelativePlanetSizesAtStart = true;
+
     private PlanetData _currentPlanet;
     private ExperienceSelection _currentSelection = ExperienceSelection.None;
     private string _reihenfolgeBaseLabel = "Reihenfolge";
@@ -100,6 +118,8 @@ public class MainMenuController : MonoBehaviour
     private Color _testTabVisibleColor;
     private bool _hasCachedTabColors;
     private Transform _startExperienceButton;
+    private Transform _startExperiencePanelRoot;
+    private Transform _planetSizeModeRoot;
 
     void Start()
     {
@@ -107,6 +127,7 @@ public class MainMenuController : MonoBehaviour
         CacheQuizButtonReferences();
         CacheTabVisibleColors();
         SetupPassthroughToggle();
+        SetupPlanetSizeModeToggle();
         ShowLearnTab();
     }
 
@@ -115,6 +136,16 @@ public class MainMenuController : MonoBehaviour
         if (_passthroughModeToggle != null)
         {
             _passthroughModeToggle.onValueChanged.RemoveListener(SetPassthroughMode);
+        }
+
+        if (_planetSizeModeToggle != null)
+        {
+            _planetSizeModeToggle.onValueChanged.RemoveListener(SetRelativePlanetSizeMode);
+        }
+
+        if (_planetSizeModeButton != null)
+        {
+            _planetSizeModeButton.onClick.RemoveListener(ToggleRelativePlanetSizeMode);
         }
     }
 
@@ -261,6 +292,8 @@ public class MainMenuController : MonoBehaviour
                 _startExperienceButton = FindDeepChild(mainPanel, "PrimaryButton_IconAndLabel_UnityUIButton");
             }
 
+            _startExperiencePanelRoot = FindStartExperiencePanelRoot(mainPanel, _startExperienceButton);
+            AutoBindPlanetSizeModeToggle(_startExperiencePanelRoot);
             actionButtonText = FindText(_startExperienceButton, null, actionButtonText);
 
             TextMeshProUGUI actionButtonLabel = actionButtonText as TextMeshProUGUI;
@@ -334,7 +367,18 @@ public class MainMenuController : MonoBehaviour
     {
         if (_startExperienceButton == null) return;
 
-        _startExperienceButton.gameObject.SetActive(isVisible);
+        Transform visibleRoot = _startExperiencePanelRoot != null
+            ? _startExperiencePanelRoot
+            : _startExperienceButton;
+
+        visibleRoot.gameObject.SetActive(isVisible);
+
+        if (visibleRoot != _startExperienceButton)
+        {
+            _startExperienceButton.gameObject.SetActive(true);
+        }
+
+        SetPlanetSizeModeVisible(isVisible && _currentSelection == ExperienceSelection.Planet);
     }
 
     private void BindPlanetButtons(Transform mainPanel)
@@ -371,6 +415,144 @@ public class MainMenuController : MonoBehaviour
         Button button = buttons[0];
         SetButtonTexts(button.transform, "Sonnensystem", "Alle Planeten");
         BindClick(button, SelectSolarSystem);
+    }
+
+    private Transform FindStartExperiencePanelRoot(Transform mainPanel, Transform startButton)
+    {
+        if (startButton == null) return null;
+
+        Transform current = startButton.parent;
+        while (current != null && current != mainPanel)
+        {
+            if (ContainsToggle(current) || FindDeepChild(current, "ToggleHandle") != null)
+            {
+                return current;
+            }
+
+            current = current.parent;
+        }
+
+        return startButton;
+    }
+
+    private bool ContainsToggle(Transform root)
+    {
+        if (root == null) return false;
+
+        Toggle toggle = root.GetComponentInChildren<Toggle>(true);
+        return toggle != null;
+    }
+
+    private void AutoBindPlanetSizeModeToggle(Transform actionRoot)
+    {
+        if (actionRoot == null) return;
+
+        if (_planetSizeModeToggle == null)
+        {
+            _planetSizeModeToggle = actionRoot.GetComponentInChildren<Toggle>(true);
+        }
+
+        if (_planetSizeModeRoot == null)
+        {
+            _planetSizeModeRoot = FindPlanetSizeModeRoot(actionRoot);
+        }
+
+        Transform visualRoot = _planetSizeModeRoot != null
+            ? _planetSizeModeRoot
+            : _planetSizeModeToggle != null
+                ? _planetSizeModeToggle.transform
+                : actionRoot;
+
+        if (_planetSizeModeBackground == null)
+        {
+            _planetSizeModeBackground = FindGraphicWithName(visualRoot, "ToggleBG");
+        }
+
+        if (_planetSizeModeHandle == null)
+        {
+            _planetSizeModeHandle = FindRectTransformWithName(visualRoot, "ToggleHandle");
+        }
+
+        if (_planetSizeModeToggle == null && _planetSizeModeButton == null)
+        {
+            _planetSizeModeButton = FindButtonForPlanetSizeToggle(visualRoot);
+        }
+    }
+
+    private Transform FindPlanetSizeModeRoot(Transform actionRoot)
+    {
+        if (_planetSizeModeToggle != null)
+        {
+            return FindClosestToggleVisualRoot(actionRoot, _planetSizeModeToggle.transform);
+        }
+
+        RectTransform handle = FindRectTransformWithName(actionRoot, "ToggleHandle");
+        if (handle != null)
+        {
+            return FindClosestToggleVisualRoot(actionRoot, handle);
+        }
+
+        return null;
+    }
+
+    private Transform FindClosestToggleVisualRoot(Transform limitRoot, Transform child)
+    {
+        Transform current = child;
+        while (current != null && current != limitRoot.parent)
+        {
+            if (current == limitRoot) break;
+
+            if (FindDeepChild(current, "ToggleHandle") != null || FindDeepChild(current, "ToggleBG") != null)
+            {
+                return current;
+            }
+
+            current = current.parent;
+        }
+
+        return child;
+    }
+
+    private Graphic FindGraphicWithName(Transform root, string objectName)
+    {
+        RectTransform rectTransform = FindRectTransformWithName(root, objectName);
+        if (rectTransform == null) return null;
+
+        return rectTransform.GetComponent<Graphic>();
+    }
+
+    private RectTransform FindRectTransformWithName(Transform root, string objectName)
+    {
+        if (root == null || string.IsNullOrWhiteSpace(objectName)) return null;
+
+        RectTransform[] rectTransforms = root.GetComponentsInChildren<RectTransform>(true);
+        for (int i = 0; i < rectTransforms.Length; i++)
+        {
+            if (rectTransforms[i] != null && rectTransforms[i].name == objectName)
+            {
+                return rectTransforms[i];
+            }
+        }
+
+        return null;
+    }
+
+    private Button FindButtonForPlanetSizeToggle(Transform visualRoot)
+    {
+        if (visualRoot == null) return null;
+
+        Button button = visualRoot.GetComponent<Button>();
+        if (button != null) return button;
+
+        if (_planetSizeModeHandle != null)
+        {
+            button = _planetSizeModeHandle.GetComponent<Button>();
+            if (button != null) return button;
+            button = _planetSizeModeHandle.GetComponentInParent<Button>();
+            if (button != null && button.transform.IsChildOf(visualRoot)) return button;
+        }
+
+        return visualRoot.GetComponentInChildren<Button>(true);
     }
 
     private void BindChallengeButtons(Transform learnPanelTransform)
@@ -837,5 +1019,98 @@ public class MainMenuController : MonoBehaviour
         }
 
         _passthroughDissolver.SetPassthroughActive(isActive);
+    }
+
+    private void SetupPlanetSizeModeToggle()
+    {
+        if (placementManager == null)
+        {
+            placementManager = FindFirstObjectByType<PlacementManager>();
+        }
+
+        bool useRelativeSizes = _planetSizeModeToggle != null
+            ? _planetSizeModeToggle.isOn
+            : _useRelativePlanetSizesAtStart;
+
+        if (placementManager != null)
+        {
+            placementManager.SetUseRelativePlanetSizes(useRelativeSizes);
+        }
+
+        if (_planetSizeModeToggle != null)
+        {
+            _planetSizeModeToggle.SetIsOnWithoutNotify(useRelativeSizes);
+            _planetSizeModeToggle.onValueChanged.RemoveListener(SetRelativePlanetSizeMode);
+            _planetSizeModeToggle.onValueChanged.AddListener(SetRelativePlanetSizeMode);
+        }
+
+        if (_planetSizeModeToggle == null && _planetSizeModeButton != null)
+        {
+            _planetSizeModeButton.onClick.RemoveListener(ToggleRelativePlanetSizeMode);
+            _planetSizeModeButton.onClick.AddListener(ToggleRelativePlanetSizeMode);
+        }
+
+        UpdatePlanetSizeModeVisual(useRelativeSizes);
+        SetPlanetSizeModeVisible(false);
+    }
+
+    // Kann direkt im Toggle unter On Value Changed (bool) eingetragen werden.
+    public void SetRelativePlanetSizeMode(bool useRelativeSizes)
+    {
+        if (placementManager == null)
+        {
+            placementManager = FindFirstObjectByType<PlacementManager>();
+        }
+
+        if (placementManager != null)
+        {
+            placementManager.SetUseRelativePlanetSizes(useRelativeSizes);
+        }
+
+        if (_planetSizeModeToggle != null)
+        {
+            _planetSizeModeToggle.SetIsOnWithoutNotify(useRelativeSizes);
+        }
+
+        UpdatePlanetSizeModeVisual(useRelativeSizes);
+    }
+
+    public void ToggleRelativePlanetSizeMode()
+    {
+        bool useRelativeSizes = _planetSizeModeToggle != null
+            ? _planetSizeModeToggle.isOn == false
+            : placementManager == null || placementManager.UsesRelativePlanetSizes() == false;
+
+        SetRelativePlanetSizeMode(useRelativeSizes);
+    }
+
+    private void SetPlanetSizeModeVisible(bool isVisible)
+    {
+        Transform visibleRoot = _planetSizeModeRoot != null
+            ? _planetSizeModeRoot
+            : _planetSizeModeToggle != null
+                ? _planetSizeModeToggle.transform
+                : null;
+
+        if (visibleRoot == null) return;
+
+        visibleRoot.gameObject.SetActive(isVisible);
+    }
+
+    private void UpdatePlanetSizeModeVisual(bool useRelativeSizes)
+    {
+        if (_planetSizeModeHandle != null)
+        {
+            Vector2 position = _planetSizeModeHandle.anchoredPosition;
+            position.x = useRelativeSizes ? _planetSizeHandleOnX : _planetSizeHandleOffX;
+            _planetSizeModeHandle.anchoredPosition = position;
+        }
+
+        if (_planetSizeModeBackground != null)
+        {
+            _planetSizeModeBackground.color = useRelativeSizes
+                ? _planetSizeModeOnColor
+                : _planetSizeModeOffColor;
+        }
     }
 }
