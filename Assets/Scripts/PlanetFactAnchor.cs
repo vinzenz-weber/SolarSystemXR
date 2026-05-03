@@ -28,10 +28,10 @@ public class PlanetFactAnchor : MonoBehaviour
     [Tooltip("Optionaler Root fuer die Mesh-Suche. Leer = PlanetBody/VisualRoot wird automatisch genutzt.")]
     public Transform meshSurfaceRoot;
 
-    [Tooltip("Wenn aktiv, nutzt das Label die echte Mesh-Normal an der naechsten Oberflaechenstelle.")]
-    public bool useMeshNormal = true;
+    [Tooltip("Optionaler Spezialfall. Standard ist aus, weil die Richtung vom Planetenzentrum zum Empty robuster ist.")]
+    public bool useMeshNormal = false;
 
-    [Tooltip("Fallback: Wenn keine Mesh-Normal gefunden wird, schwebt das Label vom Planetenzentrum aus nach aussen.")]
+    [Tooltip("Wenn aktiv, schwebt das Label vom Planetenzentrum ueber das Empty nach aussen.")]
     public bool useDirectionFromPlanetCenter = true;
 
     [Tooltip("Abstand des Labels vom Empty in Normalrichtung. 0.2 = 20 cm.")]
@@ -68,11 +68,21 @@ public class PlanetFactAnchor : MonoBehaviour
     private LineRenderer _lineRenderer;
     private Material _runtimeLineMaterial;
     private bool _isInitializing;
-    private Vector3 _currentSurfacePoint;
+    private Transform _resolvedPlanetCenter;
+    private Transform _resolvedMeshSurfaceRoot;
+
+#if UNITY_EDITOR
+    private bool _hasPendingEditorInitialize;
+#endif
 
     private void OnEnable()
     {
         Initialize();
+    }
+
+    private void Update()
+    {
+        UpdateLabelAndLine();
     }
 
     private void LateUpdate()
@@ -90,29 +100,16 @@ public class PlanetFactAnchor : MonoBehaviour
 
         if (_labelTransform == null || _lineRenderer == null) return;
 
-        if (_cameraTransform == null)
-        {
-            _cameraTransform = ResolveCameraTransform();
-        }
-
-        _labelTransform.position = GetLabelWorldPosition();
-        SetWorldScale(_labelTransform, Vector3.one * textWorldScale);
-
-        if (_cameraTransform != null)
-        {
-            Vector3 lookDirection = _labelTransform.position - _cameraTransform.position;
-            if (lookDirection.sqrMagnitude > 0.0001f)
-            {
-                _labelTransform.rotation = Quaternion.LookRotation(lookDirection.normalized, Vector3.up);
-            }
-        }
-
-        _lineRenderer.SetPosition(0, _labelTransform.position);
-        _lineRenderer.SetPosition(1, _currentSurfacePoint);
+        UpdateLabelAndLine();
     }
 
     private void OnDisable()
     {
+#if UNITY_EDITOR
+        EditorApplication.delayCall -= DelayedEditorInitialize;
+        _hasPendingEditorInitialize = false;
+#endif
+
         DestroyGeneratedObjectsInEditor();
     }
 
@@ -142,6 +139,14 @@ public class PlanetFactAnchor : MonoBehaviour
 
         if (isActiveAndEnabled)
         {
+#if UNITY_EDITOR
+            if (Application.isPlaying == false)
+            {
+                QueueEditorInitialize();
+                return;
+            }
+#endif
+
             Initialize();
         }
     }
@@ -179,12 +184,21 @@ public class PlanetFactAnchor : MonoBehaviour
         {
             _labelTransform.gameObject.SetActive(hasText);
         }
+
+        UpdateLabelAndLine();
     }
 
     [ContextMenu("Editor Preview aufraeumen")]
     public void CleanupEditorPreview()
     {
         DestroyGeneratedObjectsInEditor();
+    }
+
+    [ContextMenu("Editor Preview neu aufbauen")]
+    public void RebuildEditorPreview()
+    {
+        DestroyGeneratedObjectsInEditor();
+        Initialize();
     }
 
     private void CreateRuntimeObjects()
@@ -220,8 +234,8 @@ public class PlanetFactAnchor : MonoBehaviour
 
         _isInitializing = true;
         _planetData = ResolvePlanetData();
-        planetCenter = ResolvePlanetCenter();
-        meshSurfaceRoot = ResolveMeshSurfaceRoot();
+        _resolvedPlanetCenter = ResolvePlanetCenter();
+        _resolvedMeshSurfaceRoot = ResolveMeshSurfaceRoot();
         _cameraTransform = ResolveCameraTransform();
 
         if (_labelTransform == null || _labelText == null || _lineRenderer == null)
@@ -230,6 +244,7 @@ public class PlanetFactAnchor : MonoBehaviour
         }
 
         RefreshContent();
+        UpdateLabelAndLine();
         _isInitializing = false;
     }
 
@@ -237,6 +252,27 @@ public class PlanetFactAnchor : MonoBehaviour
     {
         return Application.isPlaying || showPreviewInEditor;
     }
+
+#if UNITY_EDITOR
+    private void QueueEditorInitialize()
+    {
+        if (_hasPendingEditorInitialize) return;
+
+        _hasPendingEditorInitialize = true;
+        EditorApplication.delayCall += DelayedEditorInitialize;
+    }
+
+    private void DelayedEditorInitialize()
+    {
+        EditorApplication.delayCall -= DelayedEditorInitialize;
+        _hasPendingEditorInitialize = false;
+
+        if (this == null || isActiveAndEnabled == false) return;
+
+        Initialize();
+        SceneView.RepaintAll();
+    }
+#endif
 
     private string GetFactText(out bool isMissingPreviewText)
     {
@@ -349,11 +385,6 @@ public class PlanetFactAnchor : MonoBehaviour
 
     private Transform ResolveCameraTransform()
     {
-        if (Camera.main != null)
-        {
-            return Camera.main.transform;
-        }
-
 #if UNITY_EDITOR
         if (Application.isPlaying == false
             && SceneView.lastActiveSceneView != null
@@ -363,33 +394,52 @@ public class PlanetFactAnchor : MonoBehaviour
         }
 #endif
 
+        if (Camera.main != null)
+        {
+            return Camera.main.transform;
+        }
+
         Camera anyCamera = FindFirstObjectByType<Camera>();
         return anyCamera != null ? anyCamera.transform : null;
     }
 
-    private Vector3 GetLabelWorldPosition()
+    private void UpdateLabelAndLine()
     {
-        Vector3 normalDirection = GetNormalDirection(out Vector3 surfacePoint);
-        _currentSurfacePoint = surfacePoint;
-        return surfacePoint + normalDirection * labelDistance;
-    }
+        if (_labelTransform == null || _lineRenderer == null) return;
+        if (ShouldShowPreview() == false) return;
 
-    private Vector3 GetNormalDirection(out Vector3 surfacePoint)
-    {
-        if (useMeshNormal && TryGetMeshSurfaceNormal(out surfacePoint, out Vector3 meshNormal))
+        Vector3 anchorPosition = transform.position;
+        Vector3 outwardDirection = GetOutwardDirection();
+        Vector3 labelPosition = anchorPosition + outwardDirection * labelDistance;
+
+        _labelTransform.position = labelPosition;
+        SetWorldScale(_labelTransform, Vector3.one * textWorldScale);
+
+        _cameraTransform = ResolveCameraTransform();
+        if (_cameraTransform != null)
         {
-            return meshNormal;
+            _labelTransform.rotation = _cameraTransform.rotation;
         }
 
-        surfacePoint = transform.position;
+        _lineRenderer.SetPosition(0, labelPosition);
+        _lineRenderer.SetPosition(1, anchorPosition);
+    }
 
-        if (useDirectionFromPlanetCenter && planetCenter != null)
+    private Vector3 GetOutwardDirection()
+    {
+        Transform center = planetCenter != null ? planetCenter : _resolvedPlanetCenter;
+        if (useDirectionFromPlanetCenter && center != null)
         {
-            Vector3 direction = transform.position - planetCenter.position;
+            Vector3 direction = transform.position - center.position;
             if (direction.sqrMagnitude > 0.0001f)
             {
                 return direction.normalized;
             }
+        }
+
+        if (useMeshNormal && TryGetMeshSurfaceNormal(out Vector3 _, out Vector3 meshNormal))
+        {
+            return meshNormal;
         }
 
         Vector3 fallbackDirection = transform.TransformDirection(labelLocalOffset);
@@ -406,7 +456,12 @@ public class PlanetFactAnchor : MonoBehaviour
         surfacePoint = transform.position;
         normalDirection = Vector3.zero;
 
-        Transform searchRoot = meshSurfaceRoot != null ? meshSurfaceRoot : ResolveMeshSurfaceRoot();
+        Transform searchRoot = meshSurfaceRoot != null ? meshSurfaceRoot : _resolvedMeshSurfaceRoot;
+        if (searchRoot == null)
+        {
+            searchRoot = ResolveMeshSurfaceRoot();
+            _resolvedMeshSurfaceRoot = searchRoot;
+        }
         if (searchRoot == null) return false;
 
         MeshFilter[] meshFilters = searchRoot.GetComponentsInChildren<MeshFilter>(true);

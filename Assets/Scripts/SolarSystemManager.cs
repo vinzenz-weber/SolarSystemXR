@@ -109,6 +109,9 @@ public class SolarSystemManager : MonoBehaviour
             GameObject planetObj = Instantiate(data.planetPrefab, transform);
             planetObj.name = data.planetName;
             instance.planetTransform = planetObj.transform;
+            instance.planetTransform.localPosition = data.semiMajorAxis > 0
+                ? CalculateKeplerPosition(data, currentSimulationDays)
+                : Vector3.zero;
 
             UpdatePlanetSize(instance);
 
