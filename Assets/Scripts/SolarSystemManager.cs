@@ -25,6 +25,9 @@ public class SolarSystemManager : MonoBehaviour
 
     [Header("Simulation & Zeit")]
     public float timeScale = 1f;
+    [Range(0f, 1f)]
+    [Tooltip("Bremst nur die sichtbare Eigenrotation der Planeten. 0.02 = 2 Prozent der normalen Simulationsgeschwindigkeit.")]
+    public float EigenrotationMultiplikator = 0.02f;
     public double currentSimulationDays = 0.0;
 
     [Header("Lernmodus (Übertreibungen)")]
@@ -72,7 +75,7 @@ public class SolarSystemManager : MonoBehaviour
             if (instance.data.rotationSpeed != 0f)
             {
                 float rotationDegreesPerDay = 360f / instance.data.rotationSpeed;
-                instance.currentRotationAngle += rotationDegreesPerDay * timeScale * Time.deltaTime;
+                instance.currentRotationAngle += rotationDegreesPerDay * timeScale * EigenrotationMultiplikator * Time.deltaTime;
                 instance.currentRotationAngle %= 360f;
             }
 

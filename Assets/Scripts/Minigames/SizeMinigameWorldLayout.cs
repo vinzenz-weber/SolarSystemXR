@@ -1,55 +1,30 @@
 using UnityEngine;
 
-// Richtet die wichtigsten Size-Minispiel-Elemente nach dem Prefab-Spawn im Raum aus.
-// Das Prefab selbst darf weiter als Ganzes vom MinigameManager gespawnt werden.
+// Dreht das fertig arrangierte Size-Minispiel nach dem Spawn zum Spieler.
+// Die lokalen Positionen der Kinder bleiben unveraendert, damit das Prefab
+// frei im Editor art-directed werden kann.
 public class SizeMinigameWorldLayout : MonoBehaviour
 {
-    [Header("Referenzen")]
-    [Tooltip("Das List-GameObject aus dem Size-Prefab.")]
-    public Transform ListRoot;
+    [Header("Spawn-Ausrichtung")]
+    [Tooltip("Wenn aktiv, wird das komplette Minigame beim Start auf den Kopf-/Kamera-Ursprung gesetzt.")]
+    public bool PlaceAtCameraOnStart = true;
 
-    [Tooltip("Parent der einzelnen Snap-Ringe.")]
-    public Transform OrbitsRoot;
+    [Tooltip("Lokaler Offset relativ zum Kopf. Z ist nach vorne, X zur Seite, Y nach oben.")]
+    public Vector3 CameraLocalOffset = Vector3.zero;
 
-    [Header("Position vor dem Spieler")]
-    [Tooltip("Welt-Hoehe fuer Liste und Snap-Ringe in Metern.")]
-    public float WorldHeight = 1.1f;
-
-    [Tooltip("Abstand der Planeten-Liste vor dem Kopf des Spielers.")]
-    public float ListDistance = 1.05f;
-
-    [Tooltip("Abstand der Snap-Ringe vor dem Kopf des Spielers.")]
-    public float OrbitsDistance = 1.35f;
-
-    [Tooltip("Seitlicher Offset der Liste. Positiv = rechts vom Spieler.")]
-    public float ListSideOffset = 0f;
-
-    [Tooltip("Seitlicher Offset der Snap-Ringe. Positiv = rechts vom Spieler.")]
-    public float OrbitsSideOffset = 0f;
-
-    [Tooltip("Wenn aktiv, wird beim Start automatisch anhand der Kamera ausgerichtet.")]
-    public bool AlignOnStart = true;
-
-    private void Reset()
-    {
-        CollectReferences();
-    }
-
-    private void OnValidate()
-    {
-        CollectReferences();
-    }
+    [Tooltip("Wenn aktiv, wird das komplette Minigame beim Start in Blickrichtung der Kamera gedreht.")]
+    public bool RotateToPlayerOnStart = true;
 
     private void Start()
     {
-        if (AlignOnStart)
+        if (PlaceAtCameraOnStart || RotateToPlayerOnStart)
         {
-            AlignToPlayer();
+            AlignRootToCamera();
         }
     }
 
-    [ContextMenu("Size-Layout vor Spieler ausrichten")]
-    public void AlignToPlayer()
+    [ContextMenu("Size-Minispiel am Kopf ausrichten")]
+    public void AlignRootToCamera()
     {
         Transform cameraTransform = Camera.main != null ? Camera.main.transform : null;
         if (cameraTransform == null)
@@ -58,8 +33,19 @@ public class SizeMinigameWorldLayout : MonoBehaviour
             return;
         }
 
-        CollectReferences();
+        if (PlaceAtCameraOnStart)
+        {
+            transform.position = cameraTransform.position + cameraTransform.TransformDirection(CameraLocalOffset);
+        }
 
+        if (RotateToPlayerOnStart)
+        {
+            RotateRootToCameraForward(cameraTransform);
+        }
+    }
+
+    private void RotateRootToCameraForward(Transform cameraTransform)
+    {
         Vector3 forward = Vector3.ProjectOnPlane(cameraTransform.forward, Vector3.up);
         if (forward.sqrMagnitude < 0.0001f)
         {
@@ -71,49 +57,6 @@ public class SizeMinigameWorldLayout : MonoBehaviour
             forward = Vector3.forward;
         }
 
-        forward.Normalize();
-
-        Quaternion floorParallelRotation = Quaternion.LookRotation(forward, Vector3.up);
-        Vector3 right = floorParallelRotation * Vector3.right;
-
-        Vector3 basePosition = cameraTransform.position;
-        basePosition.y = WorldHeight;
-
-        PlaceRoot(ListRoot, basePosition + forward * ListDistance + right * ListSideOffset, floorParallelRotation);
-        PlaceRoot(OrbitsRoot, basePosition + forward * OrbitsDistance + right * OrbitsSideOffset, floorParallelRotation);
-    }
-
-    private void PlaceRoot(Transform root, Vector3 position, Quaternion rotation)
-    {
-        if (root == null) return;
-
-        root.SetPositionAndRotation(position, rotation);
-    }
-
-    private void CollectReferences()
-    {
-        if (ListRoot == null)
-        {
-            ListRoot = FindDirectChild("List");
-        }
-
-        if (OrbitsRoot == null)
-        {
-            OrbitsRoot = FindDirectChild("Orbits");
-        }
-    }
-
-    private Transform FindDirectChild(string childName)
-    {
-        for (int i = 0; i < transform.childCount; i++)
-        {
-            Transform child = transform.GetChild(i);
-            if (child.name == childName)
-            {
-                return child;
-            }
-        }
-
-        return null;
+        transform.rotation = Quaternion.LookRotation(forward.normalized, Vector3.up);
     }
 }

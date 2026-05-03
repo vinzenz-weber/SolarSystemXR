@@ -1500,15 +1500,26 @@ MonoBehaviour:
   distanzSlider: {fileID: 1798282222971907969}
   groesseSlider: {fileID: 3913941364342074432}
   zeitSlider: {fileID: 3603576218023475405}
+  inklinationSlider: {fileID: 0}
   exzentrizitaetSlider: {fileID: 7711694782595013654}
+  spacingModeToggle: {fileID: 0}
+  spacingModeButton: {fileID: 0}
+  spacingModeBackground: {fileID: 0}
+  spacingModeHandle: {fileID: 0}
+  spacingHandleOnX: -4
+  spacingHandleOffX: -24
+  spacingModeOnColor: {r: 0.188, g: 0.82, b: 0.345, a: 1}
+  spacingModeOffColor: {r: 1, g: 1, b: 1, a: 0.4}
   distanzLabel: {fileID: 3826929925256663722}
   groesseLabel: {fileID: 1999080045948080491}
   zeitLabel: {fileID: 2300579786793813478}
+  inklinationLabel: {fileID: 0}
   exzentrizitaetLabel: {fileID: 5109973491723051325}
+  spacingModeLabel: {fileID: 0}
   positioniereNebenUser: 1
-  abstandVorUser: 1.2
-  seitlicherAbstand: -0.45
-  hoehenOffset: -0.1
+  abstandVorUser: 0.3
+  seitlicherAbstand: -0.35
+  hoehenOffset: -0.75
 --- !u!1 &8799703708686035334
 GameObject:
   m_ObjectHideFlags: 0

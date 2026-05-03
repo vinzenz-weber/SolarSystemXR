@@ -50,9 +50,9 @@ public class SonnensystemUI : MonoBehaviour
     [Header("Position")]
     [Tooltip("Wenn aktiv, stellt sich das Panel beim Anzeigen neben den User.")]
     public bool positioniereNebenUser = true;
-    public float abstandVorUser = 1.2f;
-    public float seitlicherAbstand = -0.45f;
-    public float hoehenOffset = -0.1f;
+    public float abstandVorUser = 0.3f;
+    public float seitlicherAbstand = -0.35f;
+    public float hoehenOffset = -0.75f;
 
     private bool _isInitializing;
 
@@ -339,12 +339,24 @@ public class SonnensystemUI : MonoBehaviour
         if (Camera.main == null) return;
 
         Transform kamera = Camera.main.transform;
+        Vector3 forward = kamera.forward;
+        forward.y = 0f;
+
+        if (forward.sqrMagnitude < 0.0001f)
+        {
+            forward = kamera.parent != null ? kamera.parent.forward : Vector3.forward;
+            forward.y = 0f;
+        }
+
+        forward = forward.normalized;
+        Vector3 right = Vector3.Cross(Vector3.up, forward).normalized;
+
         Vector3 position = kamera.position
-            + kamera.forward * abstandVorUser
-            + kamera.right * seitlicherAbstand
+            + forward * abstandVorUser
+            + right * seitlicherAbstand
             + Vector3.up * hoehenOffset;
 
-        Quaternion rotation = Quaternion.LookRotation(position - kamera.position);
+        Quaternion rotation = Quaternion.LookRotation(position - new Vector3(kamera.position.x, position.y, kamera.position.z));
         transform.SetPositionAndRotation(position, rotation);
     }
 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Oculus.Interaction;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 // Prueft das Size-Minispiel.
 // Meta SDK kuemmert sich weiter um Grab und Snap, dieses Script liest nur die Liste aus.
@@ -16,6 +17,8 @@ public class SizeChecker : MonoBehaviour
     public ReihenfolgeOrbitSlot[] Slots;
     public ReihenfolgePlanet[] Planets;
     public TMP_Text SuccessText;
+    public GameObject CompletionMenu;
+    public Button CompletionMenuButton;
 
     [Header("Auswertung")]
     public int ExpectedPlanetCount = 8;
@@ -32,6 +35,12 @@ public class SizeChecker : MonoBehaviour
     public float WrongBlinkDuration = 0.45f;
 
     [Header("Groessen-Feedback")]
+    [Tooltip("Wenn aktiv, werden alle wartenden Planeten vor Spielstart gleich gross dargestellt.")]
+    public bool NormalizeWaitingPlanetSizes = true;
+
+    [Tooltip("Sichtbare Groesse der Planeten, solange sie vor dem Spieler auf der Liste warten.")]
+    public float WaitingPlanetSizeMeters = 0.03f;
+
     [Tooltip("So gross wird die Erde im Size-Minispiel, wenn sie richtig platziert ist.")]
     public float EarthSizeMeters = 0.04f;
 
@@ -50,6 +59,7 @@ public class SizeChecker : MonoBehaviour
     private SizeSlotState[] _slotStates;
     private List<Coroutine> _runningPlanetCoroutines = new();
     private Dictionary<Transform, Vector3> _initialVisualScales = new();
+    private bool _isReady;
 
     private void Reset()
     {
@@ -58,6 +68,12 @@ public class SizeChecker : MonoBehaviour
 
     private void OnValidate()
     {
+        WaitingPlanetSizeMeters = Mathf.Max(0.001f, WaitingPlanetSizeMeters);
+        EarthSizeMeters = Mathf.Max(0.001f, EarthSizeMeters);
+        EarthDiameterKm = Mathf.Max(0.001f, EarthDiameterKm);
+        WrongReturnDelay = Mathf.Max(0f, WrongReturnDelay);
+        ReturnDuration = Mathf.Max(0.01f, ReturnDuration);
+
         if (AutoCollectChildren)
         {
             CollectChildren();
@@ -66,17 +82,21 @@ public class SizeChecker : MonoBehaviour
 
     private void Start()
     {
+        _isReady = false;
+
         if (AutoCollectChildren)
         {
             CollectChildren();
         }
 
-        CacheInitialVisualScales();
-        ResetGame();
+        BindCompletionMenuButton();
+        ApplyWaitingPlanetSizeToVisualSettings();
+        StartCoroutine(PrepareGameAfterVisualRefresh());
     }
 
     private void Update()
     {
+        if (_isReady == false) return;
         if (_hasCompleted) return;
 
         EvaluateLive();
@@ -87,10 +107,29 @@ public class SizeChecker : MonoBehaviour
         _hasCompleted = false;
         _lastWrongOrderSignature = "";
         HideSuccessText();
+        HideCompletionMenu();
         StopWrongBlink();
         StopPlanetCoroutines();
         SetAllPlanetsColor(NeutralColor);
         ResetPlanetScales();
+    }
+
+    private IEnumerator PrepareGameAfterVisualRefresh()
+    {
+        // InteractablePlanetVisual erzeugt seine Planet-Visuals ebenfalls in Start.
+        // Ein Frame Wartezeit stellt sicher, dass danach die finalen Renderer existieren.
+        yield return null;
+
+        if (AutoCollectChildren)
+        {
+            CollectChildren();
+        }
+
+        ApplyWaitingPlanetSizeToVisualSettings();
+        NormalizeWaitingPlanetScales();
+        CacheInitialVisualScales();
+        ResetGame();
+        _isReady = true;
     }
 
     public bool ValidateCurrentOrder()
@@ -126,7 +165,6 @@ public class SizeChecker : MonoBehaviour
         if (ValidateCurrentOrder())
         {
             CompleteMinigame();
-            EndMinigame();
             return;
         }
 
@@ -137,6 +175,7 @@ public class SizeChecker : MonoBehaviour
     public void CollectChildren()
     {
         Planets = GetComponentsInChildren<ReihenfolgePlanet>(true);
+        CollectCompletionMenuReferences();
 
         if (ListSnapInteractable == null)
         {
@@ -198,6 +237,8 @@ public class SizeChecker : MonoBehaviour
             SuccessText.gameObject.SetActive(true);
             SuccessText.text = "Geschafft!";
         }
+
+        ShowCompletionMenu();
 
         if (MinigameManager.Instance != null)
         {
@@ -547,6 +588,38 @@ public class SizeChecker : MonoBehaviour
         }
     }
 
+    private void ApplyWaitingPlanetSizeToVisualSettings()
+    {
+        if (NormalizeWaitingPlanetSizes == false || Planets == null) return;
+
+        foreach (ReihenfolgePlanet planet in Planets)
+        {
+            if (planet == null) continue;
+
+            InteractablePlanetVisual visual = planet.GetComponent<InteractablePlanetVisual>();
+            if (visual == null) continue;
+
+            visual.FitVisualToTargetSize = true;
+            visual.TargetVisualSize = WaitingPlanetSizeMeters;
+        }
+    }
+
+    private void NormalizeWaitingPlanetScales()
+    {
+        if (NormalizeWaitingPlanetSizes == false || Planets == null) return;
+
+        foreach (ReihenfolgePlanet planet in Planets)
+        {
+            Transform scaleRoot = GetPlanetScaleRoot(planet);
+            if (scaleRoot == null) continue;
+
+            float currentSize = GetPlanetWorldSize(scaleRoot);
+            if (currentSize <= 0.0001f) continue;
+
+            scaleRoot.localScale *= WaitingPlanetSizeMeters / currentSize;
+        }
+    }
+
     private void ResetPlanetScale(ReihenfolgePlanet planet)
     {
         Transform scaleRoot = GetPlanetScaleRoot(planet);
@@ -649,6 +722,67 @@ public class SizeChecker : MonoBehaviour
         }
 
         return snapInteractables.Length > 0 ? snapInteractables[0] : null;
+    }
+
+    private void CollectCompletionMenuReferences()
+    {
+        if (CompletionMenu == null)
+        {
+            Transform completionMenuTransform = FindDirectChild("Congrats");
+            if (completionMenuTransform == null)
+            {
+                completionMenuTransform = FindDirectChild("CompletionMenu");
+            }
+
+            if (completionMenuTransform != null)
+            {
+                CompletionMenu = completionMenuTransform.gameObject;
+            }
+        }
+
+        if (CompletionMenuButton == null && CompletionMenu != null)
+        {
+            CompletionMenuButton = CompletionMenu.GetComponentInChildren<Button>(true);
+        }
+    }
+
+    private void BindCompletionMenuButton()
+    {
+        CollectCompletionMenuReferences();
+        if (CompletionMenuButton == null) return;
+
+        CompletionMenuButton.onClick.RemoveListener(EndMinigame);
+        CompletionMenuButton.onClick.AddListener(EndMinigame);
+    }
+
+    private void ShowCompletionMenu()
+    {
+        if (CompletionMenu != null)
+        {
+            CompletionMenu.SetActive(true);
+        }
+    }
+
+    private void HideCompletionMenu()
+    {
+        if (CompletionMenu != null)
+        {
+            CompletionMenu.SetActive(false);
+        }
+    }
+
+    private Transform FindDirectChild(string childName)
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            Transform child = transform.GetChild(i);
+            if (child.name == childName)
+            {
+                return child;
+            }
+        }
+
+        return null;
     }
 
     private Transform FindParentNamed(Transform start, string targetName)

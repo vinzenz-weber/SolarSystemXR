@@ -23,6 +23,10 @@ public class PlacementManager : MonoBehaviour
     public SonnensystemUI sonnensystemUIPrefab;
     private SonnensystemUI _currentSonnensystemUI;
 
+    [Header("Sonnensystem Ausrichtung")]
+    [Tooltip("Neigt das platzierte Sonnensystem in Grad zum Betrachter. 0 = flach auf der Flaeche.")]
+    public float solarSystemTiltTowardsUserDegrees = 20f;
+
     // Aktuell zu platzierender Planet (null wenn Sonnensystem-Modus)
     private PlanetData currentPlanetData;
 
@@ -214,7 +218,12 @@ public class PlacementManager : MonoBehaviour
 
             // Beim Sonnensystem heben wir die Vorschau nicht an - es steht direkt auf dem Boden.
             float lift = _isSolarSystemMode ? 0f : planetHeight;
-            previewInstance.transform.position = hitPoint + Vector3.up * lift;
+            Vector3 previewPosition = hitPoint + Vector3.up * lift;
+            Quaternion previewRotation = _isSolarSystemMode == true
+                ? GetSolarSystemPlacementRotation(previewPosition)
+                : Quaternion.identity;
+
+            previewInstance.transform.SetPositionAndRotation(previewPosition, previewRotation);
             visualizerInstance.transform.position = hitPoint;
 
             // --- PLATZIEREN ---
@@ -232,7 +241,7 @@ public class PlacementManager : MonoBehaviour
                     ClearPlacedPlanets();
                     ClearPlacedSolarSystem();
 
-                    _placedSolarSystemObject = Instantiate(_currentSolarSystemPrefab, previewInstance.transform.position, Quaternion.identity);
+                    _placedSolarSystemObject = Instantiate(_currentSolarSystemPrefab, previewInstance.transform.position, previewInstance.transform.rotation);
                     SetupSonnensystemUI(_placedSolarSystemObject);
                 }
                 else
@@ -328,6 +337,37 @@ public class PlacementManager : MonoBehaviour
     private bool IsEditorFallbackActive()
     {
         return Application.isEditor == true && useEditorFallbackPlacement == true;
+    }
+
+    private Quaternion GetSolarSystemPlacementRotation(Vector3 placementPosition)
+    {
+        if (Mathf.Approximately(solarSystemTiltTowardsUserDegrees, 0f) == true)
+        {
+            return Quaternion.identity;
+        }
+
+        Transform viewerTransform = Camera.main != null ? Camera.main.transform : rayOrigin;
+        if (viewerTransform == null)
+        {
+            return Quaternion.identity;
+        }
+
+        Vector3 directionToViewer = viewerTransform.position - placementPosition;
+        directionToViewer.y = 0f;
+
+        if (directionToViewer.sqrMagnitude < 0.0001f)
+        {
+            return Quaternion.identity;
+        }
+
+        // Lokale Up-Achse des Sonnensystems wird leicht zum User gekippt.
+        Vector3 tiltAxis = Vector3.Cross(Vector3.up, directionToViewer.normalized);
+        if (tiltAxis.sqrMagnitude < 0.0001f)
+        {
+            return Quaternion.identity;
+        }
+
+        return Quaternion.AngleAxis(solarSystemTiltTowardsUserDegrees, tiltAxis.normalized);
     }
 
     private void DisableDepthApiInEditorFallback()

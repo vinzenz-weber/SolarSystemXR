@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 1760788044883291446}
   - component: {fileID: 7960322153015277364}
   - component: {fileID: 8121584892642493715}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Venus
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -136,7 +136,7 @@ GameObject:
   - component: {fileID: 153296023051892971}
   - component: {fileID: 2926763040927286480}
   - component: {fileID: 2485875361440892284}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Planet_LOD1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -226,7 +226,7 @@ GameObject:
   - component: {fileID: 4933267175823160678}
   - component: {fileID: 6666269898175720580}
   - component: {fileID: 6793567130823210084}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Planet_LOD3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -316,7 +316,7 @@ GameObject:
   - component: {fileID: 5087875950344854501}
   - component: {fileID: 4626480101408101238}
   - component: {fileID: 4969008401402813528}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Planet_LOD0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -406,7 +406,7 @@ GameObject:
   - component: {fileID: 8910176704502074348}
   - component: {fileID: 3886674872508443111}
   - component: {fileID: 8962158352097844741}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Planet_LOD2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -494,7 +494,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5577950946073641162}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: VenusPrefab
   m_TagString: Untagged
   m_Icon: {fileID: 0}
