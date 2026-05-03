@@ -64,9 +64,15 @@ public class PlanetInfoPanelManager : MonoBehaviour
         }
 
         _currentPlanetData = data;
+        bool wasPanelVisible = infoPanel.gameObject.activeSelf;
+
         infoPanel.Bind(data);
         infoPanel.gameObject.SetActive(true);
-        PositionPanelNextToUser();
+
+        if (wasPanelVisible == false)
+        {
+            PositionPanelNextToUser();
+        }
     }
 
     public void HidePanel()

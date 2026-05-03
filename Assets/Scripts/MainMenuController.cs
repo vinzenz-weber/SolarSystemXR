@@ -58,15 +58,6 @@ public class MainMenuController : MonoBehaviour
     [Tooltip("Optional: Text auf dem Gravity-Button.")]
     public TextMeshProUGUI gravityButtonLabel;
 
-    [Tooltip("Farbe fuer noch nicht abgeschlossene Quiz-Buttons.")]
-    public Color quizOpenColor = new Color(0.12f, 0.32f, 0.62f, 0.95f);
-
-    [Tooltip("Farbe fuer abgeschlossene Quiz-Buttons.")]
-    public Color quizCompletedColor = new Color(0.12f, 0.55f, 0.28f, 0.95f);
-
-    [Tooltip("Farbe fuer Coming-Soon-Eintraege.")]
-    public Color quizDisabledColor = new Color(0.23f, 0.23f, 0.23f, 0.8f);
-
     // ----------- TAB-BUTTONS -----------
     [Header("Tabs (Learn / Sonnensystem)")]
     [Tooltip("Visuelles Highlight fuer den aktiven/inaktiven Tab.")]
@@ -226,6 +217,11 @@ public class MainMenuController : MonoBehaviour
     {
         _currentPlanet = null;
         _currentSelection = ExperienceSelection.SolarSystem;
+
+        if (placementManager != null)
+        {
+            placementManager.DeactivatePlanetSun();
+        }
 
         if (menuHeadline != null)
         {
@@ -391,11 +387,21 @@ public class MainMenuController : MonoBehaviour
 
             string text = GetCombinedButtonText(button.transform).ToLowerInvariant();
 
+            if (IsDebugResetChallenge(button.transform, text, i))
+            {
+                gravityButton = button;
+                gravityButtonLabel = button.GetComponentInChildren<TextMeshProUGUI>(true);
+                CacheChallengeBaseLabel(gravityButtonLabel, ref _gravityBaseLabel);
+                BindChallengeStart(button, ResetQuizProgress);
+                continue;
+            }
+
             if (text.Contains("size") || text.Contains("groesse") || text.Contains("größe"))
             {
                 sizeButton = button;
                 sizeButtonLabel = button.GetComponentInChildren<TextMeshProUGUI>(true);
-                BindClick(button, StartSizeMinigame);
+                CacheChallengeBaseLabel(sizeButtonLabel, ref _sizeBaseLabel);
+                BindChallengeStart(button, StartSizeMinigame);
                 continue;
             }
 
@@ -403,14 +409,50 @@ public class MainMenuController : MonoBehaviour
             {
                 reihenfolgeButton = button;
                 reihenfolgeButtonLabel = button.GetComponentInChildren<TextMeshProUGUI>(true);
-                BindClick(button, StartReihenfolgeMinigame);
+                CacheChallengeBaseLabel(reihenfolgeButtonLabel, ref _reihenfolgeBaseLabel);
+                BindChallengeStart(button, StartReihenfolgeMinigame);
                 continue;
             }
 
             gravityButton = button;
             gravityButtonLabel = button.GetComponentInChildren<TextMeshProUGUI>(true);
-            BindClick(button, ShowGravityComingSoon);
+            CacheChallengeBaseLabel(gravityButtonLabel, ref _gravityBaseLabel);
+            BindChallengeStart(button, ResetQuizProgress);
         }
+    }
+
+    private void CacheChallengeBaseLabel(TextMeshProUGUI label, ref string baseLabel)
+    {
+        if (label == null || string.IsNullOrWhiteSpace(label.text)) return;
+
+        baseLabel = label.text.Replace(" (geschafft)", "");
+    }
+
+    private bool IsDebugResetChallenge(Transform challengeTransform, string combinedText, int index)
+    {
+        if (index == 2) return true;
+        if (challengeTransform == null) return false;
+
+        string objectName = challengeTransform.name.ToLowerInvariant();
+        return objectName.Contains("challengebutton (3)")
+            || combinedText.Contains("gravity")
+            || combinedText.Contains("schwerkraft")
+            || combinedText.Contains("test 3");
+    }
+
+    private void BindChallengeStart(Button challengeButton, UnityEngine.Events.UnityAction action)
+    {
+        if (challengeButton == null || action == null) return;
+
+        BindClick(challengeButton, action);
+
+        Transform startButtonTransform = FindDeepChild(challengeButton.transform, "StartButton");
+        if (startButtonTransform == null) return;
+
+        Button startButton = startButtonTransform.GetComponent<Button>();
+        if (startButton == null) startButton = startButtonTransform.GetComponentInChildren<Button>(true);
+
+        BindClick(startButton, action);
     }
 
     private void BindButtonByName(Transform root, string buttonName, UnityEngine.Events.UnityAction action)
@@ -631,7 +673,7 @@ public class MainMenuController : MonoBehaviour
 
         UpdateQuizButton(reihenfolgeButton, reihenfolgeButtonLabel, _reihenfolgeBaseLabel, isReihenfolgeCompleted, true);
         UpdateQuizButton(sizeButton, sizeButtonLabel, _sizeBaseLabel, isSizeCompleted, true);
-        UpdateQuizButton(gravityButton, gravityButtonLabel, _gravityBaseLabel, false, false);
+        UpdateDebugResetButton(gravityButton, gravityButtonLabel, _gravityBaseLabel);
     }
 
     private void StartMinigame(MinigameType type)
@@ -689,24 +731,47 @@ public class MainMenuController : MonoBehaviour
     {
         if (label != null)
         {
-            label.text = isCompleted ? baseLabel + " (geschafft)" : baseLabel;
+            label.text = baseLabel;
         }
 
         if (button == null) return;
 
         button.interactable = canStart;
+        SetChallengeCompletionVisual(button.transform, isCompleted, canStart);
+    }
 
-        Image image = button.targetGraphic as Image;
-        if (image == null)
+    private void UpdateDebugResetButton(Button button, TextMeshProUGUI label, string baseLabel)
+    {
+        if (label != null)
         {
-            image = button.GetComponent<Image>();
+            label.text = baseLabel;
         }
 
-        if (image != null)
+        if (button == null) return;
+
+        button.gameObject.SetActive(true);
+        button.interactable = true;
+        SetChallengeCompletionVisual(button.transform, false, true);
+    }
+
+    private void SetChallengeCompletionVisual(Transform challengeTransform, bool isCompleted, bool canStart)
+    {
+        if (challengeTransform == null) return;
+
+        Transform startButton = FindDirectChild(challengeTransform, "StartButton");
+        if (startButton == null) startButton = FindDeepChild(challengeTransform, "StartButton");
+
+        Transform check = FindDirectChild(challengeTransform, "Check");
+        if (check == null) check = FindDeepChild(challengeTransform, "Check");
+
+        if (startButton != null)
         {
-            image.color = canStart == false
-                ? quizDisabledColor
-                : isCompleted ? quizCompletedColor : quizOpenColor;
+            startButton.gameObject.SetActive(canStart && isCompleted == false);
+        }
+
+        if (check != null)
+        {
+            check.gameObject.SetActive(canStart && isCompleted);
         }
     }
 

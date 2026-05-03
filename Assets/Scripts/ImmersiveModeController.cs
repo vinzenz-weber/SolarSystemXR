@@ -136,6 +136,7 @@ public class ImmersiveModeController : MonoBehaviour
 
         if (placementManager != null)
         {
+            placementManager.DeactivatePlanetSun();
             placementManager.SetPlacedContentVisible(false);
         }
 

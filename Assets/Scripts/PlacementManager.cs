@@ -27,6 +27,16 @@ public class PlacementManager : MonoBehaviour
     [Tooltip("Neigt das platzierte Sonnensystem in Grad zum Betrachter. 0 = flach auf der Flaeche.")]
     public float solarSystemTiltTowardsUserDegrees = 20f;
 
+    [Header("Sonne fuer Einzelplaneten")]
+    [Tooltip("Scene-Objekt 'sun', das die Lichtposition fuer einzeln platzierte AR-Planeten steuert.")]
+    [SerializeField] private GameObject _sunObject;
+
+    [Tooltip("Wenn leer, wird Camera.main benutzt. Die Sonne wird beim ersten Planeten an dieser Position gespawnt.")]
+    [SerializeField] private Transform _userCamera;
+
+    [Tooltip("Wenn aktiv, wird das Sun-Objekt bis zum ersten platzierten Einzelplaneten ausgeblendet.")]
+    [SerializeField] private bool _hideSunUntilFirstPlanetPlacement = true;
+
     // Aktuell zu platzierender Planet (null wenn Sonnensystem-Modus)
     private PlanetData currentPlanetData;
 
@@ -41,6 +51,12 @@ public class PlacementManager : MonoBehaviour
     // gezielt nur das jeweils andere System geloescht wird.
     private List<GameObject> _placedPlanetObjects = new List<GameObject>();
     private GameObject _placedSolarSystemObject;
+    private bool _hasSpawnedSunForPlanets;
+    private bool _hasStoredPanelVisibilityForMainMenu;
+    private bool _wasPlanetInfoPanelVisibleBeforeMainMenu;
+    private bool _wasSonnensystemUIVisibleBeforeMainMenu;
+    private List<GameObjectState> _distanceGrabObjectStatesBeforeMainMenu = new List<GameObjectState>();
+    private bool _hasStoredDistanceGrabObjectStatesForMainMenu;
 
     public float planetHeight = 0.15f;
 
@@ -71,6 +87,8 @@ public class PlacementManager : MonoBehaviour
 
     private void Start()
     {
+        AutoBindSunObject();
+        PrepareSunObject();
         DisableDepthApiInEditorFallback();
     }
 
@@ -94,6 +112,7 @@ public class PlacementManager : MonoBehaviour
     public void SelectSolarSystem(GameObject solarSystemPrefab)
     {
         ClearPreview();
+        DeactivatePlanetSun();
 
         _isSolarSystemMode = true;
         currentPlanetData = null;
@@ -119,6 +138,13 @@ public class PlacementManager : MonoBehaviour
         }
     }
 
+    public void DeactivatePlanetSun()
+    {
+        AutoBindSunObject();
+        _hasSpawnedSunForPlanets = false;
+        SetSunVisible(false);
+    }
+
     public void SetPlacedContentVisible(bool isVisible)
     {
         for (int i = 0; i < _placedPlanetObjects.Count; i++)
@@ -140,6 +166,21 @@ public class PlacementManager : MonoBehaviour
         }
     }
 
+    public void SetWorldPanelsHiddenByMainMenu(bool isHidden)
+    {
+        if (isHidden)
+        {
+            StorePanelVisibilityForMainMenu();
+            SetPlanetInfoPanelVisible(false);
+            SetSonnensystemUIVisible(false);
+            SetDistanceGrabObjectsHiddenByMainMenu(true);
+            return;
+        }
+
+        RestorePanelVisibilityAfterMainMenu();
+        SetDistanceGrabObjectsHiddenByMainMenu(false);
+    }
+
     private void ClearPlacedPlanets()
     {
         for (int i = 0; i < _placedPlanetObjects.Count; i++)
@@ -151,6 +192,7 @@ public class PlacementManager : MonoBehaviour
         }
 
         _placedPlanetObjects.Clear();
+        DeactivatePlanetSun();
 
         if (planetInfoPanelManager != null)
         {
@@ -254,8 +296,10 @@ public class PlacementManager : MonoBehaviour
                     float rootScale = GetInteractableRootScale(spawnedPlanet, currentPlanetData);
                     spawnedPlanet.transform.localScale = new Vector3(rootScale, rootScale, rootScale);
                     RegisterSelectablePlanet(spawnedPlanet, currentPlanetData);
+                    RegisterInteractionSelectionBridge(spawnedPlanet);
                     _placedPlanetObjects.Add(spawnedPlanet);
 
+                    SpawnSunForFirstPlacedPlanet();
                     ShowPlanetInfo(currentPlanetData);
                 }
 
@@ -477,6 +521,19 @@ public class PlacementManager : MonoBehaviour
         selectable.planetData = data;
     }
 
+    private void RegisterInteractionSelectionBridge(GameObject planetObject)
+    {
+        if (planetObject == null) return;
+
+        PlanetInteractionSelectionBridge bridge = planetObject.GetComponent<PlanetInteractionSelectionBridge>();
+        if (bridge == null)
+        {
+            bridge = planetObject.AddComponent<PlanetInteractionSelectionBridge>();
+        }
+
+        bridge.Refresh();
+    }
+
     private void ShowPlanetInfo(PlanetData data)
     {
         PlanetInfoPanelManager manager = planetInfoPanelManager != null
@@ -521,5 +578,229 @@ public class PlacementManager : MonoBehaviour
         _currentSonnensystemUI = ui;
         ui.gameObject.SetActive(true);
         ui.Bind(solarSystemManager);
+    }
+
+    private void AutoBindSunObject()
+    {
+        if (_sunObject != null) return;
+
+        Transform[] sceneTransforms = FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        foreach (Transform sceneTransform in sceneTransforms)
+        {
+            if (sceneTransform == null) continue;
+            if (sceneTransform.gameObject.scene.IsValid() == false) continue;
+            if (sceneTransform.gameObject.scene.isLoaded == false) continue;
+
+            string objectName = sceneTransform.name.ToLowerInvariant();
+            if (objectName == "sun")
+            {
+                _sunObject = sceneTransform.gameObject;
+                return;
+            }
+        }
+    }
+
+    private void PrepareSunObject()
+    {
+        if (_hideSunUntilFirstPlanetPlacement == false) return;
+
+        SetSunVisible(false);
+    }
+
+    private void SpawnSunForFirstPlacedPlanet()
+    {
+        if (_hasSpawnedSunForPlanets) return;
+
+        AutoBindSunObject();
+
+        if (_sunObject == null)
+        {
+            Debug.LogWarning("PlacementManager: Kein Sun-Objekt gefunden oder zugewiesen.");
+            return;
+        }
+
+        Transform cameraTransform = GetUserCameraTransform();
+        if (cameraTransform == null)
+        {
+            Debug.LogWarning("PlacementManager: Keine Kamera fuer das Sun-Placement gefunden.");
+            return;
+        }
+
+        Vector3 horizontalForward = cameraTransform.forward;
+        horizontalForward.y = 0f;
+
+        if (horizontalForward.sqrMagnitude < 0.0001f)
+        {
+            horizontalForward = Vector3.forward;
+        }
+
+        Quaternion horizontalRotation = Quaternion.LookRotation(horizontalForward.normalized, Vector3.up);
+        _sunObject.transform.SetPositionAndRotation(cameraTransform.position, horizontalRotation);
+        SetSunVisible(true);
+        _hasSpawnedSunForPlanets = true;
+    }
+
+    private Transform GetUserCameraTransform()
+    {
+        if (_userCamera != null) return _userCamera;
+        if (Camera.main != null) return Camera.main.transform;
+        return rayOrigin;
+    }
+
+    private void SetSunVisible(bool isVisible)
+    {
+        if (_sunObject == null) return;
+
+        _sunObject.SetActive(isVisible);
+    }
+
+    private void StorePanelVisibilityForMainMenu()
+    {
+        if (_hasStoredPanelVisibilityForMainMenu) return;
+
+        PlanetInfoPanelManager manager = GetPlanetInfoPanelManager();
+        _wasPlanetInfoPanelVisibleBeforeMainMenu = manager != null
+            && manager.infoPanel != null
+            && manager.infoPanel.gameObject.activeSelf;
+
+        _wasSonnensystemUIVisibleBeforeMainMenu = _currentSonnensystemUI != null
+            && _currentSonnensystemUI.gameObject.activeSelf;
+
+        _hasStoredPanelVisibilityForMainMenu = true;
+    }
+
+    private void RestorePanelVisibilityAfterMainMenu()
+    {
+        if (_hasStoredPanelVisibilityForMainMenu == false) return;
+
+        SetPlanetInfoPanelVisible(_wasPlanetInfoPanelVisibleBeforeMainMenu);
+        SetSonnensystemUIVisible(_wasSonnensystemUIVisibleBeforeMainMenu);
+
+        if (_wasPlanetInfoPanelVisibleBeforeMainMenu)
+        {
+            PlanetInfoPanelManager manager = GetPlanetInfoPanelManager();
+            if (manager != null)
+            {
+                manager.PositionPanelNextToUser();
+            }
+        }
+
+        _hasStoredPanelVisibilityForMainMenu = false;
+    }
+
+    private void SetPlanetInfoPanelVisible(bool isVisible)
+    {
+        PlanetInfoPanelManager manager = GetPlanetInfoPanelManager();
+        if (manager == null || manager.infoPanel == null) return;
+
+        manager.infoPanel.gameObject.SetActive(isVisible);
+    }
+
+    private void SetSonnensystemUIVisible(bool isVisible)
+    {
+        if (_currentSonnensystemUI == null) return;
+
+        _currentSonnensystemUI.gameObject.SetActive(isVisible);
+    }
+
+    private PlanetInfoPanelManager GetPlanetInfoPanelManager()
+    {
+        return planetInfoPanelManager != null
+            ? planetInfoPanelManager
+            : PlanetInfoPanelManager.Instance;
+    }
+
+    private void SetDistanceGrabObjectsHiddenByMainMenu(bool isHidden)
+    {
+        if (isHidden)
+        {
+            StoreDistanceGrabObjectStatesForMainMenu();
+            SetDistanceGrabObjectsVisible(false);
+            return;
+        }
+
+        RestoreDistanceGrabObjectStatesAfterMainMenu();
+    }
+
+    private void StoreDistanceGrabObjectStatesForMainMenu()
+    {
+        if (_hasStoredDistanceGrabObjectStatesForMainMenu) return;
+
+        _distanceGrabObjectStatesBeforeMainMenu.Clear();
+        StoreDistanceGrabObjectStates(_placedSolarSystemObject);
+
+        for (int i = 0; i < _placedPlanetObjects.Count; i++)
+        {
+            StoreDistanceGrabObjectStates(_placedPlanetObjects[i]);
+        }
+
+        _hasStoredDistanceGrabObjectStatesForMainMenu = true;
+    }
+
+    private void StoreDistanceGrabObjectStates(GameObject root)
+    {
+        if (root == null) return;
+
+        Transform[] children = root.GetComponentsInChildren<Transform>(true);
+        foreach (Transform child in children)
+        {
+            if (child == null) continue;
+            if (child.name != "ISDK_DistanceHandGrabInteraction") continue;
+
+            _distanceGrabObjectStatesBeforeMainMenu.Add(new GameObjectState(child.gameObject, child.gameObject.activeSelf));
+        }
+    }
+
+    private void SetDistanceGrabObjectsVisible(bool isVisible)
+    {
+        SetDistanceGrabObjectsVisible(_placedSolarSystemObject, isVisible);
+
+        for (int i = 0; i < _placedPlanetObjects.Count; i++)
+        {
+            SetDistanceGrabObjectsVisible(_placedPlanetObjects[i], isVisible);
+        }
+    }
+
+    private void SetDistanceGrabObjectsVisible(GameObject root, bool isVisible)
+    {
+        if (root == null) return;
+
+        Transform[] children = root.GetComponentsInChildren<Transform>(true);
+        foreach (Transform child in children)
+        {
+            if (child == null) continue;
+            if (child.name != "ISDK_DistanceHandGrabInteraction") continue;
+
+            child.gameObject.SetActive(isVisible);
+        }
+    }
+
+    private void RestoreDistanceGrabObjectStatesAfterMainMenu()
+    {
+        if (_hasStoredDistanceGrabObjectStatesForMainMenu == false) return;
+
+        for (int i = 0; i < _distanceGrabObjectStatesBeforeMainMenu.Count; i++)
+        {
+            GameObjectState state = _distanceGrabObjectStatesBeforeMainMenu[i];
+            if (state.GameObject != null)
+            {
+                state.GameObject.SetActive(state.WasActive);
+            }
+        }
+
+        _distanceGrabObjectStatesBeforeMainMenu.Clear();
+        _hasStoredDistanceGrabObjectStatesForMainMenu = false;
+    }
+
+    private readonly struct GameObjectState
+    {
+        public readonly GameObject GameObject;
+        public readonly bool WasActive;
+
+        public GameObjectState(GameObject gameObject, bool wasActive)
+        {
+            GameObject = gameObject;
+            WasActive = wasActive;
+        }
     }
 }
