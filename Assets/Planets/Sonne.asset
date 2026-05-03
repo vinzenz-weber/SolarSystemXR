@@ -38,7 +38,7 @@ MonoBehaviour:
   windStaerke: 0
   windTurbulenz: 0
   windPartikelFarbe: {r: 1, g: 1, b: 1, a: 1}
-  beschreibung: 
+  beschreibung: "Die Sonne ist kein Planet, sondern der Stern im Zentrum unseres Sonnensystems. Ihre Gravitation haelt Planeten, Monde, Asteroiden und Kometen auf ihren Bahnen. In ihrem Inneren verschmelzen Wasserstoffkerne zu Helium; dabei entsteht die Energie, die als Licht und Waerme zur Erde gelangt. Ohne die Sonne waeren fluessiges Wasser, Wetter und Leben auf der Erde nicht moeglich."
   planetSizeInfoText: 
   orbitalDistanceInfoText: 
   orbitalSpeedInfoText: 

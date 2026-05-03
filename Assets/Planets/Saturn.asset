@@ -39,7 +39,7 @@ MonoBehaviour:
   windStaerke: 15
   windTurbulenz: 0.5
   windPartikelFarbe: {r: 0.9, g: 0.85, b: 0.6, a: 1}
-  beschreibung: 
+  beschreibung: "Saturn ist ein grosser Gasplanet aus Wasserstoff und Helium und vor allem fuer sein auffaelliges Ringsystem bekannt. Die Ringe bestehen aus unzaehligen Stuecken aus Eis und Gestein, von feinem Staub bis zu grossen Brocken. Wie Jupiter besitzt Saturn keine feste Oberflaeche, auf der man landen koennte. Seine Monde, besonders Titan und Enceladus, sind fuer die Forschung interessant, weil sie Hinweise auf komplexe Chemie und moegliche Ozeane liefern."
   planetSizeInfoText: 
   orbitalDistanceInfoText: 
   orbitalSpeedInfoText: 

@@ -39,7 +39,7 @@ MonoBehaviour:
   windStaerke: 0
   windTurbulenz: 0
   windPartikelFarbe: {r: 1, g: 1, b: 1, a: 1}
-  beschreibung: 
+  beschreibung: "Merkur ist der kleinste Planet und kreist am naechsten um die Sonne. Seine Oberflaeche ist voller Einschlagskrater und erinnert an den Mond, weil Merkur fast keine Atmosphaere besitzt, die Meteoroiden abbremst oder Waerme speichert. Deshalb wechseln die Temperaturen extrem zwischen heissen Tagen und sehr kalten Naechten. Ein Merkurjahr dauert nur etwa 88 Erdentage."
   planetSizeInfoText: 
   orbitalDistanceInfoText: 
   orbitalSpeedInfoText: 

@@ -39,7 +39,7 @@ MonoBehaviour:
   windStaerke: 25
   windTurbulenz: 0.9
   windPartikelFarbe: {r: 0.9, g: 0.6, b: 0.3, a: 1}
-  beschreibung: 
+  beschreibung: "Jupiter ist der groesste Planet des Sonnensystems und besteht vor allem aus Wasserstoff und Helium. Seine hellen und dunklen Wolkenbaender werden von schnellen Winden in entgegengesetzte Richtungen gezogen. Der Grosse Rote Fleck ist ein riesiger Sturm, der groesser als die Erde sein kann und seit langer Zeit beobachtet wird. Jupiters starke Gravitation praegt viele Monde, darunter die vier grossen Galileischen Monde."
   planetSizeInfoText: 
   orbitalDistanceInfoText: 
   orbitalSpeedInfoText: 

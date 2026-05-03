@@ -39,7 +39,7 @@ MonoBehaviour:
   windStaerke: 5
   windTurbulenz: 0.3
   windPartikelFarbe: {r: 0.85, g: 0.7, b: 0.3, a: 1}
-  beschreibung: 
+  beschreibung: "Venus ist fast so gross wie die Erde, aber ihre Bedingungen sind extrem lebensfeindlich. Eine dichte Atmosphaere aus Kohlendioxid und Wolken aus Schwefelsaeure erzeugen einen starken Treibhauseffekt, der die Oberflaeche heisser macht als auf Merkur. Venus rotiert sehr langsam und in entgegengesetzter Richtung zu den meisten Planeten. Dadurch zeigt sie besonders gut, wie stark eine Atmosphaere das Klima eines Planeten veraendern kann."
   planetSizeInfoText: 
   orbitalDistanceInfoText: 
   orbitalSpeedInfoText: 

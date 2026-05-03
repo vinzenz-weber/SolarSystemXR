@@ -39,7 +39,7 @@ MonoBehaviour:
   windStaerke: 28
   windTurbulenz: 0.95
   windPartikelFarbe: {r: 0.2, g: 0.4, b: 0.9, a: 1}
-  beschreibung: 
+  beschreibung: "Neptun ist der aeusserste der acht Planeten und ein kalter, blauer Eisriese. Obwohl er sehr weit von der Sonne entfernt ist, besitzt er eine dynamische Atmosphaere mit extrem starken Winden und grossen Sturmsystemen. Methan traegt zu seiner blauen Farbe bei, waehrend Wasser, Ammoniak und andere Eis-Materialien im Inneren eine wichtige Rolle spielen. Neptun wurde nicht zuerst direkt entdeckt, sondern durch Berechnungen aus Stoerungen der Uranusbahn vorhergesagt."
   planetSizeInfoText: 
   orbitalDistanceInfoText: 
   orbitalSpeedInfoText: 

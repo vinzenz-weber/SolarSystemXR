@@ -39,7 +39,7 @@ MonoBehaviour:
   windStaerke: 8
   windTurbulenz: 0.6
   windPartikelFarbe: {r: 0.8, g: 0.35, b: 0.1, a: 1}
-  beschreibung: Testbeschreibung
+  beschreibung: "Mars ist eine kalte, trockene Wuestenwelt mit einer sehr duennen Atmosphaere. Seine rote Farbe entsteht durch oxidierte Eisenminerale im Staub und Gestein. Auf Mars gibt es gewaltige Landschaftsformen wie den Vulkan Olympus Mons und das Canyon-System Valles Marineris. Spuren frueherer Fluesse und Seen machen ihn wichtig fuer die Frage, ob es frueher einmal lebensfreundliche Bedingungen gab."
   planetSizeInfoText: 
   orbitalDistanceInfoText: 
   orbitalSpeedInfoText: 

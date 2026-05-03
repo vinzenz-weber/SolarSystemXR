@@ -39,5 +39,5 @@ MonoBehaviour:
   windStaerke: 0
   windTurbulenz: 0
   windPartikelFarbe: {r: 1, g: 1, b: 1, a: 1}
-  beschreibung: 
+  beschreibung: "Die Erde ist unsere Heimat und der bisher einzige bekannte Planet, auf dem Leben nachgewiesen wurde. Fluessiges Wasser, eine schuetzende Atmosphaere und ein stabiles Klima machen sie im Sonnensystem besonders. Ihre Achsenneigung verursacht Jahreszeiten, und ihr Mond stabilisiert die Ausrichtung der Erde. Aus dem Weltraum erkennt man die Erde an Ozeanen, Wolken und Kontinenten."
   fakten: []
