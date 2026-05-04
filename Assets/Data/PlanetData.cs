@@ -13,6 +13,13 @@ public class PlanetData : ScriptableObject
     [Tooltip("Nutze Sprite anstelle von UI.Image, da ScriptableObjects keine Szenen-Komponenten speichern koennen.")]
     public Sprite planetImage;
 
+    [Header("Menue-Bilder")]
+    [Tooltip("Eigenes Bild fuer den Planet-Button im Hauptmenue.")]
+    public Sprite menuButtonImage;
+
+    [Tooltip("Eigenes Hintergrundbild fuer das Hauptmenue, wenn dieser Planet ausgewaehlt ist.")]
+    public Sprite menuBackgroundImage;
+
     [Header("Physikalische Werte")]
     [Tooltip("Durchmesser in km, z.B. 12742 fuer Erde.")]
     public float diameter;

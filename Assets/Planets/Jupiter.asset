@@ -18,6 +18,8 @@ MonoBehaviour:
     wie alle anderen Planeten zusammen und ber\xFChmt f\xFCr seinen riesigen Wirbelsturm,
     den Gro\xDFen Roten Fleck."
   planetImage: {fileID: 0}
+  menuButtonImage: {fileID: 21300000, guid: 60b735924c63e874e8b88b5da2847b35, type: 3}
+  menuBackgroundImage: {fileID: 21300000, guid: affb639cb63740f4e8869377d34705e5, type: 3}
   diameter: 139914
   axialTilt: 3.13
   rotationSpeed: 0.413
@@ -39,7 +41,12 @@ MonoBehaviour:
   windStaerke: 25
   windTurbulenz: 0.9
   windPartikelFarbe: {r: 0.9, g: 0.6, b: 0.3, a: 1}
-  beschreibung: "Jupiter ist der groesste Planet des Sonnensystems und besteht vor allem aus Wasserstoff und Helium. Seine hellen und dunklen Wolkenbaender werden von schnellen Winden in entgegengesetzte Richtungen gezogen. Der Grosse Rote Fleck ist ein riesiger Sturm, der groesser als die Erde sein kann und seit langer Zeit beobachtet wird. Jupiters starke Gravitation praegt viele Monde, darunter die vier grossen Galileischen Monde."
+  beschreibung: Jupiter ist der groesste Planet des Sonnensystems und besteht vor
+    allem aus Wasserstoff und Helium. Seine hellen und dunklen Wolkenbaender werden
+    von schnellen Winden in entgegengesetzte Richtungen gezogen. Der Grosse Rote
+    Fleck ist ein riesiger Sturm, der groesser als die Erde sein kann und seit langer
+    Zeit beobachtet wird. Jupiters starke Gravitation praegt viele Monde, darunter
+    die vier grossen Galileischen Monde.
   planetSizeInfoText: 
   orbitalDistanceInfoText: 
   orbitalSpeedInfoText: 

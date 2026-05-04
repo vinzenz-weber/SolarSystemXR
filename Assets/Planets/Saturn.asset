@@ -18,6 +18,8 @@ MonoBehaviour:
     aus Eis und Gestein, ist Saturn ein gewaltiger Gasriese mit massiven, dynamischen
     Wettersystemen."
   planetImage: {fileID: 0}
+  menuButtonImage: {fileID: 21300000, guid: a7717b92cb16ede409cbd3f7e3df8be1, type: 3}
+  menuBackgroundImage: {fileID: 21300000, guid: 72249f803ddda5e47ac32e79f2e79a45, type: 3}
   diameter: 116464
   axialTilt: 26.73
   rotationSpeed: 0.444
@@ -39,7 +41,12 @@ MonoBehaviour:
   windStaerke: 15
   windTurbulenz: 0.5
   windPartikelFarbe: {r: 0.9, g: 0.85, b: 0.6, a: 1}
-  beschreibung: "Saturn ist ein grosser Gasplanet aus Wasserstoff und Helium und vor allem fuer sein auffaelliges Ringsystem bekannt. Die Ringe bestehen aus unzaehligen Stuecken aus Eis und Gestein, von feinem Staub bis zu grossen Brocken. Wie Jupiter besitzt Saturn keine feste Oberflaeche, auf der man landen koennte. Seine Monde, besonders Titan und Enceladus, sind fuer die Forschung interessant, weil sie Hinweise auf komplexe Chemie und moegliche Ozeane liefern."
+  beschreibung: Saturn ist ein grosser Gasplanet aus Wasserstoff und Helium und vor
+    allem fuer sein auffaelliges Ringsystem bekannt. Die Ringe bestehen aus unzaehligen
+    Stuecken aus Eis und Gestein, von feinem Staub bis zu grossen Brocken. Wie Jupiter
+    besitzt Saturn keine feste Oberflaeche, auf der man landen koennte. Seine Monde,
+    besonders Titan und Enceladus, sind fuer die Forschung interessant, weil sie
+    Hinweise auf komplexe Chemie und moegliche Ozeane liefern.
   planetSizeInfoText: 
   orbitalDistanceInfoText: 
   orbitalSpeedInfoText: 

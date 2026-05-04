@@ -18,6 +18,8 @@ MonoBehaviour:
     unter der dichten, giftigen Wolkendecke der Venus eine extrem hei\xDFe Oberfl\xE4che
     mit enormem Druck."
   planetImage: {fileID: 0}
+  menuButtonImage: {fileID: 21300000, guid: f41652469c5347646b01aebdae110201, type: 3}
+  menuBackgroundImage: {fileID: 21300000, guid: 5412509de4579f64ab9faa7cf98ed30b, type: 3}
   diameter: 12104
   axialTilt: 177.36
   rotationSpeed: -243.02
@@ -39,7 +41,12 @@ MonoBehaviour:
   windStaerke: 5
   windTurbulenz: 0.3
   windPartikelFarbe: {r: 0.85, g: 0.7, b: 0.3, a: 1}
-  beschreibung: "Venus ist fast so gross wie die Erde, aber ihre Bedingungen sind extrem lebensfeindlich. Eine dichte Atmosphaere aus Kohlendioxid und Wolken aus Schwefelsaeure erzeugen einen starken Treibhauseffekt, der die Oberflaeche heisser macht als auf Merkur. Venus rotiert sehr langsam und in entgegengesetzter Richtung zu den meisten Planeten. Dadurch zeigt sie besonders gut, wie stark eine Atmosphaere das Klima eines Planeten veraendern kann."
+  beschreibung: Venus ist fast so gross wie die Erde, aber ihre Bedingungen sind
+    extrem lebensfeindlich. Eine dichte Atmosphaere aus Kohlendioxid und Wolken aus
+    Schwefelsaeure erzeugen einen starken Treibhauseffekt, der die Oberflaeche heisser
+    macht als auf Merkur. Venus rotiert sehr langsam und in entgegengesetzter Richtung
+    zu den meisten Planeten. Dadurch zeigt sie besonders gut, wie stark eine Atmosphaere
+    das Klima eines Planeten veraendern kann.
   planetSizeInfoText: 
   orbitalDistanceInfoText: 
   orbitalSpeedInfoText: 

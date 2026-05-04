@@ -18,6 +18,8 @@ MonoBehaviour:
     Welt, die von \xDCberschallwinden und massiven St\xFCrmen in ihrer tiefblauen
     Atmosph\xE4re gepeitscht wird."
   planetImage: {fileID: 0}
+  menuButtonImage: {fileID: 21300000, guid: 0e0ed8dc62b11b245af3e8d44806eac2, type: 3}
+  menuBackgroundImage: {fileID: 21300000, guid: a29feb97619b06b418fa85cf2bae9b8e, type: 3}
   diameter: 49244
   axialTilt: 28.32
   rotationSpeed: 0.671
@@ -39,7 +41,12 @@ MonoBehaviour:
   windStaerke: 28
   windTurbulenz: 0.95
   windPartikelFarbe: {r: 0.2, g: 0.4, b: 0.9, a: 1}
-  beschreibung: "Neptun ist der aeusserste der acht Planeten und ein kalter, blauer Eisriese. Obwohl er sehr weit von der Sonne entfernt ist, besitzt er eine dynamische Atmosphaere mit extrem starken Winden und grossen Sturmsystemen. Methan traegt zu seiner blauen Farbe bei, waehrend Wasser, Ammoniak und andere Eis-Materialien im Inneren eine wichtige Rolle spielen. Neptun wurde nicht zuerst direkt entdeckt, sondern durch Berechnungen aus Stoerungen der Uranusbahn vorhergesagt."
+  beschreibung: Neptun ist der aeusserste der acht Planeten und ein kalter, blauer
+    Eisriese. Obwohl er sehr weit von der Sonne entfernt ist, besitzt er eine dynamische
+    Atmosphaere mit extrem starken Winden und grossen Sturmsystemen. Methan traegt
+    zu seiner blauen Farbe bei, waehrend Wasser, Ammoniak und andere Eis-Materialien
+    im Inneren eine wichtige Rolle spielen. Neptun wurde nicht zuerst direkt entdeckt,
+    sondern durch Berechnungen aus Stoerungen der Uranusbahn vorhergesagt.
   planetSizeInfoText: 
   orbitalDistanceInfoText: 
   orbitalSpeedInfoText: 

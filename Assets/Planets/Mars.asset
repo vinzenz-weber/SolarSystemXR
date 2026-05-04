@@ -18,6 +18,8 @@ MonoBehaviour:
     Seine rote Farbe verdankt er dem Eisenoxid \u2013 also Rost \u2013 auf seiner
     staubigen Oberfl\xE4che."
   planetImage: {fileID: 0}
+  menuButtonImage: {fileID: 21300000, guid: 18afd1df2923c9e4fbeb7e14a607e92b, type: 3}
+  menuBackgroundImage: {fileID: 21300000, guid: b2b3e17457e2a3a4ca72eb385af621ef, type: 3}
   diameter: 6780
   axialTilt: 25.19
   rotationSpeed: 1.026
@@ -39,7 +41,12 @@ MonoBehaviour:
   windStaerke: 8
   windTurbulenz: 0.6
   windPartikelFarbe: {r: 0.8, g: 0.35, b: 0.1, a: 1}
-  beschreibung: "Mars ist eine kalte, trockene Wuestenwelt mit einer sehr duennen Atmosphaere. Seine rote Farbe entsteht durch oxidierte Eisenminerale im Staub und Gestein. Auf Mars gibt es gewaltige Landschaftsformen wie den Vulkan Olympus Mons und das Canyon-System Valles Marineris. Spuren frueherer Fluesse und Seen machen ihn wichtig fuer die Frage, ob es frueher einmal lebensfreundliche Bedingungen gab."
+  beschreibung: Mars ist eine kalte, trockene Wuestenwelt mit einer sehr duennen
+    Atmosphaere. Seine rote Farbe entsteht durch oxidierte Eisenminerale im Staub
+    und Gestein. Auf Mars gibt es gewaltige Landschaftsformen wie den Vulkan Olympus
+    Mons und das Canyon-System Valles Marineris. Spuren frueherer Fluesse und Seen
+    machen ihn wichtig fuer die Frage, ob es frueher einmal lebensfreundliche Bedingungen
+    gab.
   planetSizeInfoText: 
   orbitalDistanceInfoText: 
   orbitalSpeedInfoText: 

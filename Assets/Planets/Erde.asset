@@ -17,7 +17,9 @@ MonoBehaviour:
   shortDescription: "Der einzige bekannte Planet mit fl\xFCssigem Wasser auf der
     Oberfl\xE4che und einer sauerstoffreichen Atmosph\xE4re, die eine unglaubliche
     Vielfalt an Leben erm\xF6glicht."
-  planetImage: {fileID: 0}
+  planetImage: {fileID: 21300000, guid: 92eb305c6615c564ba32b65e2ed1908d, type: 3}
+  menuButtonImage: {fileID: 21300000, guid: 92eb305c6615c564ba32b65e2ed1908d, type: 3}
+  menuBackgroundImage: {fileID: 21300000, guid: 1c8f050dd166f254bb2ae8af42997db9, type: 3}
   diameter: 12742
   axialTilt: 23.44
   rotationSpeed: 0.997
@@ -39,5 +41,16 @@ MonoBehaviour:
   windStaerke: 0
   windTurbulenz: 0
   windPartikelFarbe: {r: 1, g: 1, b: 1, a: 1}
-  beschreibung: "Die Erde ist unsere Heimat und der bisher einzige bekannte Planet, auf dem Leben nachgewiesen wurde. Fluessiges Wasser, eine schuetzende Atmosphaere und ein stabiles Klima machen sie im Sonnensystem besonders. Ihre Achsenneigung verursacht Jahreszeiten, und ihr Mond stabilisiert die Ausrichtung der Erde. Aus dem Weltraum erkennt man die Erde an Ozeanen, Wolken und Kontinenten."
+  beschreibung: Die Erde ist unsere Heimat und der bisher einzige bekannte Planet,
+    auf dem Leben nachgewiesen wurde. Fluessiges Wasser, eine schuetzende Atmosphaere
+    und ein stabiles Klima machen sie im Sonnensystem besonders. Ihre Achsenneigung
+    verursacht Jahreszeiten, und ihr Mond stabilisiert die Ausrichtung der Erde.
+    Aus dem Weltraum erkennt man die Erde an Ozeanen, Wolken und Kontinenten.
+  planetSizeInfoText: 
+  orbitalDistanceInfoText: 
+  orbitalSpeedInfoText: 
+  axialTiltInfoText: 
+  eccentricityInfoText: 
+  planetScaleInfoText: 
+  gravityInfoText: 
   fakten: []

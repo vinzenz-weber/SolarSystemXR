@@ -76,6 +76,13 @@ public class MainMenuController : MonoBehaviour
     [Tooltip("PlanetData-Assets in der Reihenfolge der Planet-Buttons im neuen MenuRoot.")]
     [SerializeField] private List<PlanetData> menuPlanetData = new List<PlanetData>();
 
+    [Header("Sonnensystem-Menue-Bilder")]
+    [Tooltip("Eigenes Bild fuer den Sonnensystem-Button im Hauptmenue.")]
+    [SerializeField] private Sprite solarSystemButtonImage;
+
+    [Tooltip("Eigenes Hintergrundbild fuer das Hauptmenue, wenn das Sonnensystem ausgewaehlt ist.")]
+    [SerializeField] private Sprite solarSystemMenuBackgroundImage;
+
     // ----------- REFERENZEN -----------
     [Header("Referenzen")]
     public PlacementManager placementManager;
@@ -234,9 +241,11 @@ public class MainMenuController : MonoBehaviour
             descriptionText.text = data.beschreibung;
         }
 
-        if (backgroundImage != null && data.planetImage != null)
+        Sprite selectedBackground = GetPlanetMenuBackground(data);
+        if (backgroundImage != null && selectedBackground != null)
         {
-            backgroundImage.sprite = data.planetImage;
+            backgroundImage.sprite = selectedBackground;
+            backgroundImage.enabled = true;
         }
 
         ShowStartExperienceButton();
@@ -266,6 +275,12 @@ public class MainMenuController : MonoBehaviour
                 : "Platziere das komplette Sonnensystem im Raum.";
         }
 
+        if (backgroundImage != null && solarSystemMenuBackgroundImage != null)
+        {
+            backgroundImage.sprite = solarSystemMenuBackgroundImage;
+            backgroundImage.enabled = true;
+        }
+
         ShowStartExperienceButton();
         SetActionButtonText("Discover Solar System");
     }
@@ -286,6 +301,7 @@ public class MainMenuController : MonoBehaviour
             learnPanel = mainPanel.gameObject;
             menuHeadline = FindTextMeshPro(mainPanel, "Headline", menuHeadline);
             descriptionText = FindTextMeshPro(mainPanel, "Description", descriptionText);
+            backgroundImage = FindMenuBackgroundImage(mainPanel, backgroundImage);
             _startExperienceButton = FindDeepChild(mainPanel, "Button_Primary");
             if (_startExperienceButton == null)
             {
@@ -399,6 +415,7 @@ public class MainMenuController : MonoBehaviour
             if (button == null || data == null) continue;
 
             SetButtonTexts(button.transform, data.planetName, data.subHeadline);
+            SetPlanetButtonImage(button, data);
             button.onClick.AddListener(() => SelectPlanet(data));
         }
     }
@@ -414,6 +431,7 @@ public class MainMenuController : MonoBehaviour
 
         Button button = buttons[0];
         SetButtonTexts(button.transform, "Sonnensystem", "Alle Planeten");
+        SetButtonImage(button, solarSystemButtonImage);
         BindClick(button, SelectSolarSystem);
     }
 
@@ -683,6 +701,105 @@ public class MainMenuController : MonoBehaviour
         if (texts.Length > 1) texts[1].text = subtitle;
     }
 
+    private void SetPlanetButtonImage(Button button, PlanetData data)
+    {
+        if (button == null || data == null || data.menuButtonImage == null) return;
+
+        SetButtonImage(button, data.menuButtonImage);
+    }
+
+    private void SetButtonImage(Button button, Sprite sprite)
+    {
+        if (button == null || sprite == null) return;
+
+        Image image = FindMenuButtonImage(button);
+        if (image == null) return;
+
+        image.sprite = sprite;
+        image.enabled = true;
+        image.preserveAspect = true;
+    }
+
+    private Image FindMenuButtonImage(Button button)
+    {
+        if (button == null) return null;
+
+        Image maskedBackground = FindImageAtPath(button.transform, "Mask/Background");
+        if (maskedBackground != null) return maskedBackground;
+
+        Transform buttonImageRoot = FindChildWithBaseName(button.transform, "ButtonImage");
+        maskedBackground = FindImageAtPath(buttonImageRoot, "Mask/Background");
+        if (maskedBackground != null) return maskedBackground;
+
+        Image namedImage = FindImageWithName(button.transform, "Image");
+        if (namedImage != null) return namedImage;
+
+        namedImage = FindImageWithName(button.transform, "Icon");
+        if (namedImage != null) return namedImage;
+
+        Image targetImage = button.targetGraphic as Image;
+        if (targetImage != null) return targetImage;
+
+        return button.GetComponentInChildren<Image>(true);
+    }
+
+    private Image FindImageAtPath(Transform root, string path)
+    {
+        if (root == null || string.IsNullOrWhiteSpace(path)) return null;
+
+        Transform target = root.Find(path);
+        if (target == null) return null;
+
+        return target.GetComponent<Image>();
+    }
+
+    private Transform FindChildWithBaseName(Transform root, string baseName)
+    {
+        if (root == null || string.IsNullOrWhiteSpace(baseName)) return null;
+
+        Transform[] children = root.GetComponentsInChildren<Transform>(true);
+        for (int i = 0; i < children.Length; i++)
+        {
+            Transform child = children[i];
+            if (child != null && HasBaseName(child.name, baseName))
+            {
+                return child;
+            }
+        }
+
+        return null;
+    }
+
+    private bool HasBaseName(string objectName, string baseName)
+    {
+        if (string.IsNullOrWhiteSpace(objectName) || string.IsNullOrWhiteSpace(baseName)) return false;
+        if (objectName == baseName) return true;
+
+        return objectName.StartsWith(baseName + " (");
+    }
+
+    private Image FindImageWithName(Transform root, string objectName)
+    {
+        if (root == null || string.IsNullOrWhiteSpace(objectName)) return null;
+
+        Image[] images = root.GetComponentsInChildren<Image>(true);
+        for (int i = 0; i < images.Length; i++)
+        {
+            if (images[i] != null && images[i].name == objectName)
+            {
+                return images[i];
+            }
+        }
+
+        return null;
+    }
+
+    private Sprite GetPlanetMenuBackground(PlanetData data)
+    {
+        if (data == null) return null;
+        return data.menuBackgroundImage != null ? data.menuBackgroundImage : data.planetImage;
+    }
+
     private string GetCombinedButtonText(Transform buttonTransform)
     {
         if (buttonTransform == null) return "";
@@ -724,6 +841,17 @@ public class MainMenuController : MonoBehaviour
 
         Image image = root.GetComponent<Image>();
         return image != null ? image : fallback;
+    }
+
+    private Image FindMenuBackgroundImage(Transform mainPanel, Image fallback)
+    {
+        if (fallback != null) return fallback;
+        if (mainPanel == null) return null;
+
+        Image background = FindImage(FindDirectChild(mainPanel, "Background"), null);
+        if (background != null) return background;
+
+        return mainPanel.GetComponent<Image>();
     }
 
     private Transform FindDirectChild(Transform parent, string childName)

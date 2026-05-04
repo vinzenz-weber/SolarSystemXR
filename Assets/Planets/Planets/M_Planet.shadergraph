@@ -2917,7 +2917,7 @@
     "m_ObjectId": "0500f755197d41538279b0b19e20b061",
     "m_Title": "Depth Occlusion",
     "m_Position": {
-        "x": -3978.66650390625,
+        "x": -3978.6669921875,
         "y": -7516.6669921875
     }
 }
@@ -4267,7 +4267,7 @@
     "m_ObjectId": "19b58edd8d2d4a149487fb8bd6e05719",
     "m_Title": "Add Fresnel",
     "m_Position": {
-        "x": 5202.0,
+        "x": 5201.99951171875,
         "y": -3722.666748046875
     }
 }
@@ -5743,7 +5743,7 @@
     "m_ObjectId": "31ba493e2f304f638c4953cdb19e50b5",
     "m_Title": "Add Cloud Depth",
     "m_Position": {
-        "x": 3792.00048828125,
+        "x": 3792.0,
         "y": -3610.666748046875
     }
 }
@@ -7688,7 +7688,7 @@
     "m_ObjectId": "52b1d004f5b94b70ad41f43944d0f78e",
     "m_Title": "Generate Cloud Depth",
     "m_Position": {
-        "x": 615.33349609375,
+        "x": 615.333251953125,
         "y": -5743.33349609375
     }
 }
@@ -9068,7 +9068,7 @@
     "m_ObjectId": "62f95925e3cc45b39eb8d3977ca6cd68",
     "m_Title": "Normal Map Texture",
     "m_Position": {
-        "x": 3594.00048828125,
+        "x": 3594.0,
         "y": -6189.33349609375
     }
 }
@@ -9458,7 +9458,7 @@
     "m_ObjectId": "6ad6332dec6542cd9c76feed44599825",
     "m_Title": "Atmosphäre",
     "m_Position": {
-        "x": 2937.33349609375,
+        "x": 2937.3330078125,
         "y": -6958.00048828125
     }
 }
@@ -10319,7 +10319,7 @@
     "m_ObjectId": "7858492e1d9c4430a12e08f6d9f45733",
     "m_Title": "Add Normal Texture",
     "m_Position": {
-        "x": 4462.0,
+        "x": 4461.99951171875,
         "y": -3616.0
     }
 }
@@ -12055,7 +12055,7 @@
     "m_ObjectId": "9717bcd382a14874bc95fa9f15a56570",
     "m_Title": "Lichtberechnung",
     "m_Position": {
-        "x": 1197.3333740234375,
+        "x": 1197.333251953125,
         "y": -7729.33349609375
     }
 }
@@ -14889,7 +14889,7 @@
     "m_ObjectId": "c512ad17bba94cd0a3d6e307db376518",
     "m_Title": "Main Texture",
     "m_Position": {
-        "x": -1741.333251953125,
+        "x": -1741.3333740234375,
         "y": -6709.33349609375
     }
 }
@@ -15846,7 +15846,7 @@
     "m_ObjectId": "d5826102b4d642b2a3ba3f38b8c70d44",
     "m_Title": "Add Emission",
     "m_Position": {
-        "x": 2525.33349609375,
+        "x": 2525.3330078125,
         "y": -3630.0
     }
 }

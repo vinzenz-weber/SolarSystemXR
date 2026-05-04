@@ -18,6 +18,8 @@ MonoBehaviour:
     Welt ohne echte Atmosph\xE4re, die der Sonne so nah ist, dass ein Jahr hier nur
     88 Tage dauert."
   planetImage: {fileID: 0}
+  menuButtonImage: {fileID: 21300000, guid: 2760da09e58de7d4cbbc9b0ea68d1291, type: 3}
+  menuBackgroundImage: {fileID: 21300000, guid: ddbd4693d6d350548858e4988b5045ea, type: 3}
   diameter: 4879
   axialTilt: 0.03
   rotationSpeed: 58.65
@@ -39,7 +41,11 @@ MonoBehaviour:
   windStaerke: 0
   windTurbulenz: 0
   windPartikelFarbe: {r: 1, g: 1, b: 1, a: 1}
-  beschreibung: "Merkur ist der kleinste Planet und kreist am naechsten um die Sonne. Seine Oberflaeche ist voller Einschlagskrater und erinnert an den Mond, weil Merkur fast keine Atmosphaere besitzt, die Meteoroiden abbremst oder Waerme speichert. Deshalb wechseln die Temperaturen extrem zwischen heissen Tagen und sehr kalten Naechten. Ein Merkurjahr dauert nur etwa 88 Erdentage."
+  beschreibung: Merkur ist der kleinste Planet und kreist am naechsten um die Sonne.
+    Seine Oberflaeche ist voller Einschlagskrater und erinnert an den Mond, weil
+    Merkur fast keine Atmosphaere besitzt, die Meteoroiden abbremst oder Waerme speichert.
+    Deshalb wechseln die Temperaturen extrem zwischen heissen Tagen und sehr kalten
+    Naechten. Ein Merkurjahr dauert nur etwa 88 Erdentage.
   planetSizeInfoText: 
   orbitalDistanceInfoText: 
   orbitalSpeedInfoText: 

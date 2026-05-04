@@ -18,6 +18,8 @@ MonoBehaviour:
     scheinbar auf der Seite liegt. Seine blassblaue Farbe stammt von Methangas in
     seiner Atmosph\xE4re."
   planetImage: {fileID: 0}
+  menuButtonImage: {fileID: 21300000, guid: 2e4537ea7b2e185458df855e1badf4e1, type: 3}
+  menuBackgroundImage: {fileID: 21300000, guid: 0b239fe1a3190f64bb853f29d0e489aa, type: 3}
   diameter: 50724
   axialTilt: 97.77
   rotationSpeed: -0.718
@@ -39,7 +41,12 @@ MonoBehaviour:
   windStaerke: 12
   windTurbulenz: 0.4
   windPartikelFarbe: {r: 0.5, g: 0.9, b: 0.9, a: 1}
-  beschreibung: "Uranus ist ein Eisriese mit einer blass blaugruenen Farbe, die durch Methan in seiner Atmosphaere entsteht. Seine Rotationsachse ist fast seitlich gekippt, sodass der Planet scheinbar wie eine rollende Kugel um die Sonne wandert. Dadurch entstehen extrem lange Jahreszeiten, bei denen ein Pol viele Jahre Sonnenlicht und der andere Dunkelheit erlebt. Uranus besitzt schmale, dunkle Ringe und zahlreiche Monde."
+  beschreibung: Uranus ist ein Eisriese mit einer blass blaugruenen Farbe, die durch
+    Methan in seiner Atmosphaere entsteht. Seine Rotationsachse ist fast seitlich
+    gekippt, sodass der Planet scheinbar wie eine rollende Kugel um die Sonne wandert.
+    Dadurch entstehen extrem lange Jahreszeiten, bei denen ein Pol viele Jahre Sonnenlicht
+    und der andere Dunkelheit erlebt. Uranus besitzt schmale, dunkle Ringe und zahlreiche
+    Monde.
   planetSizeInfoText: 
   orbitalDistanceInfoText: 
   orbitalSpeedInfoText: 
