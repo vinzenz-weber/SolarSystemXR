@@ -6,7 +6,12 @@ using Meta.XR.MRUtilityKit;
 
 public class PlacementManager : MonoBehaviour
 {
+    [Header("Placement-Ray")]
+    [Tooltip("Fallback-Ray-Ursprung. Wenn hier ein HandAnchor eingetragen ist, wird automatisch ein genauerer Controller-/Hand-Ray-Child gesucht.")]
     public Transform rayOrigin;
+    [Tooltip("Automatisch einen genaueren Ray-Ursprung wie RightControllerAnchor unter rayOrigin verwenden. Wichtig fuer Controller-as-Hand/Natural-Hand-Modus.")]
+    [SerializeField] private bool _autoUseChildRayOrigin = true;
+
     public EnvironmentRaycastManager raycastManager;
     public LineRenderer lineRenderer;
 
@@ -72,6 +77,23 @@ public class PlacementManager : MonoBehaviour
     [Tooltip("Zusaetzlich RawButtons pruefen. Hilft, wenn OVRInput.Button je nach Rig/Hand nicht sauber feuert.")]
     public bool acceptRawIndexTriggers = true;
 
+    [Tooltip("Zusaetzlich Index-Pinch der Hand als Platzier-Geste akzeptieren.")]
+    [SerializeField] private bool _acceptIndexPinchPlacement = true;
+
+    [Tooltip("Optional: rechte OVRHand. Leer = wird zur Laufzeit automatisch gesucht.")]
+    [SerializeField] private OVRHand _rightHand;
+
+    [Tooltip("Optional: linke OVRHand. Leer = wird zur Laufzeit automatisch gesucht.")]
+    [SerializeField] private OVRHand _leftHand;
+
+    [Tooltip("Ab welcher Pinch-Staerke ein Pinch als Klick startet.")]
+    [Range(0f, 1f)]
+    [SerializeField] private float _pinchDownThreshold = 0.75f;
+
+    [Tooltip("Unter welcher Pinch-Staerke der Pinch wieder als losgelassen gilt.")]
+    [Range(0f, 1f)]
+    [SerializeField] private float _pinchUpThreshold = 0.35f;
+
     [Tooltip("Wie stark die Flaeche nach oben zeigen muss. 1 = exakt horizontal, 0.75 erlaubt leicht schraege Flaechen.")]
     [Range(0f, 1f)]
     public float horizontalSurfaceThreshold = 0.75f;
@@ -96,6 +118,9 @@ public class PlacementManager : MonoBehaviour
     [Tooltip("Durchmesser fuer Einzelplaneten, wenn relative Planetengroessen ausgeschaltet sind.")]
     [SerializeField] private float fixedPlanetDiameterMeters = 0.5f;
     private const float earthDiameterInKm = 12742f;
+    private Transform _resolvedRayOrigin;
+    private bool _wasRightIndexPinching;
+    private bool _wasLeftIndexPinching;
 
     private void Start()
     {
@@ -250,7 +275,14 @@ public class PlacementManager : MonoBehaviour
             return;
         }
 
-        Ray ray = new Ray(rayOrigin.position, rayOrigin.forward);
+        Transform currentRayOrigin = GetRayOrigin();
+        if (currentRayOrigin == null)
+        {
+            lineRenderer.enabled = false;
+            return;
+        }
+
+        Ray ray = new Ray(currentRayOrigin.position, currentRayOrigin.forward);
         bool didHit = TryGetPlacementPoint(ray, out Vector3 hitPoint, out Vector3 hitNormal);
 
         if (didHit == true)
@@ -272,7 +304,7 @@ public class PlacementManager : MonoBehaviour
             visualizerInstance.SetActive(true);
             lineRenderer.enabled = true;
 
-            lineRenderer.SetPosition(0, rayOrigin.position);
+            lineRenderer.SetPosition(0, currentRayOrigin.position);
             lineRenderer.SetPosition(1, hitPoint);
 
             // Beim Sonnensystem heben wir die Vorschau nicht an - es steht direkt auf dem Boden.
@@ -362,10 +394,126 @@ public class PlacementManager : MonoBehaviour
             return true;
         }
 
-        if (acceptRawIndexTriggers == false) return false;
+        if (acceptRawIndexTriggers == true
+            && (OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger)
+                || OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger)))
+        {
+            return true;
+        }
 
-        return OVRInput.GetDown(OVRInput.RawButton.RIndexTrigger)
-            || OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger);
+        return HasIndexPinchDown();
+    }
+
+    private Transform GetRayOrigin()
+    {
+        if (_autoUseChildRayOrigin == false) return rayOrigin;
+
+        if (_resolvedRayOrigin != null && _resolvedRayOrigin.gameObject.activeInHierarchy)
+        {
+            return _resolvedRayOrigin;
+        }
+
+        _resolvedRayOrigin = FindBetterRayOrigin(rayOrigin);
+        return _resolvedRayOrigin != null ? _resolvedRayOrigin : rayOrigin;
+    }
+
+    private Transform FindBetterRayOrigin(Transform root)
+    {
+        if (root == null) return null;
+
+        // Der allgemeine HandAnchor liegt oft an der Handwurzel. Fuer Raycasts ist
+        // der konkrete Controller-/Pointer-Anchor genauer, auch im Natural-Hand-Modus.
+        string[] candidateNames =
+        {
+            "RightControllerAnchor",
+            "LeftControllerAnchor",
+            "RightControllerInHandAnchor",
+            "LeftControllerInHandAnchor",
+            "RightHandOnControllerAnchor",
+            "LeftHandOnControllerAnchor"
+        };
+
+        for (int i = 0; i < candidateNames.Length; i++)
+        {
+            Transform candidate = FindDeepChild(root, candidateNames[i]);
+            if (candidate != null && candidate.gameObject.activeInHierarchy)
+            {
+                return candidate;
+            }
+        }
+
+        return null;
+    }
+
+    private Transform FindDeepChild(Transform root, string childName)
+    {
+        if (root == null) return null;
+
+        foreach (Transform child in root)
+        {
+            if (child.name == childName)
+            {
+                return child;
+            }
+
+            Transform foundChild = FindDeepChild(child, childName);
+            if (foundChild != null)
+            {
+                return foundChild;
+            }
+        }
+
+        return null;
+    }
+
+    private bool HasIndexPinchDown()
+    {
+        if (_acceptIndexPinchPlacement == false) return false;
+
+        CacheHandsIfNeeded();
+
+        bool hasRightPinchDown = HasHandIndexPinchDown(_rightHand, ref _wasRightIndexPinching);
+        bool hasLeftPinchDown = HasHandIndexPinchDown(_leftHand, ref _wasLeftIndexPinching);
+        return hasRightPinchDown || hasLeftPinchDown;
+    }
+
+    private void CacheHandsIfNeeded()
+    {
+        if (_rightHand != null && _leftHand != null) return;
+
+        OVRHand[] hands = FindObjectsByType<OVRHand>(FindObjectsInactive.Include, FindObjectsSortMode.None);
+        for (int i = 0; i < hands.Length; i++)
+        {
+            OVRHand hand = hands[i];
+            if (hand == null) continue;
+
+            if (hand.GetHand() == OVRPlugin.Hand.HandRight && _rightHand == null)
+            {
+                _rightHand = hand;
+            }
+            else if (hand.GetHand() == OVRPlugin.Hand.HandLeft && _leftHand == null)
+            {
+                _leftHand = hand;
+            }
+        }
+    }
+
+    private bool HasHandIndexPinchDown(OVRHand hand, ref bool wasPinching)
+    {
+        if (hand == null || hand.IsTracked == false)
+        {
+            wasPinching = false;
+            return false;
+        }
+
+        float pinchStrength = hand.GetFingerPinchStrength(OVRHand.HandFinger.Index);
+        bool isPinching = wasPinching
+            ? pinchStrength > _pinchUpThreshold
+            : pinchStrength >= _pinchDownThreshold;
+
+        bool hasPinchDown = isPinching && wasPinching == false;
+        wasPinching = isPinching;
+        return hasPinchDown;
     }
 
     private bool TryGetPlacementPoint(Ray ray, out Vector3 point, out Vector3 normal)
@@ -407,7 +555,7 @@ public class PlacementManager : MonoBehaviour
             return Quaternion.identity;
         }
 
-        Transform viewerTransform = Camera.main != null ? Camera.main.transform : rayOrigin;
+        Transform viewerTransform = Camera.main != null ? Camera.main.transform : GetRayOrigin();
         if (viewerTransform == null)
         {
             return Quaternion.identity;
@@ -684,7 +832,7 @@ public class PlacementManager : MonoBehaviour
     {
         if (_userCamera != null) return _userCamera;
         if (Camera.main != null) return Camera.main.transform;
-        return rayOrigin;
+        return GetRayOrigin();
     }
 
     private void SetSunVisible(bool isVisible)
