@@ -46,11 +46,11 @@ MonoBehaviour:
     Merkur fast keine Atmosphaere besitzt, die Meteoroiden abbremst oder Waerme speichert.
     Deshalb wechseln die Temperaturen extrem zwischen heissen Tagen und sehr kalten
     Naechten. Ein Merkurjahr dauert nur etwa 88 Erdentage.
-  planetSizeInfoText: 
-  orbitalDistanceInfoText: 
-  orbitalSpeedInfoText: 
-  axialTiltInfoText: 
-  eccentricityInfoText: 
-  planetScaleInfoText: 
-  gravityInfoText: 
+  planetSizeInfoText: Merkur ist der kleinste Planet. Sein Durchmesser entspricht nur etwa 38 Prozent der Erde.
+  orbitalDistanceInfoText: Mit 0.39 AU liegt Merkur der Sonne am naechsten. Er bekommt dadurch sehr viel Sonnenenergie ab.
+  orbitalSpeedInfoText: Merkur bewegt sich auf seiner engen Bahn besonders schnell. Ein Umlauf dauert nur rund 88 Erdentage.
+  axialTiltInfoText: Die Achse ist fast gar nicht geneigt. Darum gibt es auf Merkur kaum klassische Jahreszeiten.
+  eccentricityInfoText: Seine Bahn ist deutlich ovaler als die der meisten Planeten. Der Abstand zur Sonne schwankt stark.
+  planetScaleInfoText: Im Groessenvergleich ist Merkur kleiner als alle anderen Planeten und nur etwas groesser als der Mond.
+  gravityInfoText: Die Schwerkraft liegt bei etwa 38 Prozent der Erde. Ein 10 kg schweres Objekt fuehlt sich dort wie etwa 3.8 kg an.
   fakten: []

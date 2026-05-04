@@ -1395,6 +1395,8 @@ MonoBehaviour:
   alternatePlaceButton: 268435456
   acceptRawIndexTriggers: 1
   horizontalSurfaceThreshold: 0.75
+  _useEnvironmentRaycastPlacement: 0
+  _environmentRaycastManagerObject: {fileID: 0}
   useEditorFallbackPlacement: 1
   editorPlacementDistance: 1.5
   earthDiameterInVR: 0.2
@@ -31520,6 +31522,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 9061711013628909530, guid: 993a7abbb30564a439b9818cdc8d9fb4, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -31531,7 +31537,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 1576644114}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2d8affdff7ba47d892cc734baac9ac71, type: 3}
   m_Name: 

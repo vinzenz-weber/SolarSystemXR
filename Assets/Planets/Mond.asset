@@ -40,11 +40,11 @@ MonoBehaviour:
   windTurbulenz: 0
   windPartikelFarbe: {r: 1, g: 1, b: 1, a: 1}
   beschreibung: "Der Mond ist der einzige natuerliche Satellit der Erde und umkreist sie in durchschnittlich etwa 384000 Kilometern Entfernung. Weil seine Rotation an seinen Umlauf gekoppelt ist, sehen wir von der Erde aus fast immer dieselbe Mondseite. Seine Oberflaeche ist von Kratern, dunklen Lavaebenen und hellem Hochland gepraegt, da es kaum Atmosphaere, Wind oder fluessiges Wasser gibt, die Spuren schnell verwittern wuerden. Fuer XR eignet sich der Mond besonders gut, um Phasen, Gravitation und Einschlagsgeschichte sichtbar zu machen."
-  planetSizeInfoText: 
-  orbitalDistanceInfoText: 
-  orbitalSpeedInfoText: 
-  axialTiltInfoText: 
-  eccentricityInfoText: 
-  planetScaleInfoText: 
-  gravityInfoText: 
+  planetSizeInfoText: Der Mond ist deutlich kleiner als die Erde. Sein Durchmesser entspricht etwa 27 Prozent des Erddurchmessers.
+  orbitalDistanceInfoText: Der Mond umkreist die Erde, nicht direkt die Sonne. Seine mittlere Entfernung zur Erde betraegt etwa 384.000 km.
+  orbitalSpeedInfoText: Fuer einen Umlauf um die Erde braucht der Mond rund 27.3 Tage. Seine Rotation ist daran gebunden.
+  axialTiltInfoText: Die Mondachse ist nur moderat geneigt. Dadurch sind die Jahreszeiten auf dem Mond sehr schwach.
+  eccentricityInfoText: Die Mondbahn ist leicht elliptisch. Deshalb schwankt seine Entfernung zur Erde sichtbar.
+  planetScaleInfoText: Im Groessenvergleich ist der Mond etwa ein Viertel so breit wie die Erde und kleiner als Merkur.
+  gravityInfoText: Die Schwerkraft betraegt nur etwa ein Sechstel der Erde. Schritte und Spruenge waeren deutlich weiter.
   fakten: []

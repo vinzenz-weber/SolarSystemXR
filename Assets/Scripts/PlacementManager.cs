@@ -76,11 +76,17 @@ public class PlacementManager : MonoBehaviour
     [Range(0f, 1f)]
     public float horizontalSurfaceThreshold = 0.75f;
 
-    [Header("Editor-Fallback ohne Depth API")]
-    [Tooltip("Im Unity Editor wird die Depth API komplett umgangen. Das Objekt erscheint stattdessen in fixer Distanz am Controller-Ray.")]
+    [Header("Environment Raycast / Test-Placement")]
+    [Tooltip("Aktiv = EnvironmentRaycastManager nutzen. Inaktiv = Test-Placement in fixer Distanz am Controller-Ray, auch im Build.")]
+    [SerializeField] private bool _useEnvironmentRaycastPlacement = false;
+
+    [Tooltip("Optionales GameObject mit dem EnvironmentRaycastManager. Leer = GameObject der raycastManager-Komponente.")]
+    [SerializeField] private GameObject _environmentRaycastManagerObject;
+
+    [HideInInspector]
     public bool useEditorFallbackPlacement = true;
 
-    [Tooltip("Distanz vor dem Ray-Origin, in der die Vorschau im Editor platziert wird.")]
+    [Tooltip("Distanz vor dem Ray-Origin, in der die Vorschau bei Test-Placement platziert wird.")]
     public float editorPlacementDistance = 1.5f;
 
     [Header("Scaling")]
@@ -94,7 +100,12 @@ public class PlacementManager : MonoBehaviour
     private void Start()
     {
         PrepareSunObject();
-        DisableDepthApiInEditorFallback();
+        ApplyEnvironmentRaycastManagerState();
+    }
+
+    private void OnValidate()
+    {
+        ApplyEnvironmentRaycastManagerState();
     }
 
     // ----------- AUSWAHL: einzelner Planet -----------
@@ -242,7 +253,7 @@ public class PlacementManager : MonoBehaviour
 
         if (didHit == true)
         {
-            bool canPlace = IsEditorFallbackActive() || IsHorizontal(hitNormal);
+            bool canPlace = IsSimpleRayPlacementActive() || IsHorizontal(hitNormal);
 
             if (canPlace == true)
             {
@@ -357,9 +368,9 @@ public class PlacementManager : MonoBehaviour
 
     private bool TryGetPlacementPoint(Ray ray, out Vector3 point, out Vector3 normal)
     {
-        if (IsEditorFallbackActive() == true)
+        if (IsSimpleRayPlacementActive() == true)
         {
-            // Wichtig fuer den Editor: keine Depth-API-Abfrage.
+            // Test-Placement: keine Depth-API-Abfrage, sondern fixer Punkt am Ray.
             point = ray.origin + ray.direction * editorPlacementDistance;
             normal = Vector3.up;
             return true;
@@ -382,9 +393,9 @@ public class PlacementManager : MonoBehaviour
         return true;
     }
 
-    private bool IsEditorFallbackActive()
+    private bool IsSimpleRayPlacementActive()
     {
-        return Application.isEditor == true && useEditorFallbackPlacement == true;
+        return _useEnvironmentRaycastPlacement == false;
     }
 
     private Quaternion GetSolarSystemPlacementRotation(Vector3 placementPosition)
@@ -418,15 +429,25 @@ public class PlacementManager : MonoBehaviour
         return Quaternion.AngleAxis(solarSystemTiltTowardsUserDegrees, tiltAxis.normalized);
     }
 
-    private void DisableDepthApiInEditorFallback()
+    private void ApplyEnvironmentRaycastManagerState()
     {
-        if (IsEditorFallbackActive() == false) return;
-        if (raycastManager == null) return;
+        if (raycastManager == null && _environmentRaycastManagerObject == null) return;
 
-        // Der Editor-Fallback soll die Depth API nicht nur nicht abfragen,
-        // sondern den Runtime-Manager im Playmode auch deaktivieren.
-        raycastManager.enabled = false;
-        Debug.Log("PlacementManager: Editor-Fallback aktiv - Depth API RaycastManager deaktiviert.");
+        GameObject targetObject = _environmentRaycastManagerObject != null
+            ? _environmentRaycastManagerObject
+            : raycastManager.gameObject;
+
+        bool shouldUseRaycastManager = _useEnvironmentRaycastPlacement == true;
+
+        if (targetObject != null && targetObject != gameObject)
+        {
+            targetObject.SetActive(shouldUseRaycastManager);
+        }
+
+        if (raycastManager != null)
+        {
+            raycastManager.enabled = shouldUseRaycastManager;
+        }
     }
 
     float GetScaledSize(float realSizeInKm)

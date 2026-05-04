@@ -47,11 +47,11 @@ MonoBehaviour:
     Mons und das Canyon-System Valles Marineris. Spuren frueherer Fluesse und Seen
     machen ihn wichtig fuer die Frage, ob es frueher einmal lebensfreundliche Bedingungen
     gab.
-  planetSizeInfoText: 
-  orbitalDistanceInfoText: 
-  orbitalSpeedInfoText: 
-  axialTiltInfoText: 
-  eccentricityInfoText: 
-  planetScaleInfoText: 
-  gravityInfoText: 
+  planetSizeInfoText: Mars ist deutlich kleiner als die Erde. Sein Durchmesser liegt bei etwas mehr als der Haelfte des Erddurchmessers.
+  orbitalDistanceInfoText: Mars kreist bei etwa 1.52 AU um die Sonne und liegt damit ausserhalb der Erdbahn.
+  orbitalSpeedInfoText: Ein Marsjahr dauert rund 687 Erdentage. Wegen der groesseren Entfernung bewegt er sich langsamer um die Sonne als die Erde.
+  axialTiltInfoText: Die Achsenneigung ist der Erde aehnlich. Deshalb gibt es auch auf Mars Jahreszeiten.
+  eccentricityInfoText: Die Marsbahn ist merklich elliptisch. Dadurch unterscheiden sich sonnennah und sonnenfern staerker als bei der Erde.
+  planetScaleInfoText: Im Groessenvergleich ist Mars etwa halb so breit wie die Erde, aber viel kleiner im Volumen.
+  gravityInfoText: Die Schwerkraft liegt bei etwa 38 Prozent der Erde. Bewegungen wuerden sich leichter und sprunghafter anfuehlen.
   fakten: []

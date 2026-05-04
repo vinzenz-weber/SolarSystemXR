@@ -112,17 +112,17 @@ Material:
     - _BumpScale: 1
     - _ClearCoatMask: 0
     - _ClearCoatSmoothness: 0
-    - _Cloud_01_Speed: 0.001
-    - _Cloud_02_Speed: -0.001
+    - _Cloud_01_Speed: 0.01
+    - _Cloud_02_Speed: -0.01
     - _Cloud_03_Speed: 0.1
     - _Cull: 2
     - _Cutoff: 0.5
-    - _DarkSide: 0.1
+    - _DarkSide: 0.01
     - _DetailAlbedoMapScale: 1
     - _DetailNormalMapScale: 1
     - _DstBlend: 0
     - _DstBlendAlpha: 0
-    - _EmissionIntensity: 1.63
+    - _EmissionIntensity: 2.62
     - _EnvironmentDepthBias: 0
     - _EnvironmentReflections: 1
     - _Fresnel_Strength: 5.56

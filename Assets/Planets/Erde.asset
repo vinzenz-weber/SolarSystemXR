@@ -46,11 +46,11 @@ MonoBehaviour:
     und ein stabiles Klima machen sie im Sonnensystem besonders. Ihre Achsenneigung
     verursacht Jahreszeiten, und ihr Mond stabilisiert die Ausrichtung der Erde.
     Aus dem Weltraum erkennt man die Erde an Ozeanen, Wolken und Kontinenten.
-  planetSizeInfoText: 
-  orbitalDistanceInfoText: 
-  orbitalSpeedInfoText: 
-  axialTiltInfoText: 
-  eccentricityInfoText: 
-  planetScaleInfoText: 
-  gravityInfoText: 
+  planetSizeInfoText: Die Erde dient hier als Vergleichsmassstab. Ihr Durchmesser betraegt rund 12.742 km.
+  orbitalDistanceInfoText: Die Erde kreist in etwa 1 AU Entfernung um die Sonne. Diese Einheit basiert auf dem mittleren Abstand Erde-Sonne.
+  orbitalSpeedInfoText: Die Erde umrundet die Sonne in rund 365 Tagen. Dabei legt sie pro Sekunde knapp 30 km auf ihrer Bahn zurueck.
+  axialTiltInfoText: Die Achsenneigung von etwa 23.4 Grad verursacht die Jahreszeiten auf der Erde.
+  eccentricityInfoText: Die Erdbahn ist nur leicht elliptisch. Der Abstand zur Sonne schwankt, aber nicht dramatisch.
+  planetScaleInfoText: Alle relativen Groessen im Panel werden an der Erde gemessen. Erde entspricht also 100 Prozent.
+  gravityInfoText: Die Erdschwerkraft ist der Referenzwert von 1 g. Sie bestimmt, wie Gewicht fuer uns im Alltag wirkt.
   fakten: []

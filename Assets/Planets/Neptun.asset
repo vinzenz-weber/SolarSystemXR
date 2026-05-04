@@ -47,11 +47,11 @@ MonoBehaviour:
     zu seiner blauen Farbe bei, waehrend Wasser, Ammoniak und andere Eis-Materialien
     im Inneren eine wichtige Rolle spielen. Neptun wurde nicht zuerst direkt entdeckt,
     sondern durch Berechnungen aus Stoerungen der Uranusbahn vorhergesagt.
-  planetSizeInfoText: 
-  orbitalDistanceInfoText: 
-  orbitalSpeedInfoText: 
-  axialTiltInfoText: 
-  eccentricityInfoText: 
-  planetScaleInfoText: 
-  gravityInfoText: 
+  planetSizeInfoText: Neptun ist fast viermal so breit wie die Erde und nur etwas kleiner als Uranus.
+  orbitalDistanceInfoText: Neptun kreist bei etwa 30 AU um die Sonne. Er ist der aeusserste der acht Planeten.
+  orbitalSpeedInfoText: Ein Neptunjahr dauert etwa 165 Erdjahre. Seine Umlaufbewegung ist dadurch besonders langsam.
+  axialTiltInfoText: Die Achsenneigung ist etwas groesser als die der Erde. Auch Neptun hat dadurch Jahreszeiten, aber extrem lange.
+  eccentricityInfoText: Neptuns Bahn ist fast kreisfoermig. Der Abstand zur Sonne bleibt im Vergleich zu anderen Planeten recht konstant.
+  planetScaleInfoText: Neptun ist ein Eisriese: viel groesser als die Erde, aber klar kleiner als die Gasriesen Jupiter und Saturn.
+  gravityInfoText: Die Schwerkraft ist etwas staerker als auf der Erde. Ein Objekt waere dort etwas schwerer als zu Hause.
   fakten: []

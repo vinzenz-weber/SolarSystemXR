@@ -47,11 +47,11 @@ MonoBehaviour:
     Dadurch entstehen extrem lange Jahreszeiten, bei denen ein Pol viele Jahre Sonnenlicht
     und der andere Dunkelheit erlebt. Uranus besitzt schmale, dunkle Ringe und zahlreiche
     Monde.
-  planetSizeInfoText: 
-  orbitalDistanceInfoText: 
-  orbitalSpeedInfoText: 
-  axialTiltInfoText: 
-  eccentricityInfoText: 
-  planetScaleInfoText: 
-  gravityInfoText: 
+  planetSizeInfoText: Uranus ist etwa viermal so breit wie die Erde. Er gehoert zu den Eisriesen.
+  orbitalDistanceInfoText: Uranus kreist bei etwa 19.19 AU um die Sonne. Sonnenlicht braucht bis dorthin mehr als zweieinhalb Stunden.
+  orbitalSpeedInfoText: Ein Umlauf dauert rund 84 Erdjahre. Die Bewegung um die Sonne ist deshalb sehr langsam.
+  axialTiltInfoText: Uranus ist fast seitlich gekippt. Dadurch zeigen seine Pole ueber lange Zeit zur Sonne oder von ihr weg.
+  eccentricityInfoText: Seine Bahn ist nur leicht elliptisch. Der extreme Eindruck entsteht vor allem durch die gekippte Achse.
+  planetScaleInfoText: Im Vergleich zur Erde ist Uranus ein grosser Planet, aber deutlich kleiner als Jupiter und Saturn.
+  gravityInfoText: Die Schwerkraft liegt etwas unter der Erdschwerkraft. An der Wolkenobergrenze waere man etwas leichter als auf der Erde.
   fakten: []

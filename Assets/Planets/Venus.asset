@@ -47,11 +47,11 @@ MonoBehaviour:
     macht als auf Merkur. Venus rotiert sehr langsam und in entgegengesetzter Richtung
     zu den meisten Planeten. Dadurch zeigt sie besonders gut, wie stark eine Atmosphaere
     das Klima eines Planeten veraendern kann.
-  planetSizeInfoText: 
-  orbitalDistanceInfoText: 
-  orbitalSpeedInfoText: 
-  axialTiltInfoText: 
-  eccentricityInfoText: 
-  planetScaleInfoText: 
-  gravityInfoText: 
+  planetSizeInfoText: Venus ist fast so gross wie die Erde. Ihr Durchmesser erreicht etwa 95 Prozent des Erddurchmessers.
+  orbitalDistanceInfoText: Venus kreist bei etwa 0.72 AU um die Sonne und liegt damit zwischen Merkur und Erde.
+  orbitalSpeedInfoText: Venus braucht rund 225 Erdentage fuer einen Umlauf. Sie bewegt sich schneller als die Erde, aber langsamer als Merkur.
+  axialTiltInfoText: Die Achse ist fast auf den Kopf gestellt. Das passt zu ihrer langsamen, ruecklaeufigen Rotation.
+  eccentricityInfoText: Die Venusbahn ist fast kreisfoermig. Ihr Abstand zur Sonne aendert sich nur wenig.
+  planetScaleInfoText: Im Modell wirkt Venus fast wie eine zweite Erde, obwohl ihre Oberflaechenbedingungen extrem anders sind.
+  gravityInfoText: Die Schwerkraft betraegt etwa 90 Prozent der Erde. Man waere dort nur etwas leichter als zu Hause.
   fakten: []
