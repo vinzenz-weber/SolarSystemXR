@@ -18,6 +18,10 @@ public class SolarSystemManager : MonoBehaviour
     public float distanceScale = 0.5f; 
     public float planetSizeScale = 0.002f;
 
+    [Header("Labels")]
+    [Tooltip("Ziehe hier das Label-GameObject aus dem SonnensystemPrefab hinein.")]
+    public GameObject planetLabelTemplate;
+
     [Header("Sonne")]
     [Range(0.01f, 1f)]
     public float sunSizeRatio = 0.5f;
@@ -115,6 +119,28 @@ public class SolarSystemManager : MonoBehaviour
             instance.planetTransform.localPosition = data.semiMajorAxis > 0
                 ? CalculateKeplerPosition(data, currentSimulationDays)
                 : Vector3.zero;
+
+            if (planetLabelTemplate != null)
+            {
+                GameObject labelObj = Instantiate(planetLabelTemplate, instance.planetTransform);
+                labelObj.name = "Label_" + data.planetName;
+                labelObj.transform.localPosition = Vector3.zero;
+                
+                var tmpText = labelObj.GetComponentInChildren<TMPro.TMP_Text>(true);
+                if (tmpText != null)
+                {
+                    tmpText.text = data.planetName;
+                }
+                else
+                {
+                    var uiText = labelObj.GetComponentInChildren<UnityEngine.UI.Text>(true);
+                    if (uiText != null)
+                    {
+                        uiText.text = data.planetName;
+                    }
+                }
+                labelObj.SetActive(true);
+            }
 
             UpdatePlanetSize(instance);
 
