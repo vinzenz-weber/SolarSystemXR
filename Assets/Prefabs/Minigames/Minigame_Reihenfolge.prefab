@@ -17388,29 +17388,29 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1297945793379062462, guid: cc6a941b2be52344daf1c4177c8f91c8, type: 3}
       propertyPath: m_text
-      value: 'Arrange the planets by size.
-
-
+      value: 'Arrange the planets in the correct order from the Sun.
 
 '
       objectReference: {fileID: 0}
     - target: {fileID: 2464412458726601424, guid: cc6a941b2be52344daf1c4177c8f91c8, type: 3}
       propertyPath: m_text
-      value: 'Grab each planet and place it into the correct slot. When a planet
-        is placed correctly, it will scale to its relative size. If it is in the
-        wrong slot, you can try again.
+      value: 'Think carefully about which planet comes first, second, and so on.
+        Place all planets from the closest to the Sun to the farthest away. If the
+        order is correct, you win the game.
 
+        
 
+        
 
+        
 
-
-
-
-
-
-
+        
 
 '
+      objectReference: {fileID: 0}
+    - target: {fileID: 2995617293629396402, guid: cc6a941b2be52344daf1c4177c8f91c8, type: 3}
+      propertyPath: m_SizeDelta.y
+      value: 355.8
       objectReference: {fileID: 0}
     - target: {fileID: 2995617293629396402, guid: cc6a941b2be52344daf1c4177c8f91c8, type: 3}
       propertyPath: m_LocalScale.x
@@ -17466,31 +17466,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4356112935033587830, guid: cc6a941b2be52344daf1c4177c8f91c8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.999
+      value: -0.595
       objectReference: {fileID: 0}
     - target: {fileID: 4356112935033587830, guid: cc6a941b2be52344daf1c4177c8f91c8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.138
+      value: -0.394
       objectReference: {fileID: 0}
     - target: {fileID: 4356112935033587830, guid: cc6a941b2be52344daf1c4177c8f91c8, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.659
+      value: 0.497
       objectReference: {fileID: 0}
     - target: {fileID: 4356112935033587830, guid: cc6a941b2be52344daf1c4177c8f91c8, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 1
+      value: 0.9165799
       objectReference: {fileID: 0}
     - target: {fileID: 4356112935033587830, guid: cc6a941b2be52344daf1c4177c8f91c8, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4356112935033587830, guid: cc6a941b2be52344daf1c4177c8f91c8, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0
+      value: -0.3998517
       objectReference: {fileID: 0}
     - target: {fileID: 4356112935033587830, guid: cc6a941b2be52344daf1c4177c8f91c8, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 4356112935033587830, guid: cc6a941b2be52344daf1c4177c8f91c8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -17498,7 +17498,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4356112935033587830, guid: cc6a941b2be52344daf1c4177c8f91c8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
+      value: -47.138
       objectReference: {fileID: 0}
     - target: {fileID: 4356112935033587830, guid: cc6a941b2be52344daf1c4177c8f91c8, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
@@ -17515,6 +17515,22 @@ PrefabInstance:
     - target: {fileID: 6023021215023451634, guid: cc6a941b2be52344daf1c4177c8f91c8, type: 3}
       propertyPath: m_AnchoredPosition.y
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6531131354042271054, guid: cc6a941b2be52344daf1c4177c8f91c8, type: 3}
+      propertyPath: _size.y
+      value: 355.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 6685443433811823077, guid: cc6a941b2be52344daf1c4177c8f91c8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6685443433811823077, guid: cc6a941b2be52344daf1c4177c8f91c8, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6685443433811823077, guid: cc6a941b2be52344daf1c4177c8f91c8, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -89
       objectReference: {fileID: 0}
     - target: {fileID: 6748616171582903963, guid: cc6a941b2be52344daf1c4177c8f91c8, type: 3}
       propertyPath: m_AnchorMax.y

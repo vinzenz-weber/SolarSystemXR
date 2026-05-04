@@ -56,13 +56,15 @@ public class MinigameManager : MonoBehaviour
         Debug.Log("MinigameManager: Starte Minispiel " + type + ".");
         SetReihenfolgeControllerHandMode(false);
         EndActiveInstanceOnly();
+        HidePlanetDetailPanel();
 
         _currentType = type;
         _hasActiveMinigame = true;
 
-        if (placementManager != null)
+        PlacementManager manager = GetPlacementManager();
+        if (manager != null)
         {
-            placementManager.ClearPlacedObjects();
+            manager.ClearPlacedObjects();
         }
 
         GameObject prefab = GetPrefab(type);
@@ -78,6 +80,7 @@ public class MinigameManager : MonoBehaviour
         PositionMinigameInFrontOfUser(_activeMinigame);
         SetReihenfolgeControllerHandMode(NeedsControllerHandMode(type));
         SetGameState(type);
+        HidePlanetDetailPanel();
     }
 
     public void EndMinigame()
@@ -232,6 +235,40 @@ public class MinigameManager : MonoBehaviour
         if (mode == null) return;
 
         mode.SetControllerHandMode(isEnabled);
+    }
+
+    private void HidePlanetDetailPanel()
+    {
+        PlanetInfoPanelManager manager = GetPlanetInfoPanelManager();
+        if (manager == null) return;
+
+        // Wichtig nach SetGameState: Beim Verlassen des Hauptmenues stellt der
+        // GameManager vorher sichtbare World-Panels wieder her.
+        manager.HidePanel();
+    }
+
+    private PlanetInfoPanelManager GetPlanetInfoPanelManager()
+    {
+        PlacementManager manager = GetPlacementManager();
+        if (manager != null && manager.planetInfoPanelManager != null)
+        {
+            return manager.planetInfoPanelManager;
+        }
+
+        if (PlanetInfoPanelManager.Instance != null)
+        {
+            return PlanetInfoPanelManager.Instance;
+        }
+
+        return FindFirstObjectByType<PlanetInfoPanelManager>();
+    }
+
+    private PlacementManager GetPlacementManager()
+    {
+        if (placementManager != null) return placementManager;
+
+        placementManager = FindFirstObjectByType<PlacementManager>();
+        return placementManager;
     }
 
     private ReihenfolgeControllerHandMode GetReihenfolgeControllerHandMode()

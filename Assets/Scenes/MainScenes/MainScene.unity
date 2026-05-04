@@ -1387,7 +1387,7 @@ MonoBehaviour:
   planetInfoPanelManager: {fileID: 1743660679}
   sonnensystemUIPrefab: {fileID: 1984352971}
   solarSystemTiltTowardsUserDegrees: 20
-  _sunObject: {fileID: 0}
+  _sunPlacementObject: {fileID: 1622090292}
   _userCamera: {fileID: 0}
   _hideSunUntilFirstPlanetPlacement: 1
   planetHeight: 0.15
@@ -32428,7 +32428,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1622090293}
   m_Layer: 0
-  m_Name: Sun
+  m_Name: Sun_Anchor
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -36169,7 +36169,7 @@ Transform:
   m_GameObject: {fileID: 1846835246}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -102.52, y: 124.6, z: -41.15}
+  m_LocalPosition: {x: -113.4, y: 124.6, z: -27}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

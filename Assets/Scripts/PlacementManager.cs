@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Meta.XR;
 using Meta.XR.MRUtilityKit;
 
@@ -28,8 +29,9 @@ public class PlacementManager : MonoBehaviour
     public float solarSystemTiltTowardsUserDegrees = 20f;
 
     [Header("Sonne fuer Einzelplaneten")]
-    [Tooltip("Scene-Objekt 'sun', das die Lichtposition fuer einzeln platzierte AR-Planeten steuert.")]
-    [SerializeField] private GameObject _sunObject;
+    [Tooltip("Root-GameObject, das beim ersten Einzelplaneten an die User-Position gesetzt und horizontal in User-Blickrichtung gedreht wird. SunPasser kann direkt darauf oder auf einem Child liegen.")]
+    [FormerlySerializedAs("_sunObject")]
+    [SerializeField] private GameObject _sunPlacementObject;
 
     [Tooltip("Wenn leer, wird Camera.main benutzt. Die Sonne wird beim ersten Planeten an dieser Position gespawnt.")]
     [SerializeField] private Transform _userCamera;
@@ -91,7 +93,6 @@ public class PlacementManager : MonoBehaviour
 
     private void Start()
     {
-        AutoBindSunObject();
         PrepareSunObject();
         DisableDepthApiInEditorFallback();
     }
@@ -144,7 +145,6 @@ public class PlacementManager : MonoBehaviour
 
     public void DeactivatePlanetSun()
     {
-        AutoBindSunObject();
         _hasSpawnedSunForPlanets = false;
         SetSunVisible(false);
     }
@@ -616,26 +616,6 @@ public class PlacementManager : MonoBehaviour
         ui.Bind(solarSystemManager);
     }
 
-    private void AutoBindSunObject()
-    {
-        if (_sunObject != null) return;
-
-        Transform[] sceneTransforms = FindObjectsByType<Transform>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-        foreach (Transform sceneTransform in sceneTransforms)
-        {
-            if (sceneTransform == null) continue;
-            if (sceneTransform.gameObject.scene.IsValid() == false) continue;
-            if (sceneTransform.gameObject.scene.isLoaded == false) continue;
-
-            string objectName = sceneTransform.name.ToLowerInvariant();
-            if (objectName == "sun")
-            {
-                _sunObject = sceneTransform.gameObject;
-                return;
-            }
-        }
-    }
-
     private void PrepareSunObject()
     {
         if (_hideSunUntilFirstPlanetPlacement == false) return;
@@ -647,22 +627,21 @@ public class PlacementManager : MonoBehaviour
     {
         if (_hasSpawnedSunForPlanets) return;
 
-        AutoBindSunObject();
-
-        if (_sunObject == null)
+        GameObject sunObjectToPlace = GetSunObjectToPlace();
+        if (sunObjectToPlace == null)
         {
-            Debug.LogWarning("PlacementManager: Kein Sun-Objekt gefunden oder zugewiesen.");
+            Debug.LogWarning("PlacementManager: Kein GameObject fuer das Sun-Placement gefunden.");
             return;
         }
 
-        Transform cameraTransform = GetUserCameraTransform();
-        if (cameraTransform == null)
+        Transform userTransform = GetUserCameraTransform();
+        if (userTransform == null)
         {
             Debug.LogWarning("PlacementManager: Keine Kamera fuer das Sun-Placement gefunden.");
             return;
         }
 
-        Vector3 horizontalForward = cameraTransform.forward;
+        Vector3 horizontalForward = userTransform.forward;
         horizontalForward.y = 0f;
 
         if (horizontalForward.sqrMagnitude < 0.0001f)
@@ -671,7 +650,8 @@ public class PlacementManager : MonoBehaviour
         }
 
         Quaternion horizontalRotation = Quaternion.LookRotation(horizontalForward.normalized, Vector3.up);
-        _sunObject.transform.SetPositionAndRotation(cameraTransform.position, horizontalRotation);
+        sunObjectToPlace.transform.SetPositionAndRotation(userTransform.position, horizontalRotation);
+
         SetSunVisible(true);
         _hasSpawnedSunForPlanets = true;
     }
@@ -685,9 +665,15 @@ public class PlacementManager : MonoBehaviour
 
     private void SetSunVisible(bool isVisible)
     {
-        if (_sunObject == null) return;
+        GameObject sunObjectToPlace = GetSunObjectToPlace();
+        if (sunObjectToPlace == null) return;
 
-        _sunObject.SetActive(isVisible);
+        sunObjectToPlace.SetActive(isVisible);
+    }
+
+    private GameObject GetSunObjectToPlace()
+    {
+        return _sunPlacementObject;
     }
 
     private void StorePanelVisibilityForMainMenu()
