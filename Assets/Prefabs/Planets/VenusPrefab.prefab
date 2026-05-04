@@ -514,6 +514,345 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 2782368785876817546}
   - {fileID: 2324392969126998917}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &8900330291724127715
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2782368785876817546}
+  m_Layer: 6
+  m_Name: Facts
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2782368785876817546
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8900330291724127715}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 554014078158763835}
+  - {fileID: 5534542311199782851}
+  - {fileID: 7947185961225687202}
+  m_Father: {fileID: 5577950946073641162}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1045247655961025137
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2782368785876817546}
+    m_Modifications:
+    - target: {fileID: 661029062077967180, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504385017285222639, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_Name
+      value: Fact_1 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388168214908526695, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: factIndex
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388168214908526695, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: planetDataOverride
+      value: 
+      objectReference: {fileID: 11400000, guid: 2398d89013c7542eaac08080ba772688, type: 2}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.13377053
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.28807676
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7406161
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.59211916
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -53.129
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 244.00299
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -77.212
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_text
+      value: The pressure on Venus' surface is about 93 times higher than sea-level
+        pressure on Earth.
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_margin.z
+      value: 0.90418684
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.41158822
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.8572445
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.046894453
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.30582348
+      objectReference: {fileID: 0}
+    - target: {fileID: 8769760831987870009, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.418
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+--- !u!4 &7947185961225687202 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+  m_PrefabInstance: {fileID: 1045247655961025137}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3172153008291544336
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2782368785876817546}
+    m_Modifications:
+    - target: {fileID: 661029062077967180, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504385017285222639, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_Name
+      value: Fact_1 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388168214908526695, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: factIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388168214908526695, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: planetDataOverride
+      value: 
+      objectReference: {fileID: 11400000, guid: 2398d89013c7542eaac08080ba772688, type: 2}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7652987
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.24877866
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.56457454
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.1835285
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -36.016
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 72.834
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_text
+      value: Venus' surface is hot enough to melt lead.
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_margin.z
+      value: 0.90418684
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.35815573
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.22521228
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.90404373
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.06090001
+      objectReference: {fileID: 0}
+    - target: {fileID: 8769760831987870009, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.418
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+--- !u!4 &5534542311199782851 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+  m_PrefabInstance: {fileID: 3172153008291544336}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7456593656401509864
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 2782368785876817546}
+    m_Modifications:
+    - target: {fileID: 661029062077967180, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504385017285222639, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_Name
+      value: Fact_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388168214908526695, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: planetDataOverride
+      value: 
+      objectReference: {fileID: 11400000, guid: 2398d89013c7542eaac08080ba772688, type: 2}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_text
+      value: Beneath Venus' thick clouds lies a hot rocky surface with volcanoes
+        and deformed mountains.
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_margin.z
+      value: 0.90418684
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.025963878
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.0036685783
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.98982435
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.1398577
+      objectReference: {fileID: 0}
+    - target: {fileID: 8769760831987870009, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.418
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+--- !u!4 &554014078158763835 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+  m_PrefabInstance: {fileID: 7456593656401509864}
+  m_PrefabAsset: {fileID: 0}

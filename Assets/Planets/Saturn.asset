@@ -54,4 +54,7 @@ MonoBehaviour:
   eccentricityInfoText: Die Bahn ist leicht oval. Fuer die Ringe und Monde bleibt Saturn trotzdem in einer stabilen Umlaufzone.
   planetScaleInfoText: Saturn ist riesig, aber weniger dicht als Jupiter. Die Ringe vergroessern seine sichtbare Ausdehnung im Modell stark.
   gravityInfoText: Die Schwerkraft ist ungefaehr erdaehnlich, obwohl Saturn viel groesser ist. Seine geringe Dichte macht den Unterschied.
-  fakten: []
+  fakten:
+  - Saturn has no solid surface and is made mostly of hydrogen and helium.
+  - Saturn's rings are made of countless pieces of ice and rock.
+  - Saturn's north pole has a striking hexagon-shaped wind and storm pattern.

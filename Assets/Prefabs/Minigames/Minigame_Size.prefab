@@ -14836,6 +14836,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Visual_Mars
       objectReference: {fileID: 0}
+    - target: {fileID: 3097923123415062006, guid: 5aebfbcd39f4e2e48a7fa08e006b597e, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 3196180597322366919, guid: 5aebfbcd39f4e2e48a7fa08e006b597e, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5078202955604105104, guid: 5aebfbcd39f4e2e48a7fa08e006b597e, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 8607319778283493059, guid: 5aebfbcd39f4e2e48a7fa08e006b597e, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.028540555
@@ -15154,6 +15166,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 8378592199652828834}
     m_Modifications:
+    - target: {fileID: 1964991109539428646, guid: 9d7be9091f4e9d14ab6578a85b340612, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 2932084541131115298, guid: 9d7be9091f4e9d14ab6578a85b340612, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.02854056
@@ -15209,6 +15225,14 @@ PrefabInstance:
     - target: {fileID: 3102887006551176408, guid: 9d7be9091f4e9d14ab6578a85b340612, type: 3}
       propertyPath: m_Name
       value: Visual_Jupiter
+      objectReference: {fileID: 0}
+    - target: {fileID: 4718355004199919115, guid: 9d7be9091f4e9d14ab6578a85b340612, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6611299597047957404, guid: 9d7be9091f4e9d14ab6578a85b340612, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -15976,6 +16000,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3209899208762128800}
     m_Modifications:
+    - target: {fileID: 553104211135443261, guid: 02b152abccecbaa46b65776b238425ed, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 1005810195324213454, guid: 02b152abccecbaa46b65776b238425ed, type: 3}
       propertyPath: m_Layer
       value: 6
@@ -15991,6 +16019,10 @@ PrefabInstance:
     - target: {fileID: 2307853513924869096, guid: 02b152abccecbaa46b65776b238425ed, type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 2677867404070655580, guid: 02b152abccecbaa46b65776b238425ed, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 3879198480808655897, guid: 02b152abccecbaa46b65776b238425ed, type: 3}
       propertyPath: m_Layer
@@ -16055,6 +16087,10 @@ PrefabInstance:
     - target: {fileID: 6686543377770100158, guid: 02b152abccecbaa46b65776b238425ed, type: 3}
       propertyPath: m_Layer
       value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7950918231645214372, guid: 02b152abccecbaa46b65776b238425ed, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -16160,6 +16196,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3049465911318513705}
     m_Modifications:
+    - target: {fileID: 85185636281434859, guid: 70ef21b87131b5c4ba6ce6f38ac78058, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 699677654639752592, guid: 70ef21b87131b5c4ba6ce6f38ac78058, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4412399163588637544, guid: 70ef21b87131b5c4ba6ce6f38ac78058, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 6947578851426231844, guid: 70ef21b87131b5c4ba6ce6f38ac78058, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.02854056
@@ -16295,6 +16343,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1551486311395178976, guid: 0e017df732271d0449a01e290c6151af, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4660341783604736294, guid: 0e017df732271d0449a01e290c6151af, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 9148439649251876484, guid: 0e017df732271d0449a01e290c6151af, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16318,6 +16378,15 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 2899003868848884700}
     m_Modifications:
+    - target: {fileID: 443585627009074705, guid: 23fb04a1d6167154abdfcffb97e93352, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1140670787423065043, guid: 23fb04a1d6167154abdfcffb97e93352, type: 3}
+      propertyPath: m_text
+      value: Mercury's surface is covered with impact craters and looks similar to
+        Earth's Moon.
+      objectReference: {fileID: 0}
     - target: {fileID: 3148707265128153166, guid: 23fb04a1d6167154abdfcffb97e93352, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.02854056
@@ -16374,6 +16443,18 @@ PrefabInstance:
       propertyPath: m_Name
       value: Visual_Merkur
       objectReference: {fileID: 0}
+    - target: {fileID: 5336214984740560208, guid: 23fb04a1d6167154abdfcffb97e93352, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7264475544649637996, guid: 23fb04a1d6167154abdfcffb97e93352, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7422456858320935475, guid: 23fb04a1d6167154abdfcffb97e93352, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -16397,6 +16478,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4484410738848981909}
     m_Modifications:
+    - target: {fileID: 454057908596897709, guid: 834b4ca4c418fb148b28957a9ee6e89c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 609304459373266122, guid: 834b4ca4c418fb148b28957a9ee6e89c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2532548769425520141, guid: 834b4ca4c418fb148b28957a9ee6e89c, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5324902377633925947, guid: 834b4ca4c418fb148b28957a9ee6e89c, type: 3}
       propertyPath: m_Name
       value: Visual_Erde
@@ -16638,6 +16731,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3316085785461192853}
     m_Modifications:
+    - target: {fileID: 920719222885535297, guid: 023bb906b646dde4782b2af183b8fe49, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 1395622529061249226, guid: 023bb906b646dde4782b2af183b8fe49, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4075714341361894330, guid: 023bb906b646dde4782b2af183b8fe49, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5253574409643304413, guid: 023bb906b646dde4782b2af183b8fe49, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.02854056

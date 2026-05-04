@@ -54,4 +54,7 @@ MonoBehaviour:
   eccentricityInfoText: Die Marsbahn ist merklich elliptisch. Dadurch unterscheiden sich sonnennah und sonnenfern staerker als bei der Erde.
   planetScaleInfoText: Im Groessenvergleich ist Mars etwa halb so breit wie die Erde, aber viel kleiner im Volumen.
   gravityInfoText: Die Schwerkraft liegt bei etwa 38 Prozent der Erde. Bewegungen wuerden sich leichter und sprunghafter anfuehlen.
-  fakten: []
+  fakten:
+  - Mars looks red because iron in its rocks and dust has oxidized, similar to rust.
+  - Valles Marineris is a huge canyon system and one of the largest canyons in the solar system.
+  - Mars has polar ice caps, dust storms, ancient volcanoes, and many impact craters.

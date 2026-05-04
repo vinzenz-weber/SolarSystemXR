@@ -215,6 +215,40 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1.2908942
   m_Center: {x: 0.0000002972589, y: 0, z: 0.015057472}
+--- !u!1 &5459655442226488232
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6429423156820309219}
+  m_Layer: 6
+  m_Name: Facts
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6429423156820309219
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5459655442226488232}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6940847200805098511}
+  - {fileID: 6115021289233732343}
+  - {fileID: 7550765525686641524}
+  m_Father: {fileID: 6947578851426231844}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5764602325958479346
 GameObject:
   m_ObjectHideFlags: 0
@@ -514,10 +548,357 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children:
+  - {fileID: 6429423156820309219}
   - {fileID: 1170724689370123267}
   - {fileID: 6736827188794295714}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &43262979303104220
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6429423156820309219}
+    m_Modifications:
+    - target: {fileID: 661029062077967180, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504385017285222639, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_Name
+      value: Fact_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388168214908526695, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: planetDataOverride
+      value: 
+      objectReference: {fileID: 11400000, guid: 36b6496f0a7c441b782cae9d45df6106, type: 2}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9786588
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.20549196
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -23.717
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_text
+      value: Saturn has no solid surface and is made mostly of hydrogen and helium.
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_fontSize
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_margin.z
+      value: 1.3952974
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.43994063
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.18038812
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.87945217
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.021824794
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+--- !u!4 &6940847200805098511 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+  m_PrefabInstance: {fileID: 43262979303104220}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &577254116411615655
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6429423156820309219}
+    m_Modifications:
+    - target: {fileID: 661029062077967180, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504385017285222639, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_Name
+      value: Fact_1 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388168214908526695, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: factIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388168214908526695, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: planetDataOverride
+      value: 
+      objectReference: {fileID: 11400000, guid: 36b6496f0a7c441b782cae9d45df6106, type: 2}
+    - target: {fileID: 6726203422412531080, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6726203422412531080, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.042
+      objectReference: {fileID: 0}
+    - target: {fileID: 6726203422412531080, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.762
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.18953733
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.16576615
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.96757954
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.019674048
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 5.792
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 201.23
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -18.357
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_text
+      value: Saturn's rings are made of countless pieces of ice and rock.
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_fontSize
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_margin.z
+      value: 1.3952974
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.3337986
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.1887074
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.88606966
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.26047763
+      objectReference: {fileID: 0}
+    - target: {fileID: 8769760831987870009, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8769760831987870009, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.212
+      objectReference: {fileID: 0}
+    - target: {fileID: 8769760831987870009, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.072
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+--- !u!4 &7550765525686641524 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+  m_PrefabInstance: {fileID: 577254116411615655}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3753626889360742436
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 6429423156820309219}
+    m_Modifications:
+    - target: {fileID: 661029062077967180, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504385017285222639, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_Name
+      value: Fact_1 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388168214908526695, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: factIndex
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388168214908526695, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: planetDataOverride
+      value: 
+      objectReference: {fileID: 11400000, guid: 36b6496f0a7c441b782cae9d45df6106, type: 2}
+    - target: {fileID: 6726203422412531080, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.417
+      objectReference: {fileID: 0}
+    - target: {fileID: 6726203422412531080, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.369
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.9439549
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.33007458
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 38.547
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_text
+      value: Saturn's north pole has a striking hexagon-shaped wind and storm pattern.
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_fontSize
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_margin.z
+      value: 1.3952974
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.61258584
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.2236197
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7189669
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.24045675
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+--- !u!4 &6115021289233732343 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+  m_PrefabInstance: {fileID: 3753626889360742436}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &6554072127299543625
 PrefabInstance:
   m_ObjectHideFlags: 0

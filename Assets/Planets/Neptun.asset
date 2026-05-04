@@ -54,4 +54,7 @@ MonoBehaviour:
   eccentricityInfoText: Neptuns Bahn ist fast kreisfoermig. Der Abstand zur Sonne bleibt im Vergleich zu anderen Planeten recht konstant.
   planetScaleInfoText: Neptun ist ein Eisriese: viel groesser als die Erde, aber klar kleiner als die Gasriesen Jupiter und Saturn.
   gravityInfoText: Die Schwerkraft ist etwas staerker als auf der Erde. Ein Objekt waere dort etwas schwerer als zu Hause.
-  fakten: []
+  fakten:
+  - Neptune has no solid surface; its atmosphere extends into deeper layers of icy fluids.
+  - Neptune's blue color comes from methane in its atmosphere.
+  - Neptune has extremely fast winds and large dark storm systems.

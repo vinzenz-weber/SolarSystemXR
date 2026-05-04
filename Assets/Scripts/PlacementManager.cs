@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Meta.XR;
@@ -544,6 +545,7 @@ public class PlacementManager : MonoBehaviour
         {
             if (visualRenderer == null) continue;
             if (visualRenderer.GetComponentInParent<PlanetFactAnchor>(true) != null) continue;
+            if (ShouldIgnoreRendererForPlanetSize(visualRenderer)) continue;
 
             if (hasBounds == false)
             {
@@ -561,6 +563,21 @@ public class PlacementManager : MonoBehaviour
         if (hasBounds == false) return 0f;
 
         return Mathf.Max(visualBounds.size.x, visualBounds.size.y, visualBounds.size.z);
+    }
+
+    private bool ShouldIgnoreRendererForPlanetSize(Renderer visualRenderer)
+    {
+        if (visualRenderer is LineRenderer)
+        {
+            return true;
+        }
+
+        if (visualRenderer.GetComponentInParent<TMP_Text>(true) != null)
+        {
+            return true;
+        }
+
+        return false;
     }
 
 

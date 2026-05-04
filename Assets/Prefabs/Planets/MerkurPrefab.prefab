@@ -90,6 +90,40 @@ MeshRenderer:
   m_SortingOrder: 0
   m_MaskInteraction: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!1 &2306205057327174593
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7101724233116145395}
+  m_Layer: 6
+  m_Name: Facts
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7101724233116145395
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2306205057327174593}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1073769793812020140}
+  - {fileID: 952384719311241715}
+  - {fileID: 2587632027369471183}
+  m_Father: {fileID: 3148707265128153166}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3683713850469700940
 GameObject:
   m_ObjectHideFlags: 0
@@ -120,6 +154,7 @@ Transform:
   m_ConstrainProportionsScale: 1
   m_Children:
   - {fileID: 7226247516329922723}
+  - {fileID: 7101724233116145395}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &5146408941156762857
@@ -517,3 +552,348 @@ SphereCollider:
   serializedVersion: 3
   m_Radius: 1.2908942
   m_Center: {x: 0.0000002972589, y: 0, z: 0.015057472}
+--- !u!1001 &4837562181477086748
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7101724233116145395}
+    m_Modifications:
+    - target: {fileID: 661029062077967180, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504385017285222639, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_Name
+      value: Fact_1 (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388168214908526695, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: factIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388168214908526695, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: planetDataOverride
+      value: 
+      objectReference: {fileID: 11400000, guid: 2677bb3dd6a144669a8a281540c75f6a, type: 2}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.8874732
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.38773772
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.21643145
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.12332152
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -227.867
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 205.47299
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 175.636
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_text
+      value: Mercury has almost no atmosphere, so temperatures change extremely between
+        day and night.
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_fontSize
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_margin.w
+      value: -0.6311763
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_margin.z
+      value: 0.7971902
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_fontStyle
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.7010731
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.43555176
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.5454789
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.14575298
+      objectReference: {fileID: 0}
+    - target: {fileID: 8769760831987870009, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.105
+      objectReference: {fileID: 0}
+    - target: {fileID: 8769760831987870009, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.879
+      objectReference: {fileID: 0}
+    - target: {fileID: 8769760831987870009, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.254
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+--- !u!4 &2587632027369471183 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+  m_PrefabInstance: {fileID: 4837562181477086748}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7925464982488566560
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7101724233116145395}
+    m_Modifications:
+    - target: {fileID: 661029062077967180, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504385017285222639, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_Name
+      value: Fact_1 (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388168214908526695, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: factIndex
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388168214908526695, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: planetDataOverride
+      value: 
+      objectReference: {fileID: 11400000, guid: 2677bb3dd6a144669a8a281540c75f6a, type: 2}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.16022053
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.49069774
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.15226535
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.84282887
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -204.45
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 121.236
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 7.6159973
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_text
+      value: Mercury has almost no atmosphere, so temperatures change extremely between
+        day and night.
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_fontSize
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_margin.w
+      value: -0.6311763
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_margin.z
+      value: 0.7971902
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_fontStyle
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 0.8
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: -0.3397123
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.91236824
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.039453078
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.22499597
+      objectReference: {fileID: 0}
+    - target: {fileID: 8769760831987870009, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.844
+      objectReference: {fileID: 0}
+    - target: {fileID: 8769760831987870009, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -1.345
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+--- !u!4 &952384719311241715 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+  m_PrefabInstance: {fileID: 7925464982488566560}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &7939194416927633791
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7101724233116145395}
+    m_Modifications:
+    - target: {fileID: 661029062077967180, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: 'm_Materials.Array.data[0]'
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2504385017285222639, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_Name
+      value: Fact_1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4388168214908526695, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: planetDataOverride
+      value: 
+      objectReference: {fileID: 11400000, guid: 2677bb3dd6a144669a8a281540c75f6a, type: 2}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_text
+      value: Mercury's surface is covered with impact craters and looks similar to
+        Earth's Moon.
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_margin.z
+      value: 0.8526704
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.529505
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.01598721
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.84776986
+      objectReference: {fileID: 0}
+    - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.025596505
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+--- !u!4 &1073769793812020140 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6974779163933264595, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+  m_PrefabInstance: {fileID: 7939194416927633791}
+  m_PrefabAsset: {fileID: 0}

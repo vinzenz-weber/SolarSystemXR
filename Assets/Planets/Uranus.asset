@@ -54,4 +54,7 @@ MonoBehaviour:
   eccentricityInfoText: Seine Bahn ist nur leicht elliptisch. Der extreme Eindruck entsteht vor allem durch die gekippte Achse.
   planetScaleInfoText: Im Vergleich zur Erde ist Uranus ein grosser Planet, aber deutlich kleiner als Jupiter und Saturn.
   gravityInfoText: Die Schwerkraft liegt etwas unter der Erdschwerkraft. An der Wolkenobergrenze waere man etwas leichter als auf der Erde.
-  fakten: []
+  fakten:
+  - Uranus has no true solid surface; its visible layer is atmosphere above deeper fluids.
+  - Uranus gets its blue-green color from methane, which absorbs red light.
+  - Uranus is tilted almost sideways and seems to roll around the Sun.
