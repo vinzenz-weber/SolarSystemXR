@@ -49,6 +49,11 @@ public class PlanetInfoPanelManager : MonoBehaviour
 
     public void ShowPlanet(PlanetData data)
     {
+        ShowPlanet(data, null);
+    }
+
+    public void ShowPlanet(PlanetData data, PlanetSelectable selectedPlanet)
+    {
         UsePlanetDetailRootIfAvailable();
 
         if (data == null)
@@ -65,6 +70,7 @@ public class PlanetInfoPanelManager : MonoBehaviour
 
         _currentPlanetData = data;
         bool wasPanelVisible = infoPanel.gameObject.activeSelf;
+        PlanetFactsVisibility.SelectPlanet(selectedPlanet);
 
         infoPanel.Bind(data);
         infoPanel.gameObject.SetActive(true);
@@ -81,6 +87,8 @@ public class PlanetInfoPanelManager : MonoBehaviour
         {
             infoPanel.gameObject.SetActive(false);
         }
+
+        PlanetFactsVisibility.ClearSelection();
     }
 
     public void ToggleImmersiveMode(PlanetData data)

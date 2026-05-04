@@ -81,6 +81,7 @@ public class MinigameManager : MonoBehaviour
         SetReihenfolgeControllerHandMode(NeedsControllerHandMode(type));
         SetGameState(type);
         HidePlanetDetailPanel();
+        PlanetFactsVisibility.ClearSelection();
     }
 
     public void EndMinigame()
@@ -88,6 +89,7 @@ public class MinigameManager : MonoBehaviour
         SetReihenfolgeControllerHandMode(false);
         EndActiveInstanceOnly();
         _hasActiveMinigame = false;
+        PlanetFactsVisibility.ClearSelection();
 
         if (GameManager.Instance != null)
         {

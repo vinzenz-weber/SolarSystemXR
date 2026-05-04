@@ -91,6 +91,8 @@ public class InteractablePlanetVisual : MonoBehaviour
         {
             ScaleVisualToTargetSize(visual, TargetVisualSize);
         }
+
+        PlanetFactsVisibility.Refresh();
     }
 
     [ContextMenu("Planet Visual leeren")]
@@ -198,16 +200,12 @@ public class InteractablePlanetVisual : MonoBehaviour
 
     private void ScaleVisualToTargetSize(GameObject visual, float targetSize)
     {
-        Renderer[] renderers = visual.GetComponentsInChildren<Renderer>(true);
-        if (renderers.Length == 0) return;
-
-        Bounds bounds = renderers[0].bounds;
-        for (int i = 1; i < renderers.Length; i++)
+        if (PlanetVisualBoundsUtility.TryGetPlanetVisualBounds(visual.transform, true, out Bounds bounds) == false)
         {
-            bounds.Encapsulate(renderers[i].bounds);
+            return;
         }
 
-        float currentSize = Mathf.Max(bounds.size.x, bounds.size.y, bounds.size.z);
+        float currentSize = PlanetVisualBoundsUtility.GetLargestWorldSize(bounds);
         if (currentSize <= 0.0001f) return;
 
         visual.transform.localScale *= targetSize / currentSize;

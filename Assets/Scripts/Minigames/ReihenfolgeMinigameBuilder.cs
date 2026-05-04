@@ -257,6 +257,7 @@ public class ReihenfolgeMinigameBuilder : MonoBehaviour
         DisableRuntimeSolarSystemScripts(visual);
         DisableCollidersOnVisual(visual);
         DisableNestedRigidbodiesOnVisual(visual);
+        PlanetFactsVisibility.Refresh();
 
         return visual;
     }
@@ -335,20 +336,13 @@ public class ReihenfolgeMinigameBuilder : MonoBehaviour
     {
         if (visual == null) return;
 
-        Renderer[] renderers = visual.GetComponentsInChildren<Renderer>();
-        if (renderers.Length == 0)
+        if (PlanetVisualBoundsUtility.TryGetPlanetVisualBounds(visual.transform, true, out Bounds bounds) == false)
         {
             visual.transform.localScale = Vector3.one * targetSize;
             return;
         }
 
-        Bounds bounds = renderers[0].bounds;
-        for (int i = 1; i < renderers.Length; i++)
-        {
-            bounds.Encapsulate(renderers[i].bounds);
-        }
-
-        float currentSize = Mathf.Max(bounds.size.x, bounds.size.y, bounds.size.z);
+        float currentSize = PlanetVisualBoundsUtility.GetLargestWorldSize(bounds);
         if (currentSize <= 0.0001f)
         {
             visual.transform.localScale = Vector3.one * targetSize;

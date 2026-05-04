@@ -157,6 +157,8 @@ public class SolarSystemManager : MonoBehaviour
 
             instances.Add(instance);
         }
+
+        PlanetFactsVisibility.Refresh();
     }
 
     private void UpdateOrbitLine(PlanetInstance instance, double timeInDays)

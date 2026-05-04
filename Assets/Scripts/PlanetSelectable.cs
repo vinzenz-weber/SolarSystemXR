@@ -21,7 +21,7 @@ public class PlanetSelectable : MonoBehaviour
             return;
         }
 
-        PlanetInfoPanelManager.Instance.ShowPlanet(selectedPlanetData);
+        PlanetInfoPanelManager.Instance.ShowPlanet(selectedPlanetData, this);
     }
 
     public PlanetData GetPlanetData()

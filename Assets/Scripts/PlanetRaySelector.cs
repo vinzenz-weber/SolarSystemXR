@@ -35,7 +35,7 @@ public class PlanetRaySelector : MonoBehaviour
     {
         Ray ray = new Ray(origin.position, origin.forward);
 
-        if (TryGetPlanetDataFromRay(ray, out PlanetData selectedPlanetData) == false)
+        if (TryGetPlanetFromRay(ray, out PlanetData selectedPlanetData, out PlanetSelectable selectedPlanet) == false)
         {
             return;
         }
@@ -46,7 +46,7 @@ public class PlanetRaySelector : MonoBehaviour
             return;
         }
 
-        PlanetInfoPanelManager.Instance.ShowPlanet(selectedPlanetData);
+        PlanetInfoPanelManager.Instance.ShowPlanet(selectedPlanetData, selectedPlanet);
     }
 
     private bool HasSelectInputDown()
@@ -62,9 +62,9 @@ public class PlanetRaySelector : MonoBehaviour
             || OVRInput.GetDown(OVRInput.RawButton.LIndexTrigger);
     }
 
-    private bool TryGetPlanetDataFromRay(Ray ray, out PlanetData selectedPlanetData)
+    private bool TryGetPlanetFromRay(Ray ray, out PlanetData selectedPlanetData, out PlanetSelectable selectedPlanet)
     {
-        if (TryGetPlanetDataFromRaycast(ray, planetLayers, out selectedPlanetData))
+        if (TryGetPlanetFromRaycast(ray, planetLayers, out selectedPlanetData, out selectedPlanet))
         {
             return true;
         }
@@ -73,16 +73,18 @@ public class PlanetRaySelector : MonoBehaviour
         // pruefen wir beim Klick zusaetzlich alle Layer und filtern weiter auf PlanetData.
         if (planetLayers.value != ~0)
         {
-            return TryGetPlanetDataFromRaycast(ray, ~0, out selectedPlanetData);
+            return TryGetPlanetFromRaycast(ray, ~0, out selectedPlanetData, out selectedPlanet);
         }
 
         selectedPlanetData = null;
+        selectedPlanet = null;
         return false;
     }
 
-    private bool TryGetPlanetDataFromRaycast(Ray ray, int layerMask, out PlanetData selectedPlanetData)
+    private bool TryGetPlanetFromRaycast(Ray ray, int layerMask, out PlanetData selectedPlanetData, out PlanetSelectable selectedPlanet)
     {
         selectedPlanetData = null;
+        selectedPlanet = null;
 
         RaycastHit[] hits = Physics.RaycastAll(ray, maxDistance, layerMask, QueryTriggerInteraction.Collide);
         if (hits.Length == 0) return false;
@@ -91,23 +93,26 @@ public class PlanetRaySelector : MonoBehaviour
 
         for (int i = 0; i < hits.Length; i++)
         {
-            PlanetData hitPlanetData = GetPlanetDataFromHit(hits[i].collider);
+            PlanetData hitPlanetData = GetPlanetDataFromHit(hits[i].collider, out PlanetSelectable hitPlanet);
             if (hitPlanetData == null) continue;
 
             selectedPlanetData = hitPlanetData;
+            selectedPlanet = hitPlanet;
             return true;
         }
 
         return false;
     }
 
-    private PlanetData GetPlanetDataFromHit(Collider hitCollider)
+    private PlanetData GetPlanetDataFromHit(Collider hitCollider, out PlanetSelectable selectedPlanet)
     {
+        selectedPlanet = null;
         if (hitCollider == null) return null;
 
         PlanetSelectable selectable = hitCollider.GetComponentInParent<PlanetSelectable>();
         if (selectable != null)
         {
+            selectedPlanet = selectable;
             return selectable.GetPlanetData();
         }
 

@@ -1123,18 +1123,36 @@ public class MainMenuController : MonoBehaviour
             _passthroughDissolver = FindFirstObjectByType<PassthroughDissolver>();
         }
 
+        bool isStartupSequenceActive = GameManager.Instance != null && GameManager.Instance.IsStartupSequenceActive;
+        bool startValue = isStartupSequenceActive ? false : _isPassthroughOnAtStart;
+
         if (_passthroughModeToggle != null)
         {
-            _passthroughModeToggle.SetIsOnWithoutNotify(_isPassthroughOnAtStart);
+            _passthroughModeToggle.SetIsOnWithoutNotify(startValue);
             _passthroughModeToggle.onValueChanged.AddListener(SetPassthroughMode);
         }
 
-        SetPassthroughMode(_isPassthroughOnAtStart);
+        if (isStartupSequenceActive)
+        {
+            if (_passthroughDissolver != null)
+            {
+                _passthroughDissolver.SetPassthroughActiveImmediate(false);
+            }
+
+            return;
+        }
+
+        SetPassthroughMode(startValue);
     }
 
     // Kann direkt im Toggle unter On Value Changed (bool) eingetragen werden.
     public void SetPassthroughMode(bool isActive)
     {
+        if (_passthroughModeToggle != null)
+        {
+            _passthroughModeToggle.SetIsOnWithoutNotify(isActive);
+        }
+
         if (_passthroughDissolver == null)
         {
             _passthroughDissolver = FindFirstObjectByType<PassthroughDissolver>();
@@ -1147,6 +1165,7 @@ public class MainMenuController : MonoBehaviour
         }
 
         _passthroughDissolver.SetPassthroughActive(isActive);
+        PlanetFactsVisibility.Refresh();
     }
 
     private void SetupPlanetSizeModeToggle()

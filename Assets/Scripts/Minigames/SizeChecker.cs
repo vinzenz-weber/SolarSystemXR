@@ -529,16 +529,12 @@ public class SizeChecker : MonoBehaviour
     {
         if (root == null) return 0f;
 
-        Renderer[] renderers = root.GetComponentsInChildren<Renderer>(true);
-        if (renderers.Length == 0) return 0f;
-
-        Bounds bounds = renderers[0].bounds;
-        for (int i = 1; i < renderers.Length; i++)
+        if (PlanetVisualBoundsUtility.TryGetPlanetVisualBounds(root, true, out Bounds bounds) == false)
         {
-            bounds.Encapsulate(renderers[i].bounds);
+            return 0f;
         }
 
-        return Mathf.Max(bounds.size.x, bounds.size.y, bounds.size.z);
+        return PlanetVisualBoundsUtility.GetLargestWorldSize(bounds);
     }
 
     private Transform GetPlanetScaleRoot(ReihenfolgePlanet planet)

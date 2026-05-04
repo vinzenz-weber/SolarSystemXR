@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Serialization;
 using Meta.XR;
@@ -121,6 +120,7 @@ public class PlacementManager : MonoBehaviour
         previewInstance = Instantiate(currentPlanetData.previewPrefab);
         float vrScale = GetTargetPlanetWorldDiameter(currentPlanetData);
         previewInstance.transform.localScale = new Vector3(vrScale, vrScale, vrScale);
+        PlanetFactsVisibility.ClearSelection();
 
         visualizerInstance = Instantiate(placementVisualizerPrefab);
     }
@@ -138,6 +138,7 @@ public class PlacementManager : MonoBehaviour
         // Vorschau ist hier dasselbe Prefab. Falls du eine eigene Vorschau willst,
         // kannst du im MainMenuController ein zusaetzliches previewPrefab durchreichen.
         previewInstance = Instantiate(_currentSolarSystemPrefab);
+        PlanetFactsVisibility.ClearSelection();
 
         visualizerInstance = Instantiate(placementVisualizerPrefab);
     }
@@ -311,12 +312,12 @@ public class PlacementManager : MonoBehaviour
                     SetupPlacedPlanetVisual(spawnedPlanet, currentPlanetData);
                     float rootScale = GetInteractableRootScale(spawnedPlanet, currentPlanetData);
                     spawnedPlanet.transform.localScale = new Vector3(rootScale, rootScale, rootScale);
-                    RegisterSelectablePlanet(spawnedPlanet, currentPlanetData);
+                    PlanetSelectable selectable = RegisterSelectablePlanet(spawnedPlanet, currentPlanetData);
                     RegisterInteractionSelectionBridge(spawnedPlanet);
                     _placedPlanetObjects.Add(spawnedPlanet);
 
                     SpawnSunForFirstPlacedPlanet();
-                    ShowPlanetInfo(currentPlanetData);
+                    ShowPlanetInfo(currentPlanetData, selectable);
                 }
 
                 Destroy(previewInstance);
@@ -544,8 +545,7 @@ public class PlacementManager : MonoBehaviour
         foreach (Renderer visualRenderer in renderers)
         {
             if (visualRenderer == null) continue;
-            if (visualRenderer.GetComponentInParent<PlanetFactAnchor>(true) != null) continue;
-            if (ShouldIgnoreRendererForPlanetSize(visualRenderer)) continue;
+            if (PlanetVisualBoundsUtility.ShouldIgnoreRenderer(visualRenderer)) continue;
 
             if (hasBounds == false)
             {
@@ -565,26 +565,9 @@ public class PlacementManager : MonoBehaviour
         return Mathf.Max(visualBounds.size.x, visualBounds.size.y, visualBounds.size.z);
     }
 
-    private bool ShouldIgnoreRendererForPlanetSize(Renderer visualRenderer)
+    private PlanetSelectable RegisterSelectablePlanet(GameObject planetObject, PlanetData data)
     {
-        if (visualRenderer is LineRenderer)
-        {
-            return true;
-        }
-
-        if (visualRenderer.GetComponentInParent<TMP_Text>(true) != null)
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-
-
-    private void RegisterSelectablePlanet(GameObject planetObject, PlanetData data)
-    {
-        if (planetObject == null || data == null) return;
+        if (planetObject == null || data == null) return null;
 
         PlanetSelectable selectable = planetObject.GetComponent<PlanetSelectable>();
         if (selectable == null)
@@ -593,6 +576,7 @@ public class PlacementManager : MonoBehaviour
         }
 
         selectable.planetData = data;
+        return selectable;
     }
 
     private void RegisterInteractionSelectionBridge(GameObject planetObject)
@@ -608,7 +592,7 @@ public class PlacementManager : MonoBehaviour
         bridge.Refresh();
     }
 
-    private void ShowPlanetInfo(PlanetData data)
+    private void ShowPlanetInfo(PlanetData data, PlanetSelectable selectedPlanet)
     {
         PlanetInfoPanelManager manager = planetInfoPanelManager != null
             ? planetInfoPanelManager
@@ -616,13 +600,15 @@ public class PlacementManager : MonoBehaviour
 
         if (manager != null)
         {
-            manager.ShowPlanet(data);
+            manager.ShowPlanet(data, selectedPlanet);
         }
     }
 
     private void SetupSonnensystemUI(GameObject solarSystemObject)
     {
         if (solarSystemObject == null) return;
+
+        PlanetFactsVisibility.ClearSelection();
 
         if (planetInfoPanelManager != null)
         {

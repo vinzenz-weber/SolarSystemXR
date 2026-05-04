@@ -105,6 +105,7 @@ public class ImmersiveModeController : MonoBehaviour
 
             Debug.Log("ImmersiveModeController: Fade zu VR wird ueber PassthroughDissolver gestartet.");
             passthroughDissolver.SetPassthroughActive(false);
+            PlanetFactsVisibility.Refresh();
         }
         else
         {
@@ -132,6 +133,7 @@ public class ImmersiveModeController : MonoBehaviour
         if (restorePassthroughOnExit && passthroughDissolver != null)
         {
             passthroughDissolver.SetPassthroughActive(_wasPassthroughActive);
+            PlanetFactsVisibility.Refresh();
         }
 
         if (GameManager.Instance != null)
