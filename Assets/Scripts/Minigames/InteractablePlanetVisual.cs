@@ -93,6 +93,7 @@ public class InteractablePlanetVisual : MonoBehaviour
         }
 
         PlanetFactsVisibility.Refresh();
+        PlanetLabelVisibility.RefreshInRoot(visual.transform);
     }
 
     [ContextMenu("Planet Visual leeren")]

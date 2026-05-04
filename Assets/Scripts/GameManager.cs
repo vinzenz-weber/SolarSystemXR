@@ -169,6 +169,7 @@ public class GameManager : MonoBehaviour
         }
 
         PlanetFactsVisibility.Refresh();
+        PlanetLabelVisibility.Refresh();
         Debug.Log("GameState: " + newState);
     }
 
@@ -248,6 +249,7 @@ public class GameManager : MonoBehaviour
 
         dissolver.SetPassthroughActiveImmediate(isActive);
         PlanetFactsVisibility.Refresh();
+        PlanetLabelVisibility.Refresh();
     }
 
     private void SetPassthroughWithMenuSync(bool isActive)
@@ -266,6 +268,7 @@ public class GameManager : MonoBehaviour
         }
 
         PlanetFactsVisibility.Refresh();
+        PlanetLabelVisibility.Refresh();
     }
 
     private PassthroughDissolver GetStartupPassthroughDissolver()

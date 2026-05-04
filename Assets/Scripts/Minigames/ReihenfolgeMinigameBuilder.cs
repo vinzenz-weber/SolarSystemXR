@@ -258,6 +258,7 @@ public class ReihenfolgeMinigameBuilder : MonoBehaviour
         DisableCollidersOnVisual(visual);
         DisableNestedRigidbodiesOnVisual(visual);
         PlanetFactsVisibility.Refresh();
+        PlanetLabelVisibility.RefreshInRoot(visual.transform);
 
         return visual;
     }
