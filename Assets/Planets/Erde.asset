@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d54c3864a2f4741939c85e343999e317, type: 3}
   m_Name: Erde
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
-  planetName: Erde
+  planetName: Earth
   subHeadline: Unsere Heimat, reich an Leben
   shortDescription: "Der einzige bekannte Planet mit fl\xFCssigem Wasser auf der
     Oberfl\xE4che und einer sauerstoffreichen Atmosph\xE4re, die eine unglaubliche
@@ -62,5 +62,6 @@ MonoBehaviour:
     wie Gewicht fuer uns im Alltag wirkt.
   fakten:
   - About 71 percent of Earth's surface is covered by oceans.
-  - Earth's crust is divided into moving plates that create mountains, earthquakes, and volcanoes.
+  - Earth's crust is divided into moving plates that create mountains, earthquakes,
+    and volcanoes.
   - Earth is the only known planet with stable liquid water on its surface.

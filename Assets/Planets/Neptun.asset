@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d54c3864a2f4741939c85e343999e317, type: 3}
   m_Name: Neptun
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
-  planetName: Neptun
+  planetName: Neptune
   subHeadline: "St\xFCrmischer Eisriese am \xE4u\xDFeren Rand"
   shortDescription: "Der \xE4u\xDFerste regul\xE4re Planet ist eine dunkle, eiskalte
     Welt, die von \xDCberschallwinden und massiven St\xFCrmen in ihrer tiefblauen
@@ -47,14 +47,21 @@ MonoBehaviour:
     zu seiner blauen Farbe bei, waehrend Wasser, Ammoniak und andere Eis-Materialien
     im Inneren eine wichtige Rolle spielen. Neptun wurde nicht zuerst direkt entdeckt,
     sondern durch Berechnungen aus Stoerungen der Uranusbahn vorhergesagt.
-  planetSizeInfoText: Neptun ist fast viermal so breit wie die Erde und nur etwas kleiner als Uranus.
-  orbitalDistanceInfoText: Neptun kreist bei etwa 30 AU um die Sonne. Er ist der aeusserste der acht Planeten.
-  orbitalSpeedInfoText: Ein Neptunjahr dauert etwa 165 Erdjahre. Seine Umlaufbewegung ist dadurch besonders langsam.
-  axialTiltInfoText: Die Achsenneigung ist etwas groesser als die der Erde. Auch Neptun hat dadurch Jahreszeiten, aber extrem lange.
-  eccentricityInfoText: Neptuns Bahn ist fast kreisfoermig. Der Abstand zur Sonne bleibt im Vergleich zu anderen Planeten recht konstant.
-  planetScaleInfoText: Neptun ist ein Eisriese: viel groesser als die Erde, aber klar kleiner als die Gasriesen Jupiter und Saturn.
-  gravityInfoText: Die Schwerkraft ist etwas staerker als auf der Erde. Ein Objekt waere dort etwas schwerer als zu Hause.
+  planetSizeInfoText: Neptun ist fast viermal so breit wie die Erde und nur etwas
+    kleiner als Uranus.
+  orbitalDistanceInfoText: Neptun kreist bei etwa 30 AU um die Sonne. Er ist der
+    aeusserste der acht Planeten.
+  orbitalSpeedInfoText: Ein Neptunjahr dauert etwa 165 Erdjahre. Seine Umlaufbewegung
+    ist dadurch besonders langsam.
+  axialTiltInfoText: Die Achsenneigung ist etwas groesser als die der Erde. Auch
+    Neptun hat dadurch Jahreszeiten, aber extrem lange.
+  eccentricityInfoText: Neptuns Bahn ist fast kreisfoermig. Der Abstand zur Sonne
+    bleibt im Vergleich zu anderen Planeten recht konstant.
+  planetScaleInfoText: 
+  gravityInfoText: Die Schwerkraft ist etwas staerker als auf der Erde. Ein Objekt
+    waere dort etwas schwerer als zu Hause.
   fakten:
-  - Neptune has no solid surface; its atmosphere extends into deeper layers of icy fluids.
+  - Neptune has no solid surface; its atmosphere extends into deeper layers of icy
+    fluids.
   - Neptune's blue color comes from methane in its atmosphere.
   - Neptune has extremely fast winds and large dark storm systems.

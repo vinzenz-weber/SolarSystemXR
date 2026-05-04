@@ -29,6 +29,12 @@ public class PlacementManager : MonoBehaviour
     public SonnensystemUI sonnensystemUIPrefab;
     private SonnensystemUI _currentSonnensystemUI;
 
+    [Header("Sonnensystem Preview")]
+    [Tooltip("Ghost-Prefab fuer die Sonnensystem-Vorschau. Wenn leer, wird als Fallback das echte Sonnensystem-Prefab genutzt.")]
+    public GameObject solarSystemPreviewPrefab;
+    [Tooltip("Durchmesser der Sonnensystem-Vorschau in Metern.")]
+    public float solarSystemPreviewDiameterMeters = 0.5f;
+
     [Header("Sonnensystem Ausrichtung")]
     [Tooltip("Neigt das platzierte Sonnensystem in Grad zum Betrachter. 0 = flach auf der Flaeche.")]
     public float solarSystemTiltTowardsUserDegrees = 20f;
@@ -53,6 +59,8 @@ public class PlacementManager : MonoBehaviour
 
     private GameObject previewInstance;
     private GameObject visualizerInstance;
+    private Vector3 _lastPlacementPoint;
+    private Quaternion _lastPlacementRotation = Quaternion.identity;
 
     // Neu: Planeten und Sonnensystem getrennt merken, damit beim Platzieren
     // gezielt nur das jeweils andere System geloescht wird.
@@ -153,6 +161,11 @@ public class PlacementManager : MonoBehaviour
     // ----------- AUSWAHL: Sonnensystem-Prefab -----------
     public void SelectSolarSystem(GameObject solarSystemPrefab)
     {
+        SelectSolarSystem(solarSystemPrefab, null);
+    }
+
+    public void SelectSolarSystem(GameObject solarSystemPrefab, GameObject previewPrefab)
+    {
         ClearPreview();
         DeactivatePlanetSun();
 
@@ -160,9 +173,14 @@ public class PlacementManager : MonoBehaviour
         currentPlanetData = null;
         _currentSolarSystemPrefab = solarSystemPrefab;
 
-        // Vorschau ist hier dasselbe Prefab. Falls du eine eigene Vorschau willst,
-        // kannst du im MainMenuController ein zusaetzliches previewPrefab durchreichen.
-        previewInstance = Instantiate(_currentSolarSystemPrefab);
+        GameObject selectedPreviewPrefab = previewPrefab != null
+            ? previewPrefab
+            : solarSystemPreviewPrefab != null
+                ? solarSystemPreviewPrefab
+                : _currentSolarSystemPrefab;
+
+        previewInstance = Instantiate(selectedPreviewPrefab);
+        previewInstance.transform.localScale = Vector3.one * Mathf.Max(0.001f, solarSystemPreviewDiameterMeters);
         PlanetFactsVisibility.ClearSelection();
 
         visualizerInstance = Instantiate(placementVisualizerPrefab);
@@ -307,12 +325,18 @@ public class PlacementManager : MonoBehaviour
             lineRenderer.SetPosition(0, currentRayOrigin.position);
             lineRenderer.SetPosition(1, hitPoint);
 
-            // Beim Sonnensystem heben wir die Vorschau nicht an - es steht direkt auf dem Boden.
-            float lift = _isSolarSystemMode ? 0f : planetHeight;
+            float lift = _isSolarSystemMode
+                ? Mathf.Max(0.001f, solarSystemPreviewDiameterMeters) * 0.5f
+                : planetHeight;
             Vector3 previewPosition = hitPoint + Vector3.up * lift;
             Quaternion previewRotation = _isSolarSystemMode == true
                 ? GetSolarSystemPlacementRotation(previewPosition)
                 : Quaternion.identity;
+
+            _lastPlacementPoint = hitPoint;
+            _lastPlacementRotation = _isSolarSystemMode == true
+                ? GetSolarSystemPlacementRotation(hitPoint)
+                : previewRotation;
 
             previewInstance.transform.SetPositionAndRotation(previewPosition, previewRotation);
             visualizerInstance.transform.position = hitPoint;
@@ -332,7 +356,7 @@ public class PlacementManager : MonoBehaviour
                     ClearPlacedPlanets();
                     ClearPlacedSolarSystem();
 
-                    _placedSolarSystemObject = Instantiate(_currentSolarSystemPrefab, previewInstance.transform.position, previewInstance.transform.rotation);
+                    _placedSolarSystemObject = Instantiate(_currentSolarSystemPrefab, _lastPlacementPoint, _lastPlacementRotation);
                     SetupSonnensystemUI(_placedSolarSystemObject);
                 }
                 else

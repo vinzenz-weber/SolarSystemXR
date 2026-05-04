@@ -12,11 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d54c3864a2f4741939c85e343999e317, type: 3}
   m_Name: Sonne
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
-  planetName: Sonne
+  planetName: Sun
   subHeadline: Unser Stern im Zentrum
   shortDescription: "Ein gigantischer, leuchtender Ball aus Plasma, der 99,8 % der
     Masse des gesamten Sonnensystems ausmacht und uns Licht sowie W\xE4rme spendet."
   planetImage: {fileID: 0}
+  menuButtonImage: {fileID: 0}
+  menuBackgroundImage: {fileID: 0}
   diameter: 1392700
   axialTilt: 7.25
   rotationSpeed: 27.28
@@ -38,12 +40,23 @@ MonoBehaviour:
   windStaerke: 0
   windTurbulenz: 0
   windPartikelFarbe: {r: 1, g: 1, b: 1, a: 1}
-  beschreibung: "Die Sonne ist kein Planet, sondern der Stern im Zentrum unseres Sonnensystems. Ihre Gravitation haelt Planeten, Monde, Asteroiden und Kometen auf ihren Bahnen. In ihrem Inneren verschmelzen Wasserstoffkerne zu Helium; dabei entsteht die Energie, die als Licht und Waerme zur Erde gelangt. Ohne die Sonne waeren fluessiges Wasser, Wetter und Leben auf der Erde nicht moeglich."
-  planetSizeInfoText: Die Sonne ist kein Planet, sondern ein Stern. Ihr Durchmesser ist etwa 109-mal so gross wie der der Erde.
-  orbitalDistanceInfoText: Die Sonne bildet das Zentrum des Modells. Fuer sie selbst ist die Sonnenentfernung deshalb 0 AU.
-  orbitalSpeedInfoText: Die Sonne umkreist nicht die Sonne. Der Wert im Datensatz steht hier nicht fuer eine Planetenbahn.
-  axialTiltInfoText: Auch die Sonne rotiert um eine Achse. Diese ist leicht gegen die Bahnebene der Erde geneigt.
-  eccentricityInfoText: Als Zentralstern hat die Sonne in diesem Modell keine eigene Umlaufbahn um die Sonne.
-  planetScaleInfoText: Im Groessenvergleich ueberragt die Sonne alle Planeten. Selbst Jupiter ist nur etwa ein Zehntel so breit.
-  gravityInfoText: Die Schwerkraft an der sichtbaren Sonnenoberflaeche ist etwa 28-mal staerker als auf der Erde.
+  beschreibung: Die Sonne ist kein Planet, sondern der Stern im Zentrum unseres Sonnensystems.
+    Ihre Gravitation haelt Planeten, Monde, Asteroiden und Kometen auf ihren Bahnen.
+    In ihrem Inneren verschmelzen Wasserstoffkerne zu Helium; dabei entsteht die
+    Energie, die als Licht und Waerme zur Erde gelangt. Ohne die Sonne waeren fluessiges
+    Wasser, Wetter und Leben auf der Erde nicht moeglich.
+  planetSizeInfoText: Die Sonne ist kein Planet, sondern ein Stern. Ihr Durchmesser
+    ist etwa 109-mal so gross wie der der Erde.
+  orbitalDistanceInfoText: Die Sonne bildet das Zentrum des Modells. Fuer sie selbst
+    ist die Sonnenentfernung deshalb 0 AU.
+  orbitalSpeedInfoText: Die Sonne umkreist nicht die Sonne. Der Wert im Datensatz
+    steht hier nicht fuer eine Planetenbahn.
+  axialTiltInfoText: Auch die Sonne rotiert um eine Achse. Diese ist leicht gegen
+    die Bahnebene der Erde geneigt.
+  eccentricityInfoText: Als Zentralstern hat die Sonne in diesem Modell keine eigene
+    Umlaufbahn um die Sonne.
+  planetScaleInfoText: Im Groessenvergleich ueberragt die Sonne alle Planeten. Selbst
+    Jupiter ist nur etwa ein Zehntel so breit.
+  gravityInfoText: Die Schwerkraft an der sichtbaren Sonnenoberflaeche ist etwa 28-mal
+    staerker als auf der Erde.
   fakten: []

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d54c3864a2f4741939c85e343999e317, type: 3}
   m_Name: Merkur
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
-  planetName: Merkur
+  planetName: Mercury
   subHeadline: "Kleinster und sonnenn\xE4chster Planet"
   shortDescription: "Merkur ist eine von Kratern \xFCbers\xE4te, extrem hei\xDFe
     Welt ohne echte Atmosph\xE4re, die der Sonne so nah ist, dass ein Jahr hier nur
@@ -61,6 +61,8 @@ MonoBehaviour:
   gravityInfoText: Die Schwerkraft liegt bei etwa 38 Prozent der Erde. Ein 10 kg
     schweres Objekt fuehlt sich dort wie etwa 3.8 kg an.
   fakten:
-  - Mercury's surface is covered with impact craters and looks similar to Earth's Moon.
-  - Mercury has almost no atmosphere, so temperatures change extremely between day and night.
+  - Mercury's surface is covered with impact craters and looks similar to Earth's
+    Moon.
+  - Mercury has almost no atmosphere, so temperatures change extremely between day
+    and night.
   - Water ice may survive inside permanently shadowed craters near Mercury's poles.

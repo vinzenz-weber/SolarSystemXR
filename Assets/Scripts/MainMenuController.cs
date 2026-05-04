@@ -35,6 +35,8 @@ public class MainMenuController : MonoBehaviour
 
     [Tooltip("Das Prefab des kompletten Sonnensystems, das platziert werden soll.")]
     public GameObject sonnensystemPrefab;
+    [Tooltip("Optionales Ghost-Prefab fuer die Sonnensystem-Vorschau. Leer = erstes Planet-previewPrefab aus menuPlanetData.")]
+    public GameObject sonnensystemPreviewPrefab;
 
     public TextMeshProUGUI sonnensystemHeadline;
     public TextMeshProUGUI sonnensystemDescription;
@@ -1093,8 +1095,29 @@ public class MainMenuController : MonoBehaviour
             return;
         }
 
-        placementManager.SelectSolarSystem(sonnensystemPrefab);
+        placementManager.SelectSolarSystem(sonnensystemPrefab, GetSolarSystemPreviewPrefab());
         StartPlacementState();
+    }
+
+    private GameObject GetSolarSystemPreviewPrefab()
+    {
+        if (sonnensystemPreviewPrefab != null)
+        {
+            return sonnensystemPreviewPrefab;
+        }
+
+        if (menuPlanetData == null) return null;
+
+        for (int i = 0; i < menuPlanetData.Count; i++)
+        {
+            PlanetData data = menuPlanetData[i];
+            if (data != null && data.previewPrefab != null)
+            {
+                return data.previewPrefab;
+            }
+        }
+
+        return null;
     }
 
     private void StartPlacementState()

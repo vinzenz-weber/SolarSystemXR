@@ -21,6 +21,12 @@ public class SolarSystemManager : MonoBehaviour
     [Header("Labels")]
     [Tooltip("Ziehe hier das Label-GameObject aus dem SonnensystemPrefab hinein.")]
     public GameObject planetLabelTemplate;
+    [Tooltip("Abstand zwischen Planet-Unterseite und Label in Weltmetern.")]
+    public float planetLabelWorldGap = 0.03f;
+    [Tooltip("Einheitlicher Multiplikator fuer alle Labels. 1 = Groesse des Label-Templates.")]
+    public float planetLabelWorldScale = 1f;
+    [Tooltip("Stabiler Radius-Faktor fuer die Label-Position. 0.5 passt zu Planeten-Prefabs mit 1 Einheit Durchmesser.")]
+    public float planetLabelRadiusFactor = 0.5f;
 
     [Header("Sonne")]
     [Range(0.01f, 1f)]
@@ -52,11 +58,13 @@ public class SolarSystemManager : MonoBehaviour
     {
         public PlanetData data;
         public Transform planetTransform;
+        public Transform labelTransform;
         public LineRenderer orbitLine;
         public float currentRotationAngle;
     }
 
     private List<PlanetInstance> instances = new List<PlanetInstance>();
+    private Vector3 labelTemplateWorldScale = Vector3.one;
 
     // Tracking für Live-Updates im Editor
     private float lastDistScale, lastSizeScale, lastEccMult, lastIncMult;
@@ -64,6 +72,7 @@ public class SolarSystemManager : MonoBehaviour
 
     void Start()
     {
+        CacheLabelTemplateScale();
         InitializeSystem();
         SaveCurrentScales();
     }
@@ -102,6 +111,8 @@ public class SolarSystemManager : MonoBehaviour
             {
                 UpdatePlanetSize(instance);
             }
+
+            UpdatePlanetLabel(instance);
         }
     }
 
@@ -122,9 +133,9 @@ public class SolarSystemManager : MonoBehaviour
 
             if (planetLabelTemplate != null)
             {
-                GameObject labelObj = Instantiate(planetLabelTemplate, instance.planetTransform);
+                GameObject labelObj = Instantiate(planetLabelTemplate, transform);
                 labelObj.name = "Label_" + data.planetName;
-                labelObj.transform.localPosition = Vector3.zero;
+                instance.labelTransform = labelObj.transform;
                 
                 var tmpText = labelObj.GetComponentInChildren<TMPro.TMP_Text>(true);
                 if (tmpText != null)
@@ -143,6 +154,7 @@ public class SolarSystemManager : MonoBehaviour
             }
 
             UpdatePlanetSize(instance);
+            UpdatePlanetLabel(instance);
 
             if (data.semiMajorAxis > 0)
             {
@@ -185,6 +197,72 @@ public class SolarSystemManager : MonoBehaviour
         }
 
         PlanetFactsVisibility.Refresh();
+    }
+
+    private void UpdatePlanetLabel(PlanetInstance instance)
+    {
+        if (instance == null || instance.planetTransform == null || instance.labelTransform == null) return;
+
+        float planetRadius = GetStablePlanetWorldRadius(instance.planetTransform);
+        Vector3 labelPosition = instance.planetTransform.position + Vector3.down * (planetRadius + planetLabelWorldGap);
+
+        instance.labelTransform.position = labelPosition;
+        SetWorldScale(instance.labelTransform, labelTemplateWorldScale * Mathf.Max(0.0001f, planetLabelWorldScale));
+    }
+
+    private float GetStablePlanetWorldRadius(Transform planetTransform)
+    {
+        if (planetTransform == null) return 0f;
+
+        // Renderer.bounds jittert bei rotierenden Meshes, weil die Bounds weltachsen-ausgerichtet sind.
+        // Die Transform-Skalierung bleibt stabil und reicht fuer die Label-Hoehe im Sonnensystem-Modus.
+        Vector3 worldScale = planetTransform.lossyScale;
+        float largestScale = Mathf.Max(Mathf.Abs(worldScale.x), Mathf.Abs(worldScale.y), Mathf.Abs(worldScale.z));
+        return largestScale * Mathf.Max(0f, planetLabelRadiusFactor);
+    }
+
+    private void CacheLabelTemplateScale()
+    {
+        if (planetLabelTemplate == null)
+        {
+            labelTemplateWorldScale = Vector3.one;
+            return;
+        }
+
+        labelTemplateWorldScale = planetLabelTemplate.transform.lossyScale;
+        if (labelTemplateWorldScale.sqrMagnitude < 0.0001f)
+        {
+            labelTemplateWorldScale = planetLabelTemplate.transform.localScale;
+        }
+    }
+
+    private void SetWorldScale(Transform targetTransform, Vector3 worldScale)
+    {
+        if (targetTransform == null) return;
+
+        Transform parent = targetTransform.parent;
+        if (parent == null)
+        {
+            targetTransform.localScale = worldScale;
+            return;
+        }
+
+        Vector3 parentScale = parent.lossyScale;
+        targetTransform.localScale = new Vector3(
+            SafeDivide(worldScale.x, parentScale.x),
+            SafeDivide(worldScale.y, parentScale.y),
+            SafeDivide(worldScale.z, parentScale.z)
+        );
+    }
+
+    private float SafeDivide(float value, float divisor)
+    {
+        if (Mathf.Abs(divisor) < 0.0001f)
+        {
+            return value;
+        }
+
+        return value / divisor;
     }
 
     private void UpdateOrbitLine(PlanetInstance instance, double timeInDays)
