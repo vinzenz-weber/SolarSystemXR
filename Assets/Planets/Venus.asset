@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: Venus
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
   planetName: Venus
-  subHeadline: "H\xF6llisch hei\xDFe Zwillingsschwester der Erde"
-  shortDescription: "Obwohl sie \xE4hnlich gro\xDF wie die Erde ist, verbirgt sich
-    unter der dichten, giftigen Wolkendecke der Venus eine extrem hei\xDFe Oberfl\xE4che
-    mit enormem Druck."
+  subHeadline: Hellishly hot sister planet of Earth
+  shortDescription: Although Venus is similar in size to Earth, its dense, toxic
+    cloud cover hides an extremely hot surface under enormous pressure.
   planetImage: {fileID: 0}
   menuButtonImage: {fileID: 21300000, guid: f41652469c5347646b01aebdae110201, type: 3}
   menuBackgroundImage: {fileID: 21300000, guid: 5412509de4579f64ab9faa7cf98ed30b, type: 3}
@@ -41,26 +40,25 @@ MonoBehaviour:
   windStaerke: 5
   windTurbulenz: 0.3
   windPartikelFarbe: {r: 0.85, g: 0.7, b: 0.3, a: 1}
-  beschreibung: Venus ist fast so gross wie die Erde, aber ihre Bedingungen sind
-    extrem lebensfeindlich. Eine dichte Atmosphaere aus Kohlendioxid und Wolken aus
-    Schwefelsaeure erzeugen einen starken Treibhauseffekt, der die Oberflaeche heisser
-    macht als auf Merkur. Venus rotiert sehr langsam und in entgegengesetzter Richtung
-    zu den meisten Planeten. Dadurch zeigt sie besonders gut, wie stark eine Atmosphaere
-    das Klima eines Planeten veraendern kann.
-  planetSizeInfoText: Venus ist fast so gross wie die Erde. Ihr Durchmesser erreicht
-    etwa 95 Prozent des Erddurchmessers.
-  orbitalDistanceInfoText: Venus kreist bei etwa 0.72 AU um die Sonne und liegt damit
-    zwischen Merkur und Erde.
-  orbitalSpeedInfoText: Venus braucht rund 225 Erdentage fuer einen Umlauf. Sie bewegt
-    sich schneller als die Erde, aber langsamer als Merkur.
-  axialTiltInfoText: Die Achse ist fast auf den Kopf gestellt. Das passt zu ihrer
-    langsamen, ruecklaeufigen Rotation.
-  eccentricityInfoText: Die Venusbahn ist fast kreisfoermig. Ihr Abstand zur Sonne
-    aendert sich nur wenig.
-  planetScaleInfoText: Im Modell wirkt Venus fast wie eine zweite Erde, obwohl ihre
-    Oberflaechenbedingungen extrem anders sind.
-  gravityInfoText: Die Schwerkraft betraegt etwa 90 Prozent der Erde. Man waere dort
-    nur etwas leichter als zu Hause.
+  beschreibung: Venus is almost as large as Earth, but its conditions are extremely
+    hostile to life. A dense carbon dioxide atmosphere and clouds of sulfuric acid
+    create a powerful greenhouse effect, making the surface hotter than Mercury's.
+    Venus rotates very slowly and in the opposite direction from most planets. This
+    makes it a strong example of how much an atmosphere can change a planet's climate.
+  planetSizeInfoText: Venus is almost as large as Earth. Its diameter reaches about
+    95 percent of Earth's diameter.
+  orbitalDistanceInfoText: Venus orbits the Sun at about 0.72 AU, placing it between
+    Mercury and Earth.
+  orbitalSpeedInfoText: Venus takes about 225 Earth days to complete one orbit. It
+    moves faster than Earth, but slower than Mercury.
+  axialTiltInfoText: Venus' axis is almost upside down, matching its slow retrograde
+    rotation.
+  eccentricityInfoText: Venus' orbit is almost circular. Its distance from the Sun
+    changes only slightly.
+  planetScaleInfoText: In the model, Venus looks almost like a second Earth, although
+    its surface conditions are extremely different.
+  gravityInfoText: Gravity is about 90 percent of Earth's gravity, so you would be
+    only slightly lighter there than at home.
   fakten:
   - Beneath Venus' thick clouds lies a hot rocky surface with volcanoes and deformed mountains.
   - Venus' surface is hot enough to melt lead.

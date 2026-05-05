@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: Mars
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
   planetName: Mars
-  subHeadline: Der rostige, kalte Rote Planet
-  shortDescription: "Eine eisige W\xFCstenwelt mit riesigen Vulkanen und tiefen Canyons.
-    Seine rote Farbe verdankt er dem Eisenoxid \u2013 also Rost \u2013 auf seiner
-    staubigen Oberfl\xE4che."
+  subHeadline: The rusty, cold Red Planet
+  shortDescription: Mars is an icy desert world with giant volcanoes and deep canyons.
+    Its red color comes from iron oxide, or rust, on its dusty surface.
   planetImage: {fileID: 0}
   menuButtonImage: {fileID: 21300000, guid: 18afd1df2923c9e4fbeb7e14a607e92b, type: 3}
   menuBackgroundImage: {fileID: 21300000, guid: b2b3e17457e2a3a4ca72eb385af621ef, type: 3}
@@ -41,19 +40,24 @@ MonoBehaviour:
   windStaerke: 8
   windTurbulenz: 0.6
   windPartikelFarbe: {r: 0.8, g: 0.35, b: 0.1, a: 1}
-  beschreibung: Mars ist eine kalte, trockene Wuestenwelt mit einer sehr duennen
-    Atmosphaere. Seine rote Farbe entsteht durch oxidierte Eisenminerale im Staub
-    und Gestein. Auf Mars gibt es gewaltige Landschaftsformen wie den Vulkan Olympus
-    Mons und das Canyon-System Valles Marineris. Spuren frueherer Fluesse und Seen
-    machen ihn wichtig fuer die Frage, ob es frueher einmal lebensfreundliche Bedingungen
-    gab.
-  planetSizeInfoText: Mars ist deutlich kleiner als die Erde. Sein Durchmesser liegt bei etwas mehr als der Haelfte des Erddurchmessers.
-  orbitalDistanceInfoText: Mars kreist bei etwa 1.52 AU um die Sonne und liegt damit ausserhalb der Erdbahn.
-  orbitalSpeedInfoText: Ein Marsjahr dauert rund 687 Erdentage. Wegen der groesseren Entfernung bewegt er sich langsamer um die Sonne als die Erde.
-  axialTiltInfoText: Die Achsenneigung ist der Erde aehnlich. Deshalb gibt es auch auf Mars Jahreszeiten.
-  eccentricityInfoText: Die Marsbahn ist merklich elliptisch. Dadurch unterscheiden sich sonnennah und sonnenfern staerker als bei der Erde.
-  planetScaleInfoText: Im Groessenvergleich ist Mars etwa halb so breit wie die Erde, aber viel kleiner im Volumen.
-  gravityInfoText: Die Schwerkraft liegt bei etwa 38 Prozent der Erde. Bewegungen wuerden sich leichter und sprunghafter anfuehlen.
+  beschreibung: Mars is a cold, dry desert world with a very thin atmosphere. Its
+    red color comes from oxidized iron minerals in its dust and rock. Mars has enormous
+    landforms such as the volcano Olympus Mons and the canyon system Valles Marineris.
+    Traces of ancient rivers and lakes make it important for the question of whether
+    habitable conditions once existed there.
+  planetSizeInfoText: Mars is much smaller than Earth. Its diameter is a little more
+    than half of Earth's diameter.
+  orbitalDistanceInfoText: Mars orbits the Sun at about 1.52 AU, outside Earth's
+    orbit.
+  orbitalSpeedInfoText: A Martian year lasts about 687 Earth days. Because of its
+    greater distance, Mars moves around the Sun more slowly than Earth.
+  axialTiltInfoText: Mars' axial tilt is similar to Earth's, so Mars also has seasons.
+  eccentricityInfoText: Mars' orbit is noticeably elliptical, so its closest and
+    farthest points from the Sun differ more than Earth's.
+  planetScaleInfoText: In a size comparison, Mars is about half as wide as Earth,
+    but much smaller in volume.
+  gravityInfoText: Gravity is about 38 percent of Earth's gravity. Movements would
+    feel lighter and more jump-like.
   fakten:
   - Mars looks red because iron in its rocks and dust has oxidized, similar to rust.
   - Valles Marineris is a huge canyon system and one of the largest canyons in the solar system.

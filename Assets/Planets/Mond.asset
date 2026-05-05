@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: Mond
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
   planetName: Moon
-  subHeadline: Der einzige natuerliche Begleiter der Erde
-  shortDescription: Der Mond ist der einzige natuerliche Satellit der Erde. Seine
-    kraterreiche Oberflaeche, seine Phasen und seine gebundene Rotation machen ihn
-    zu einem besonders anschaulichen Lernobjekt.
+  subHeadline: Earth's only natural companion
+  shortDescription: The Moon is Earth's only natural satellite. Its cratered surface,
+    phases, and synchronous rotation make it a particularly clear learning object.
   planetImage: {fileID: 0}
   menuButtonImage: {fileID: 0}
   menuBackgroundImage: {fileID: 0}
@@ -41,25 +40,24 @@ MonoBehaviour:
   windStaerke: 0
   windTurbulenz: 0
   windPartikelFarbe: {r: 1, g: 1, b: 1, a: 1}
-  beschreibung: Der Mond ist der einzige natuerliche Satellit der Erde und umkreist
-    sie in durchschnittlich etwa 384000 Kilometern Entfernung. Weil seine Rotation
-    an seinen Umlauf gekoppelt ist, sehen wir von der Erde aus fast immer dieselbe
-    Mondseite. Seine Oberflaeche ist von Kratern, dunklen Lavaebenen und hellem Hochland
-    gepraegt, da es kaum Atmosphaere, Wind oder fluessiges Wasser gibt, die Spuren
-    schnell verwittern wuerden. Fuer XR eignet sich der Mond besonders gut, um Phasen,
-    Gravitation und Einschlagsgeschichte sichtbar zu machen.
-  planetSizeInfoText: Der Mond ist deutlich kleiner als die Erde. Sein Durchmesser
-    entspricht etwa 27 Prozent des Erddurchmessers.
-  orbitalDistanceInfoText: Der Mond umkreist die Erde, nicht direkt die Sonne. Seine
-    mittlere Entfernung zur Erde betraegt etwa 384.000 km.
-  orbitalSpeedInfoText: Fuer einen Umlauf um die Erde braucht der Mond rund 27.3
-    Tage. Seine Rotation ist daran gebunden.
-  axialTiltInfoText: Die Mondachse ist nur moderat geneigt. Dadurch sind die Jahreszeiten
-    auf dem Mond sehr schwach.
-  eccentricityInfoText: Die Mondbahn ist leicht elliptisch. Deshalb schwankt seine
-    Entfernung zur Erde sichtbar.
-  planetScaleInfoText: Im Groessenvergleich ist der Mond etwa ein Viertel so breit
-    wie die Erde und kleiner als Merkur.
-  gravityInfoText: Die Schwerkraft betraegt nur etwa ein Sechstel der Erde. Schritte
-    und Spruenge waeren deutlich weiter.
+  beschreibung: The Moon is Earth's only natural satellite and orbits Earth at an
+    average distance of about 384,000 kilometers. Because its rotation is coupled
+    to its orbit, we almost always see the same side from Earth. Its surface is shaped
+    by craters, dark lava plains, and bright highlands because there is almost no
+    atmosphere, wind, or liquid water to quickly erase these traces. In XR, the Moon
+    is especially useful for making phases, gravity, and impact history visible.
+  planetSizeInfoText: The Moon is much smaller than Earth. Its diameter is about
+    27 percent of Earth's diameter.
+  orbitalDistanceInfoText: The Moon orbits Earth, not the Sun directly. Its average
+    distance from Earth is about 384,000 km.
+  orbitalSpeedInfoText: The Moon needs about 27.3 days to complete one orbit around
+    Earth. Its rotation is synchronized with that orbit.
+  axialTiltInfoText: The Moon's axis is only moderately tilted, so seasons on the
+    Moon are very weak.
+  eccentricityInfoText: The Moon's orbit is slightly elliptical, so its distance
+    from Earth changes visibly.
+  planetScaleInfoText: In a size comparison, the Moon is about one quarter as wide
+    as Earth and smaller than Mercury.
+  gravityInfoText: Gravity is only about one sixth of Earth's gravity. Steps and
+    jumps would be much longer.
   fakten: []

@@ -2,10 +2,11 @@ using TMPro;
 using UnityEngine;
 
 // Gemeinsame Bounds-Hilfe fuer Planet-Visuals.
-// Wichtig: Lern-Facts, Linien und Text duerfen die Planetengroesse nicht beeinflussen.
+// Wichtig: Lern-Facts, Linien, Text und Ringe duerfen die Planetengroesse nicht beeinflussen.
 public static class PlanetVisualBoundsUtility
 {
     private const string FactsObjectName = "Facts";
+    private const string RingNamePart = "ring";
 
     public static bool TryGetPlanetVisualBounds(Transform root, bool includeInactive, out Bounds bounds)
     {
@@ -58,7 +59,8 @@ public static class PlanetVisualBoundsUtility
             return true;
         }
 
-        return HasParentNamed(renderer.transform, FactsObjectName);
+        return HasParentNamed(renderer.transform, FactsObjectName)
+            || HasParentNamePart(renderer.transform, RingNamePart);
     }
 
     private static bool HasParentNamed(Transform current, string objectName)
@@ -66,6 +68,21 @@ public static class PlanetVisualBoundsUtility
         while (current != null)
         {
             if (string.Equals(current.name, objectName, System.StringComparison.OrdinalIgnoreCase))
+            {
+                return true;
+            }
+
+            current = current.parent;
+        }
+
+        return false;
+    }
+
+    private static bool HasParentNamePart(Transform current, string namePart)
+    {
+        while (current != null)
+        {
+            if (current.name.ToLowerInvariant().Contains(namePart))
             {
                 return true;
             }

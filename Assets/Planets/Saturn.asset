@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: Saturn
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
   planetName: Saturn
-  subHeadline: Der Planet der beeindruckenden Ringe
-  shortDescription: "Bekannt f\xFCr sein atemberaubendes und komplexes Ringsystem
-    aus Eis und Gestein, ist Saturn ein gewaltiger Gasriese mit massiven, dynamischen
-    Wettersystemen."
+  subHeadline: The planet with the spectacular rings
+  shortDescription: Known for its breathtaking and complex ring system made of ice
+    and rock, Saturn is an enormous gas giant with massive, dynamic weather systems.
   planetImage: {fileID: 0}
   menuButtonImage: {fileID: 21300000, guid: a7717b92cb16ede409cbd3f7e3df8be1, type: 3}
   menuBackgroundImage: {fileID: 21300000, guid: 72249f803ddda5e47ac32e79f2e79a45, type: 3}
@@ -41,19 +40,26 @@ MonoBehaviour:
   windStaerke: 15
   windTurbulenz: 0.5
   windPartikelFarbe: {r: 0.9, g: 0.85, b: 0.6, a: 1}
-  beschreibung: Saturn ist ein grosser Gasplanet aus Wasserstoff und Helium und vor
-    allem fuer sein auffaelliges Ringsystem bekannt. Die Ringe bestehen aus unzaehligen
-    Stuecken aus Eis und Gestein, von feinem Staub bis zu grossen Brocken. Wie Jupiter
-    besitzt Saturn keine feste Oberflaeche, auf der man landen koennte. Seine Monde,
-    besonders Titan und Enceladus, sind fuer die Forschung interessant, weil sie
-    Hinweise auf komplexe Chemie und moegliche Ozeane liefern.
-  planetSizeInfoText: Saturn ist der zweitgroesste Planet. Ohne Ringe ist sein Durchmesser etwa neunmal so gross wie der der Erde.
-  orbitalDistanceInfoText: Saturn kreist bei etwa 9.54 AU um die Sonne. Er erhaelt viel weniger Sonnenlicht als die Erde.
-  orbitalSpeedInfoText: Ein Saturnjahr dauert fast 29.5 Erdjahre. Auf seiner grossen Bahn bewegt er sich langsamer als Jupiter.
-  axialTiltInfoText: Saturn ist aehnlich stark geneigt wie die Erde. Dadurch wechseln sich auch dort Jahreszeiten ab.
-  eccentricityInfoText: Die Bahn ist leicht oval. Fuer die Ringe und Monde bleibt Saturn trotzdem in einer stabilen Umlaufzone.
-  planetScaleInfoText: Saturn ist riesig, aber weniger dicht als Jupiter. Die Ringe vergroessern seine sichtbare Ausdehnung im Modell stark.
-  gravityInfoText: Die Schwerkraft ist ungefaehr erdaehnlich, obwohl Saturn viel groesser ist. Seine geringe Dichte macht den Unterschied.
+  beschreibung: Saturn is a large gas planet made of hydrogen and helium and is best
+    known for its striking ring system. The rings consist of countless pieces of
+    ice and rock, from fine dust to large chunks. Like Jupiter, Saturn has no solid
+    surface where a spacecraft could land. Its moons, especially Titan and Enceladus,
+    are interesting for research because they show signs of complex chemistry and
+    possible oceans.
+  planetSizeInfoText: Saturn is the second-largest planet. Without its rings, its
+    diameter is about nine times Earth's diameter.
+  orbitalDistanceInfoText: Saturn orbits the Sun at about 9.54 AU and receives much
+    less sunlight than Earth.
+  orbitalSpeedInfoText: A Saturn year lasts almost 29.5 Earth years. On its large
+    orbit, Saturn moves more slowly than Jupiter.
+  axialTiltInfoText: Saturn is tilted by a similar amount to Earth, so it also has
+    changing seasons.
+  eccentricityInfoText: Saturn's orbit is slightly oval. Its rings and moons still
+    remain in a stable orbital region.
+  planetScaleInfoText: Saturn is huge, but less dense than Jupiter. Its rings greatly
+    increase its visible size in the model.
+  gravityInfoText: Gravity is roughly Earth-like, even though Saturn is much larger.
+    Its low density makes the difference.
   fakten:
   - Saturn has no solid surface and is made mostly of hydrogen and helium.
   - Saturn's rings are made of countless pieces of ice and rock.

@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: Erde
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
   planetName: Earth
-  subHeadline: Unsere Heimat, reich an Leben
-  shortDescription: "Der einzige bekannte Planet mit fl\xFCssigem Wasser auf der
-    Oberfl\xE4che und einer sauerstoffreichen Atmosph\xE4re, die eine unglaubliche
-    Vielfalt an Leben erm\xF6glicht."
+  subHeadline: Our home, rich with life
+  shortDescription: Earth is the only known planet with liquid water on its surface
+    and an oxygen-rich atmosphere that makes an incredible variety of life possible.
   planetImage: {fileID: 21300000, guid: 92eb305c6615c564ba32b65e2ed1908d, type: 3}
   menuButtonImage: {fileID: 21300000, guid: 92eb305c6615c564ba32b65e2ed1908d, type: 3}
   menuBackgroundImage: {fileID: 21300000, guid: 1c8f050dd166f254bb2ae8af42997db9, type: 3}
@@ -41,25 +40,24 @@ MonoBehaviour:
   windStaerke: 0
   windTurbulenz: 0
   windPartikelFarbe: {r: 1, g: 1, b: 1, a: 1}
-  beschreibung: Die Erde ist unsere Heimat und der bisher einzige bekannte Planet,
-    auf dem Leben nachgewiesen wurde. Fluessiges Wasser, eine schuetzende Atmosphaere
-    und ein stabiles Klima machen sie im Sonnensystem besonders. Ihre Achsenneigung
-    verursacht Jahreszeiten, und ihr Mond stabilisiert die Ausrichtung der Erde.
-    Aus dem Weltraum erkennt man die Erde an Ozeanen, Wolken und Kontinenten.
-  planetSizeInfoText: Die Erde dient hier als Vergleichsmassstab. Ihr Durchmesser
-    betraegt rund 12.742 km.
-  orbitalDistanceInfoText: Die Erde kreist in etwa 1 AU Entfernung um die Sonne.
-    Diese Einheit basiert auf dem mittleren Abstand Erde-Sonne.
-  orbitalSpeedInfoText: Die Erde umrundet die Sonne in rund 365 Tagen. Dabei legt
-    sie pro Sekunde knapp 30 km auf ihrer Bahn zurueck.
-  axialTiltInfoText: Die Achsenneigung von etwa 23.4 Grad verursacht die Jahreszeiten
-    auf der Erde.
-  eccentricityInfoText: Die Erdbahn ist nur leicht elliptisch. Der Abstand zur Sonne
-    schwankt, aber nicht dramatisch.
-  planetScaleInfoText: Alle relativen Groessen im Panel werden an der Erde gemessen.
-    Erde entspricht also 100 Prozent.
-  gravityInfoText: Die Erdschwerkraft ist der Referenzwert von 1 g. Sie bestimmt,
-    wie Gewicht fuer uns im Alltag wirkt.
+  beschreibung: Earth is our home and the only known planet where life has been
+    confirmed. Liquid water, a protective atmosphere, and a stable climate make it
+    special in the solar system. Its axial tilt causes seasons, and its Moon helps
+    stabilize Earth's orientation. From space, Earth is recognizable by its oceans,
+    clouds, and continents.
+  planetSizeInfoText: Earth is used here as the comparison scale. Its diameter is
+    about 12,742 km.
+  orbitalDistanceInfoText: Earth orbits the Sun at a distance of about 1 AU. This
+    unit is based on the average distance between Earth and the Sun.
+  orbitalSpeedInfoText: Earth orbits the Sun in about 365 days. It travels almost
+    30 km each second along its orbit.
+  axialTiltInfoText: Earth's axial tilt of about 23.4 degrees causes the seasons.
+  eccentricityInfoText: Earth's orbit is only slightly elliptical. Its distance from
+    the Sun changes, but not dramatically.
+  planetScaleInfoText: All relative sizes in the panel are measured against Earth.
+    Earth is therefore 100 percent.
+  gravityInfoText: Earth's gravity is the reference value of 1 g. It defines how
+    weight feels to us in everyday life.
   fakten:
   - About 71 percent of Earth's surface is covered by oceans.
   - Earth's crust is divided into moving plates that create mountains, earthquakes,

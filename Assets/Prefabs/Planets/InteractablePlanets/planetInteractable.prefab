@@ -342,7 +342,7 @@ MonoBehaviour:
   _scoringModifier:
     _positionRotationWeight: 0.5
   _slippiness: 0
-  _supportedGrabTypes: 3
+  _supportedGrabTypes: 1
   _pinchGrabRules:
     _thumbRequirement: 0
     _indexRequirement: 1
@@ -394,6 +394,22 @@ PrefabInstance:
     - target: {fileID: 1964991109539428646, guid: 9d7be9091f4e9d14ab6578a85b340612, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 2385385885069307978, guid: 9d7be9091f4e9d14ab6578a85b340612, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.8008097
+      objectReference: {fileID: 0}
+    - target: {fileID: 2385385885069307978, guid: 9d7be9091f4e9d14ab6578a85b340612, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.47834617
+      objectReference: {fileID: 0}
+    - target: {fileID: 2385385885069307978, guid: 9d7be9091f4e9d14ab6578a85b340612, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.22416446
+      objectReference: {fileID: 0}
+    - target: {fileID: 2385385885069307978, guid: 9d7be9091f4e9d14ab6578a85b340612, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.28220418
       objectReference: {fileID: 0}
     - target: {fileID: 2932084541131115298, guid: 9d7be9091f4e9d14ab6578a85b340612, type: 3}
       propertyPath: m_LocalScale.x
@@ -451,6 +467,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Visual_Jupiter
       objectReference: {fileID: 0}
+    - target: {fileID: 4296553646330915293, guid: 9d7be9091f4e9d14ab6578a85b340612, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7425157
+      objectReference: {fileID: 0}
+    - target: {fileID: 4296553646330915293, guid: 9d7be9091f4e9d14ab6578a85b340612, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0.53983605
+      objectReference: {fileID: 0}
+    - target: {fileID: 4296553646330915293, guid: 9d7be9091f4e9d14ab6578a85b340612, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.039151073
+      objectReference: {fileID: 0}
+    - target: {fileID: 4296553646330915293, guid: 9d7be9091f4e9d14ab6578a85b340612, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0.3946072
+      objectReference: {fileID: 0}
     - target: {fileID: 4718355004199919115, guid: 9d7be9091f4e9d14ab6578a85b340612, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
@@ -462,6 +494,22 @@ PrefabInstance:
     - target: {fileID: 6611299597047957404, guid: 9d7be9091f4e9d14ab6578a85b340612, type: 3}
       propertyPath: 'm_Materials.Array.data[0]'
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 7034507335201885936, guid: 9d7be9091f4e9d14ab6578a85b340612, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.6343639
+      objectReference: {fileID: 0}
+    - target: {fileID: 7034507335201885936, guid: 9d7be9091f4e9d14ab6578a85b340612, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0.24320054
+      objectReference: {fileID: 0}
+    - target: {fileID: 7034507335201885936, guid: 9d7be9091f4e9d14ab6578a85b340612, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0.61531204
+      objectReference: {fileID: 0}
+    - target: {fileID: 7034507335201885936, guid: 9d7be9091f4e9d14ab6578a85b340612, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0.39978382
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

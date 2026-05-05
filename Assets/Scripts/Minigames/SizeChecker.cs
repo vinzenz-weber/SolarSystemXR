@@ -477,7 +477,8 @@ public class SizeChecker : MonoBehaviour
     {
         if (planet == null || planet.PlanetData == null || EarthDiameterKm <= 0f) return 0f;
 
-        return (planet.PlanetData.diameter / EarthDiameterKm) * EarthSizeMeters;
+        float visualSizeMultiplier = GetCorrectPlacementVisualSizeMultiplier(planet);
+        return (planet.PlanetData.diameter / EarthDiameterKm) * EarthSizeMeters * visualSizeMultiplier;
     }
 
     private void ScalePlanetToWorldSize(ReihenfolgePlanet planet, float targetWorldSize)
@@ -523,6 +524,21 @@ public class SizeChecker : MonoBehaviour
         }
 
         return Vector3.zero;
+    }
+
+    private float GetCorrectPlacementVisualSizeMultiplier(ReihenfolgePlanet planet)
+    {
+        if (planet == null || planet.PlanetData == null || CorrectPlacementVisualOffsets == null) return 1f;
+
+        foreach (SizePlanetVisualOffset visualOffset in CorrectPlacementVisualOffsets)
+        {
+            if (visualOffset.PlanetData == planet.PlanetData)
+            {
+                return Mathf.Max(0.001f, visualOffset.VisualSizeMultiplier <= 0f ? 1f : visualOffset.VisualSizeMultiplier);
+            }
+        }
+
+        return 1f;
     }
 
     private float GetPlanetWorldSize(Transform root)
@@ -944,5 +960,7 @@ public class SizeChecker : MonoBehaviour
     {
         public PlanetData PlanetData;
         public Vector3 LocalOffset;
+        [Tooltip("Optionale sichtbare Groessen-Korrektur fuer einzelne Prefabs. 1 = echte relative Groesse.")]
+        public float VisualSizeMultiplier;
     }
 }

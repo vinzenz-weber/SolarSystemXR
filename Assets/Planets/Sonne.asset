@@ -13,9 +13,9 @@ MonoBehaviour:
   m_Name: Sonne
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
   planetName: Sun
-  subHeadline: Unser Stern im Zentrum
-  shortDescription: "Ein gigantischer, leuchtender Ball aus Plasma, der 99,8 % der
-    Masse des gesamten Sonnensystems ausmacht und uns Licht sowie W\xE4rme spendet."
+  subHeadline: Our star at the center
+  shortDescription: The Sun is a gigantic glowing ball of plasma that contains 99.8
+    percent of the solar system's total mass and provides us with light and heat.
   planetImage: {fileID: 0}
   menuButtonImage: {fileID: 0}
   menuBackgroundImage: {fileID: 0}
@@ -40,23 +40,23 @@ MonoBehaviour:
   windStaerke: 0
   windTurbulenz: 0
   windPartikelFarbe: {r: 1, g: 1, b: 1, a: 1}
-  beschreibung: Die Sonne ist kein Planet, sondern der Stern im Zentrum unseres Sonnensystems.
-    Ihre Gravitation haelt Planeten, Monde, Asteroiden und Kometen auf ihren Bahnen.
-    In ihrem Inneren verschmelzen Wasserstoffkerne zu Helium; dabei entsteht die
-    Energie, die als Licht und Waerme zur Erde gelangt. Ohne die Sonne waeren fluessiges
-    Wasser, Wetter und Leben auf der Erde nicht moeglich.
-  planetSizeInfoText: Die Sonne ist kein Planet, sondern ein Stern. Ihr Durchmesser
-    ist etwa 109-mal so gross wie der der Erde.
-  orbitalDistanceInfoText: Die Sonne bildet das Zentrum des Modells. Fuer sie selbst
-    ist die Sonnenentfernung deshalb 0 AU.
-  orbitalSpeedInfoText: Die Sonne umkreist nicht die Sonne. Der Wert im Datensatz
-    steht hier nicht fuer eine Planetenbahn.
-  axialTiltInfoText: Auch die Sonne rotiert um eine Achse. Diese ist leicht gegen
-    die Bahnebene der Erde geneigt.
-  eccentricityInfoText: Als Zentralstern hat die Sonne in diesem Modell keine eigene
-    Umlaufbahn um die Sonne.
-  planetScaleInfoText: Im Groessenvergleich ueberragt die Sonne alle Planeten. Selbst
-    Jupiter ist nur etwa ein Zehntel so breit.
-  gravityInfoText: Die Schwerkraft an der sichtbaren Sonnenoberflaeche ist etwa 28-mal
-    staerker als auf der Erde.
+  beschreibung: The Sun is not a planet, but the star at the center of our solar
+    system. Its gravity keeps planets, moons, asteroids, and comets on their paths.
+    Inside the Sun, hydrogen nuclei fuse into helium, releasing the energy that reaches
+    Earth as light and heat. Without the Sun, liquid water, weather, and life on
+    Earth would not be possible.
+  planetSizeInfoText: The Sun is not a planet, but a star. Its diameter is about
+    109 times Earth's diameter.
+  orbitalDistanceInfoText: The Sun forms the center of the model. For the Sun itself,
+    the distance from the Sun is therefore 0 AU.
+  orbitalSpeedInfoText: The Sun does not orbit the Sun. This value in the dataset
+    does not represent a planetary orbit.
+  axialTiltInfoText: The Sun also rotates around an axis, which is slightly tilted
+    relative to Earth's orbital plane.
+  eccentricityInfoText: As the central star, the Sun has no orbit around the Sun
+    in this model.
+  planetScaleInfoText: In a size comparison, the Sun towers over all planets. Even
+    Jupiter is only about one tenth as wide.
+  gravityInfoText: Gravity at the visible surface of the Sun is about 28 times stronger
+    than on Earth.
   fakten: []

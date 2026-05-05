@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: Neptun
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
   planetName: Neptune
-  subHeadline: "St\xFCrmischer Eisriese am \xE4u\xDFeren Rand"
-  shortDescription: "Der \xE4u\xDFerste regul\xE4re Planet ist eine dunkle, eiskalte
-    Welt, die von \xDCberschallwinden und massiven St\xFCrmen in ihrer tiefblauen
-    Atmosph\xE4re gepeitscht wird."
+  subHeadline: Stormy ice giant at the outer edge
+  shortDescription: The outermost regular planet is a dark, icy world whipped by
+    supersonic winds and massive storms in its deep blue atmosphere.
   planetImage: {fileID: 0}
   menuButtonImage: {fileID: 21300000, guid: 0e0ed8dc62b11b245af3e8d44806eac2, type: 3}
   menuBackgroundImage: {fileID: 21300000, guid: a29feb97619b06b418fa85cf2bae9b8e, type: 3}
@@ -41,25 +40,26 @@ MonoBehaviour:
   windStaerke: 28
   windTurbulenz: 0.95
   windPartikelFarbe: {r: 0.2, g: 0.4, b: 0.9, a: 1}
-  beschreibung: Neptun ist der aeusserste der acht Planeten und ein kalter, blauer
-    Eisriese. Obwohl er sehr weit von der Sonne entfernt ist, besitzt er eine dynamische
-    Atmosphaere mit extrem starken Winden und grossen Sturmsystemen. Methan traegt
-    zu seiner blauen Farbe bei, waehrend Wasser, Ammoniak und andere Eis-Materialien
-    im Inneren eine wichtige Rolle spielen. Neptun wurde nicht zuerst direkt entdeckt,
-    sondern durch Berechnungen aus Stoerungen der Uranusbahn vorhergesagt.
-  planetSizeInfoText: Neptun ist fast viermal so breit wie die Erde und nur etwas
-    kleiner als Uranus.
-  orbitalDistanceInfoText: Neptun kreist bei etwa 30 AU um die Sonne. Er ist der
-    aeusserste der acht Planeten.
-  orbitalSpeedInfoText: Ein Neptunjahr dauert etwa 165 Erdjahre. Seine Umlaufbewegung
-    ist dadurch besonders langsam.
-  axialTiltInfoText: Die Achsenneigung ist etwas groesser als die der Erde. Auch
-    Neptun hat dadurch Jahreszeiten, aber extrem lange.
-  eccentricityInfoText: Neptuns Bahn ist fast kreisfoermig. Der Abstand zur Sonne
-    bleibt im Vergleich zu anderen Planeten recht konstant.
-  planetScaleInfoText: 
-  gravityInfoText: Die Schwerkraft ist etwas staerker als auf der Erde. Ein Objekt
-    waere dort etwas schwerer als zu Hause.
+  beschreibung: Neptune is the outermost of the eight planets and a cold, blue ice
+    giant. Although it is very far from the Sun, it has a dynamic atmosphere with
+    extremely strong winds and large storm systems. Methane contributes to its blue
+    color, while water, ammonia, and other icy materials play an important role in
+    its interior. Neptune was not first discovered directly; it was predicted through
+    calculations based on disturbances in Uranus' orbit.
+  planetSizeInfoText: Neptune is almost four times as wide as Earth and only slightly
+    smaller than Uranus.
+  orbitalDistanceInfoText: Neptune orbits the Sun at about 30 AU. It is the outermost
+    of the eight planets.
+  orbitalSpeedInfoText: A Neptune year lasts about 165 Earth years, so its orbital
+    movement is especially slow.
+  axialTiltInfoText: Neptune's axial tilt is slightly larger than Earth's. Neptune
+    therefore has seasons too, but they are extremely long.
+  eccentricityInfoText: Neptune's orbit is almost circular. Its distance from the
+    Sun stays fairly constant compared with other planets.
+  planetScaleInfoText: Neptune is an ice giant almost four times as wide as Earth,
+    but still much smaller than Jupiter and Saturn.
+  gravityInfoText: Gravity is slightly stronger than on Earth. An object would be
+    a little heavier there than at home.
   fakten:
   - Neptune has no solid surface; its atmosphere extends into deeper layers of icy
     fluids.

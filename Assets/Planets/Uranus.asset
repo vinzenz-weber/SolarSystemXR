@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Uranus
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
   planetName: Uranus
-  subHeadline: Der eisige, gekippte blaue Riese
-  shortDescription: "Uranus ist ein kalter Eisriese, der mit fast 98 Grad Achsenneigung
-    scheinbar auf der Seite liegt. Seine blassblaue Farbe stammt von Methangas in
-    seiner Atmosph\xE4re."
+  subHeadline: The icy, tilted blue giant
+  shortDescription: Uranus is a cold ice giant tilted by almost 98 degrees, making
+    it appear to lie on its side. Its pale blue color comes from methane gas in its
+    atmosphere.
   planetImage: {fileID: 0}
   menuButtonImage: {fileID: 21300000, guid: 2e4537ea7b2e185458df855e1badf4e1, type: 3}
   menuBackgroundImage: {fileID: 21300000, guid: 0b239fe1a3190f64bb853f29d0e489aa, type: 3}
@@ -41,19 +41,25 @@ MonoBehaviour:
   windStaerke: 12
   windTurbulenz: 0.4
   windPartikelFarbe: {r: 0.5, g: 0.9, b: 0.9, a: 1}
-  beschreibung: Uranus ist ein Eisriese mit einer blass blaugruenen Farbe, die durch
-    Methan in seiner Atmosphaere entsteht. Seine Rotationsachse ist fast seitlich
-    gekippt, sodass der Planet scheinbar wie eine rollende Kugel um die Sonne wandert.
-    Dadurch entstehen extrem lange Jahreszeiten, bei denen ein Pol viele Jahre Sonnenlicht
-    und der andere Dunkelheit erlebt. Uranus besitzt schmale, dunkle Ringe und zahlreiche
-    Monde.
-  planetSizeInfoText: Uranus ist etwa viermal so breit wie die Erde. Er gehoert zu den Eisriesen.
-  orbitalDistanceInfoText: Uranus kreist bei etwa 19.19 AU um die Sonne. Sonnenlicht braucht bis dorthin mehr als zweieinhalb Stunden.
-  orbitalSpeedInfoText: Ein Umlauf dauert rund 84 Erdjahre. Die Bewegung um die Sonne ist deshalb sehr langsam.
-  axialTiltInfoText: Uranus ist fast seitlich gekippt. Dadurch zeigen seine Pole ueber lange Zeit zur Sonne oder von ihr weg.
-  eccentricityInfoText: Seine Bahn ist nur leicht elliptisch. Der extreme Eindruck entsteht vor allem durch die gekippte Achse.
-  planetScaleInfoText: Im Vergleich zur Erde ist Uranus ein grosser Planet, aber deutlich kleiner als Jupiter und Saturn.
-  gravityInfoText: Die Schwerkraft liegt etwas unter der Erdschwerkraft. An der Wolkenobergrenze waere man etwas leichter als auf der Erde.
+  beschreibung: Uranus is an ice giant with a pale blue-green color caused by methane
+    in its atmosphere. Its rotation axis is tilted almost sideways, so the planet
+    seems to roll around the Sun like a ball. This creates extremely long seasons,
+    with one pole receiving sunlight for many years while the other remains in darkness.
+    Uranus has narrow, dark rings and many moons.
+  planetSizeInfoText: Uranus is about four times as wide as Earth and belongs to
+    the ice giants.
+  orbitalDistanceInfoText: Uranus orbits the Sun at about 19.19 AU. Sunlight takes
+    more than two and a half hours to get there.
+  orbitalSpeedInfoText: One orbit takes about 84 Earth years, so Uranus moves very
+    slowly around the Sun.
+  axialTiltInfoText: Uranus is tilted almost sideways, so its poles point toward
+    or away from the Sun for long periods.
+  eccentricityInfoText: Uranus' orbit is only slightly elliptical. The extreme impression
+    mainly comes from its tilted axis.
+  planetScaleInfoText: Compared with Earth, Uranus is a large planet, but it is much
+    smaller than Jupiter and Saturn.
+  gravityInfoText: Gravity is slightly below Earth's gravity. At the cloud tops,
+    you would be a little lighter than on Earth.
   fakten:
   - Uranus has no true solid surface; its visible layer is atmosphere above deeper fluids.
   - Uranus gets its blue-green color from methane, which absorbs red light.

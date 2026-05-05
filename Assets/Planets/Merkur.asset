@@ -13,10 +13,10 @@ MonoBehaviour:
   m_Name: Merkur
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
   planetName: Mercury
-  subHeadline: "Kleinster und sonnenn\xE4chster Planet"
-  shortDescription: "Merkur ist eine von Kratern \xFCbers\xE4te, extrem hei\xDFe
-    Welt ohne echte Atmosph\xE4re, die der Sonne so nah ist, dass ein Jahr hier nur
-    88 Tage dauert."
+  subHeadline: Smallest planet and closest to the Sun
+  shortDescription: Mercury is a crater-covered, extremely hot world with almost
+    no atmosphere. It is so close to the Sun that one year there lasts only 88 Earth
+    days.
   planetImage: {fileID: 0}
   menuButtonImage: {fileID: 21300000, guid: 2760da09e58de7d4cbbc9b0ea68d1291, type: 3}
   menuBackgroundImage: {fileID: 21300000, guid: ddbd4693d6d350548858e4988b5045ea, type: 3}
@@ -41,25 +41,25 @@ MonoBehaviour:
   windStaerke: 0
   windTurbulenz: 0
   windPartikelFarbe: {r: 1, g: 1, b: 1, a: 1}
-  beschreibung: Merkur ist der kleinste Planet und kreist am naechsten um die Sonne.
-    Seine Oberflaeche ist voller Einschlagskrater und erinnert an den Mond, weil
-    Merkur fast keine Atmosphaere besitzt, die Meteoroiden abbremst oder Waerme speichert.
-    Deshalb wechseln die Temperaturen extrem zwischen heissen Tagen und sehr kalten
-    Naechten. Ein Merkurjahr dauert nur etwa 88 Erdentage.
-  planetSizeInfoText: Merkur ist der kleinste Planet. Sein Durchmesser entspricht
-    nur etwa 38 Prozent der Erde.
-  orbitalDistanceInfoText: Mit 0.39 AU liegt Merkur der Sonne am naechsten. Er bekommt
-    dadurch sehr viel Sonnenenergie ab.
-  orbitalSpeedInfoText: Merkur bewegt sich auf seiner engen Bahn besonders schnell.
-    Ein Umlauf dauert nur rund 88 Erdentage.
-  axialTiltInfoText: Die Achse ist fast gar nicht geneigt. Darum gibt es auf Merkur
-    kaum klassische Jahreszeiten.
-  eccentricityInfoText: Seine Bahn ist deutlich ovaler als die der meisten Planeten.
-    Der Abstand zur Sonne schwankt stark.
-  planetScaleInfoText: Im Groessenvergleich ist Merkur kleiner als alle anderen Planeten
-    und nur etwas groesser als der Mond.
-  gravityInfoText: Die Schwerkraft liegt bei etwa 38 Prozent der Erde. Ein 10 kg
-    schweres Objekt fuehlt sich dort wie etwa 3.8 kg an.
+  beschreibung: Mercury is the smallest planet and orbits closest to the Sun. Its
+    surface is full of impact craters and looks similar to the Moon because Mercury
+    has almost no atmosphere to slow meteoroids or store heat. Temperatures therefore
+    change extremely between hot days and very cold nights. One Mercury year lasts
+    only about 88 Earth days.
+  planetSizeInfoText: Mercury is the smallest planet. Its diameter is only about
+    38 percent of Earth's diameter.
+  orbitalDistanceInfoText: At 0.39 AU, Mercury is the planet closest to the Sun and
+    receives very intense solar energy.
+  orbitalSpeedInfoText: Mercury moves very quickly on its tight orbit. One orbit
+    takes only about 88 Earth days.
+  axialTiltInfoText: Mercury's axis is almost not tilted at all, so it has hardly
+    any classical seasons.
+  eccentricityInfoText: Mercury's orbit is much more oval than the orbits of most
+    planets. Its distance from the Sun changes strongly.
+  planetScaleInfoText: In a size comparison, Mercury is smaller than all other planets
+    and only a little larger than the Moon.
+  gravityInfoText: Gravity is about 38 percent of Earth's gravity. A 10 kg object
+    would feel like about 3.8 kg there.
   fakten:
   - Mercury's surface is covered with impact craters and looks similar to Earth's
     Moon.

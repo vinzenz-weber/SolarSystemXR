@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: Jupiter
   m_EditorClassIdentifier: Assembly-CSharp::PlanetData
   planetName: Jupiter
-  subHeadline: "Gr\xF6\xDFter Gasriese unseres Sonnensystems"
-  shortDescription: "Dieser gewaltige Gasriese ist mehr als doppelt so massereich
-    wie alle anderen Planeten zusammen und ber\xFChmt f\xFCr seinen riesigen Wirbelsturm,
-    den Gro\xDFen Roten Fleck."
+  subHeadline: Largest gas giant in our solar system
+  shortDescription: This enormous gas giant is more than twice as massive as all
+    the other planets combined and is famous for its huge storm, the Great Red Spot.
   planetImage: {fileID: 0}
   menuButtonImage: {fileID: 21300000, guid: 60b735924c63e874e8b88b5da2847b35, type: 3}
   menuBackgroundImage: {fileID: 21300000, guid: affb639cb63740f4e8869377d34705e5, type: 3}
@@ -41,19 +40,24 @@ MonoBehaviour:
   windStaerke: 25
   windTurbulenz: 0.9
   windPartikelFarbe: {r: 0.9, g: 0.6, b: 0.3, a: 1}
-  beschreibung: Jupiter ist der groesste Planet des Sonnensystems und besteht vor
-    allem aus Wasserstoff und Helium. Seine hellen und dunklen Wolkenbaender werden
-    von schnellen Winden in entgegengesetzte Richtungen gezogen. Der Grosse Rote
-    Fleck ist ein riesiger Sturm, der groesser als die Erde sein kann und seit langer
-    Zeit beobachtet wird. Jupiters starke Gravitation praegt viele Monde, darunter
-    die vier grossen Galileischen Monde.
-  planetSizeInfoText: Jupiter ist der groesste Planet des Sonnensystems. Sein Durchmesser ist rund elfmal so gross wie der der Erde.
-  orbitalDistanceInfoText: Jupiter kreist bei etwa 5.20 AU um die Sonne und ist damit viel weiter entfernt als die inneren Gesteinsplaneten.
-  orbitalSpeedInfoText: Fuer einen Umlauf braucht Jupiter fast 12 Erdjahre. Seine Bahn ist gross, deshalb wirkt seine Bewegung im Modell langsamer.
-  axialTiltInfoText: Jupiters Achse ist nur wenig geneigt. Seine Jahreszeiten sind dadurch deutlich schwaecher ausgepraegt als auf der Erde.
-  eccentricityInfoText: Die Bahn ist leicht elliptisch, aber nicht extrem. Jupiter bleibt insgesamt in grosser Sonnenentfernung.
-  planetScaleInfoText: Im Groessenvergleich dominiert Jupiter klar. Er ist der breiteste Planet und wirkt neben den Gesteinsplaneten gewaltig.
-  gravityInfoText: Die Schwerkraft an der Wolkenobergrenze ist mehr als doppelt so stark wie auf der Erde.
+  beschreibung: Jupiter is the largest planet in the solar system and is made mostly
+    of hydrogen and helium. Its bright and dark cloud bands are pulled in opposite
+    directions by fast winds. The Great Red Spot is a huge storm that can be larger
+    than Earth and has been observed for a long time. Jupiter's strong gravity shapes
+    many moons, including the four large Galilean moons.
+  planetSizeInfoText: Jupiter is the largest planet in the solar system. Its diameter
+    is about eleven times Earth's diameter.
+  orbitalDistanceInfoText: Jupiter orbits the Sun at about 5.20 AU, much farther
+    away than the inner rocky planets.
+  orbitalSpeedInfoText: Jupiter needs almost 12 Earth years to complete one orbit.
+    Its orbit is large, so its movement appears slower in the model.
+  axialTiltInfoText: Jupiter's axis is only slightly tilted, so its seasons are much
+    less pronounced than Earth's.
+  eccentricityInfoText: Jupiter's orbit is slightly elliptical, but not extreme.
+    Overall, Jupiter remains far from the Sun.
+  planetScaleInfoText: In a size comparison, Jupiter clearly dominates. It is the
+    widest planet and looks enormous beside the rocky planets.
+  gravityInfoText: Gravity at the cloud tops is more than twice as strong as on Earth.
   fakten:
   - Jupiter has no solid surface; what we see are cloud bands in its atmosphere.
   - Jupiter's bright and dark cloud bands move in opposite directions.
