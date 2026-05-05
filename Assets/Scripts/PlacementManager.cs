@@ -121,23 +121,31 @@ public class PlacementManager : MonoBehaviour
 
     [Header("Scaling")]
     public float earthDiameterInVR = 0.2f; // 0.2 Meter = 20 cm fuer die Erde
-    [Tooltip("Aktiv = Planeten werden relativ zur echten Groesse skaliert. Inaktiv = alle Einzelplaneten haben fixedPlanetDiameterMeters Durchmesser.")]
+    [Tooltip("Aktiv = Planeten werden relativ zur echten Groesse skaliert. Der feste 50-cm-Modus ist verworfen und wird nicht mehr genutzt.")]
     [SerializeField] private bool _useRelativePlanetSizes = true;
-    [Tooltip("Durchmesser fuer Einzelplaneten, wenn relative Planetengroessen ausgeschaltet sind.")]
+    [Tooltip("Veralteter Fallback-Wert aus dem verworfenen 50-cm-Modus.")]
     [SerializeField] private float fixedPlanetDiameterMeters = 0.5f;
     private const float earthDiameterInKm = 12742f;
     private Transform _resolvedRayOrigin;
     private bool _wasRightIndexPinching;
     private bool _wasLeftIndexPinching;
 
+    private void Awake()
+    {
+        WarnIfOldFixedSizeModeWasSerialized();
+        _useRelativePlanetSizes = true;
+    }
+
     private void Start()
     {
+        _useRelativePlanetSizes = true;
         PrepareSunObject();
         ApplyEnvironmentRaycastManagerState();
     }
 
     private void OnValidate()
     {
+        _useRelativePlanetSizes = true;
         ApplyEnvironmentRaycastManagerState();
     }
 
@@ -631,10 +639,7 @@ public class PlacementManager : MonoBehaviour
 
     private float GetTargetPlanetWorldDiameter(PlanetData data)
     {
-        if (_useRelativePlanetSizes == false)
-        {
-            return Mathf.Max(0.001f, fixedPlanetDiameterMeters);
-        }
+        _useRelativePlanetSizes = true;
 
         if (data == null) return Mathf.Max(0.001f, fixedPlanetDiameterMeters);
 
@@ -643,14 +648,28 @@ public class PlacementManager : MonoBehaviour
 
     public void SetUseRelativePlanetSizes(bool useRelativeSizes)
     {
-        _useRelativePlanetSizes = useRelativeSizes;
+        // Der Gleichgroessen-Modus ist verworfen. Alte Inspector-Events duerfen
+        // deshalb nicht mehr auf feste 50-cm-Planeten zurueckschalten.
+        _useRelativePlanetSizes = true;
         UpdateCurrentPlanetPreviewScale();
-        ClearPlacedPlanets();
+
+        if (useRelativeSizes == false)
+        {
+            Debug.Log("PlacementManager: Gleichgroessen-Modus ist verworfen. Relative Planetengroessen bleiben aktiv.");
+        }
     }
 
     public bool UsesRelativePlanetSizes()
     {
+        _useRelativePlanetSizes = true;
         return _useRelativePlanetSizes;
+    }
+
+    private void WarnIfOldFixedSizeModeWasSerialized()
+    {
+        if (_useRelativePlanetSizes == true) return;
+
+        Debug.Log("PlacementManager: Alter Gleichgroessen-Modus aus der Szene wird ignoriert. Relative Planetengroessen bleiben aktiv.");
     }
 
     private void UpdateCurrentPlanetPreviewScale()

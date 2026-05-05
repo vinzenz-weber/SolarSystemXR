@@ -7,6 +7,13 @@
 
 ## Verworfene Features
 
+### Gleichgroessen-Modus fuer Einzelplaneten im Main Menu
+
+- **Zeitraum:** bis 2026-05-05
+- **Beschreibung:** Im Main Menu gab es einen Toggle fuer den Einzelplanet-Placement-Modus. Aktiv bedeutete relative Planetengroessen, inaktiv bedeutete gleich grosse Einzelplaneten mit 50 cm Durchmesser.
+- **Grund fuer Verwerfung:** Der Default-Modus soll immer `Relative Planet Size` sein, weil die App fachlich und didaktisch auf Groessenvergleiche im Sonnensystem ausgerichtet ist. Der Gleichgroessen-Modus wurde zudem nach der Rueckkehr aus dem Immersive Mode unbeabsichtigt wieder aktiv bzw. der relative Modus wurde ausgeschaltet.
+- **Erkenntnisse:** Optionale Vereinfachungsmodi koennen Lernziele verwischen und erzeugen zusaetzlichen UI-/State-Aufwand. Wenn ein Modus verworfen ist, reicht es nicht, nur das sichtbare UI zu entfernen; alte Inspector-Events und serialisierte Toggle-Zustaende muessen im Code defensiv abgefangen werden.
+
 ### DebugDisplay (HUD-Panel)
 
 - **Zeitraum:** bis 2026-04-12

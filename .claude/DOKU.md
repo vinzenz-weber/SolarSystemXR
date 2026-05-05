@@ -240,6 +240,7 @@
 | Immersive Mode | Kein Scene-Loading; Immersive-Environment bleibt Teil der MainScene und wird ueber Root-GameObject + Dissolve aktiviert. |
 | Immersive Spawn | Planet wird am referenzierten SpawnPoint angezeigt; bei grosser Distanz berechnet `ImmersiveModeController` die Mond-Scheingroesse aus dem Spawn-Abstand. |
 | Passthrough Toggle | Der AR/VR-Toggle im Main Menu steuert den `PassthroughDissolver` (MR Motifs). Das Toggle-Objekt in `MenuRoot` heisst "Passthrough". Der Startzustand ist per `_isPassthroughOnAtStart` im Inspector steuerbar. |
+| Einzelplanet-Groessenmodus | Einzelplaneten werden immer relativ zur echten Planetengroesse skaliert. Der fruehere Main-Menu-Toggle fuer gleich grosse 50-cm-Planeten ist verworfen und wird im Code ignoriert/ausgeblendet. |
 | Sonnensystem-UI | Das Slider-Panel referenziert den `SolarSystemManager` nicht im Prefab, sondern bekommt ihn nach Placement ueber `Bind(SolarSystemManager)`. |
 | Depth API fuer Platzierung | Im Quest-Build liefert `EnvironmentRaycastManager.Raycast(Ray, out hit)` Position und Normal aus dem Depth-Mesh. |
 | Editor-Placement | Im Unity Editor ist die Depth API deaktiviert; die Platzierung nutzt einen festen Punkt vor dem Controller-Ray. |
@@ -284,6 +285,7 @@
 | 2026-04-30 | Planet-Detailsystem bleibt datenbasiert ueber `PlanetData` | Erweiterbarkeit: neue Planeten brauchen Daten/Textfelder im ScriptableObject, keine neuen UI-Scripts |
 | 2026-04-30 | Placement-Input akzeptiert beide Controller-Trigger | Ghost war sichtbar, Placement konnte aber je nach Hand/Rig am falschen Trigger-Button haengen bleiben |
 | 2026-04-30 | Einzelplanet-Placement nutzt generisches `planetInteractable.prefab` | Meta-Interactable-Komponenten bleiben zentral im Wrapper; das eigentliche Planet-Visual wird datenbasiert aus `PlanetData.planetPrefab` geladen |
+| 2026-05-05 | Relative Einzelplanet-Groessen sind immer aktiv | Wissenschaftlich korrekte Groessenvergleiche sind fuer die Lernziele wichtiger als ein vereinfachter Gleichgroessen-Modus; alte Toggle-Events duerfen den Modus nach Immersive-Rueckkehr nicht mehr deaktivieren |
 
 ---
 

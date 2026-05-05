@@ -101,9 +101,9 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] private bool _isPassthroughOnAtStart;
 
     [Header("Planetengroesse im Placement")]
-    [Tooltip("Toggle im MainMenu: aktiv = relative Planetengroessen, inaktiv = alle Einzelplaneten 50 cm Durchmesser.")]
+    [Tooltip("Veralteter Toggle aus frueheren Menu-Versionen. Wird ausgeblendet, weil relative Planetengroessen jetzt immer aktiv sind.")]
     [SerializeField] private Toggle _planetSizeModeToggle;
-    [Tooltip("Fallback, falls der Planetengroessen-Modus als Button statt Toggle gebaut ist.")]
+    [Tooltip("Veralteter Button-Fallback aus frueheren Menu-Versionen. Wird nicht mehr verwendet.")]
     [SerializeField] private Button _planetSizeModeButton;
     [Tooltip("Hintergrund des selbstgebauten Toggles, z.B. ToggleBG.")]
     [SerializeField] private Graphic _planetSizeModeBackground;
@@ -115,7 +115,7 @@ public class MainMenuController : MonoBehaviour
     [SerializeField] private float _planetSizeHandleOffX = -24f;
     [SerializeField] private Color _planetSizeModeOnColor = new Color(0.188f, 0.82f, 0.345f, 1f);
     [SerializeField] private Color _planetSizeModeOffColor = new Color(1f, 1f, 1f, 0.4f);
-    [Tooltip("Startzustand: aktiv = Planetengroessen bleiben wie bisher.")]
+    [Tooltip("Relative Planetengroessen sind der feste Standardmodus. Der Wert bleibt nur fuer alte Szenen-Serialisierung erhalten.")]
     [SerializeField] private bool _useRelativePlanetSizesAtStart = true;
 
     private PlanetData _currentPlanet;
@@ -136,7 +136,7 @@ public class MainMenuController : MonoBehaviour
         CacheQuizButtonReferences();
         CacheTabVisibleColors();
         SetupPassthroughToggle();
-        SetupPlanetSizeModeToggle();
+        SetupFixedRelativePlanetSizeMode();
         ShowLearnTab();
     }
 
@@ -396,7 +396,7 @@ public class MainMenuController : MonoBehaviour
             _startExperienceButton.gameObject.SetActive(true);
         }
 
-        SetPlanetSizeModeVisible(isVisible && _currentSelection == ExperienceSelection.Planet);
+        SetPlanetSizeModeVisible(false);
     }
 
     private void BindPlanetButtons(Transform mainPanel)
@@ -1191,40 +1191,42 @@ public class MainMenuController : MonoBehaviour
         PlanetFactsVisibility.Refresh();
     }
 
-    private void SetupPlanetSizeModeToggle()
+    private void SetupFixedRelativePlanetSizeMode()
     {
         if (placementManager == null)
         {
             placementManager = FindFirstObjectByType<PlacementManager>();
         }
 
-        bool useRelativeSizes = _planetSizeModeToggle != null
-            ? _planetSizeModeToggle.isOn
-            : _useRelativePlanetSizesAtStart;
+        if (_useRelativePlanetSizesAtStart == false)
+        {
+            Debug.Log("MainMenuController: Alter Startwert fuer Gleichgroessen-Modus wird ignoriert. Relative Planetengroessen bleiben aktiv.");
+        }
+
+        _useRelativePlanetSizesAtStart = true;
 
         if (placementManager != null)
         {
-            placementManager.SetUseRelativePlanetSizes(useRelativeSizes);
+            placementManager.SetUseRelativePlanetSizes(true);
         }
 
         if (_planetSizeModeToggle != null)
         {
-            _planetSizeModeToggle.SetIsOnWithoutNotify(useRelativeSizes);
+            _planetSizeModeToggle.SetIsOnWithoutNotify(true);
             _planetSizeModeToggle.onValueChanged.RemoveListener(SetRelativePlanetSizeMode);
-            _planetSizeModeToggle.onValueChanged.AddListener(SetRelativePlanetSizeMode);
         }
 
-        if (_planetSizeModeToggle == null && _planetSizeModeButton != null)
+        if (_planetSizeModeButton != null)
         {
             _planetSizeModeButton.onClick.RemoveListener(ToggleRelativePlanetSizeMode);
-            _planetSizeModeButton.onClick.AddListener(ToggleRelativePlanetSizeMode);
         }
 
-        UpdatePlanetSizeModeVisual(useRelativeSizes);
+        UpdatePlanetSizeModeVisual(true);
         SetPlanetSizeModeVisible(false);
     }
 
-    // Kann direkt im Toggle unter On Value Changed (bool) eingetragen werden.
+    // Veraltete UnityEvents aus alten Menu-Versionen koennen diese Methode noch aufrufen.
+    // Der feste App-Modus bleibt trotzdem immer: relative Planetengroessen.
     public void SetRelativePlanetSizeMode(bool useRelativeSizes)
     {
         if (placementManager == null)
@@ -1234,24 +1236,21 @@ public class MainMenuController : MonoBehaviour
 
         if (placementManager != null)
         {
-            placementManager.SetUseRelativePlanetSizes(useRelativeSizes);
+            placementManager.SetUseRelativePlanetSizes(true);
         }
 
         if (_planetSizeModeToggle != null)
         {
-            _planetSizeModeToggle.SetIsOnWithoutNotify(useRelativeSizes);
+            _planetSizeModeToggle.SetIsOnWithoutNotify(true);
         }
 
-        UpdatePlanetSizeModeVisual(useRelativeSizes);
+        UpdatePlanetSizeModeVisual(true);
+        SetPlanetSizeModeVisible(false);
     }
 
     public void ToggleRelativePlanetSizeMode()
     {
-        bool useRelativeSizes = _planetSizeModeToggle != null
-            ? _planetSizeModeToggle.isOn == false
-            : placementManager == null || placementManager.UsesRelativePlanetSizes() == false;
-
-        SetRelativePlanetSizeMode(useRelativeSizes);
+        SetRelativePlanetSizeMode(true);
     }
 
     private void SetPlanetSizeModeVisible(bool isVisible)
