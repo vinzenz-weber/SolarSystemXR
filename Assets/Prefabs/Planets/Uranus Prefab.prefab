@@ -854,28 +854,48 @@ PrefabInstance:
       value: Uranus gets its blue-green color from methane, which absorbs red light.
       objectReference: {fileID: 0}
     - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_fontSize
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
       propertyPath: m_margin.z
-      value: 0.9768592
+      value: 1.3773924
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.56504464
+      value: 0.6567632
       objectReference: {fileID: 0}
     - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0.03814376
+      value: -0.08835315
       objectReference: {fileID: 0}
     - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.8241635
+      value: -0.7443268
       objectReference: {fileID: 0}
     - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.004921764
+      value: -0.0826651
       objectReference: {fileID: 0}
     - target: {fileID: 8492105997793176982, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8769760831987870009, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8769760831987870009, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.522
+      objectReference: {fileID: 0}
+    - target: {fileID: 8769760831987870009, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.72
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -956,28 +976,48 @@ PrefabInstance:
       value: Uranus is tilted almost sideways and seems to roll around the Sun.
       objectReference: {fileID: 0}
     - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_fontSize
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
       propertyPath: m_margin.z
-      value: 0.9768592
+      value: 1.2985963
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
       propertyPath: m_LocalRotation.w
-      value: -0.5771549
+      value: -0.6660924
       objectReference: {fileID: 0}
     - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.33805877
+      value: 0.49407643
       objectReference: {fileID: 0}
     - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.66034997
+      value: 0.53306246
       objectReference: {fileID: 0}
     - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0.34138912
+      value: -0.16749275
       objectReference: {fileID: 0}
     - target: {fileID: 8492105997793176982, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8769760831987870009, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8769760831987870009, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.506
+      objectReference: {fileID: 0}
+    - target: {fileID: 8769760831987870009, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.652
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1055,28 +1095,44 @@ PrefabInstance:
         deeper fluids.
       objectReference: {fileID: 0}
     - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_fontSize
+      value: 0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
       propertyPath: m_margin.z
-      value: 0.9768592
+      value: 1.3691008
+      objectReference: {fileID: 0}
+    - target: {fileID: 7059908411356881580, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_fontSizeBase
+      value: 0.35
       objectReference: {fileID: 0}
     - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.8754797
+      value: 0.70746183
       objectReference: {fileID: 0}
     - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
       propertyPath: m_LocalRotation.x
-      value: 0.394559
+      value: 0.32919556
       objectReference: {fileID: 0}
     - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
       propertyPath: m_LocalRotation.y
-      value: 0.26493847
+      value: 0.5961465
       objectReference: {fileID: 0}
     - target: {fileID: 8356121569955585178, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
       propertyPath: m_LocalRotation.z
-      value: 0.08755707
+      value: 0.18904334
       objectReference: {fileID: 0}
     - target: {fileID: 8492105997793176982, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8769760831987870009, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.539
+      objectReference: {fileID: 0}
+    - target: {fileID: 8769760831987870009, guid: 83d94290a50c96b459120e508ca6b7e8, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.686
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
