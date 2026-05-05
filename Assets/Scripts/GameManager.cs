@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using MRMotifs.PassthroughTransitioning;
 using UnityEngine;
 
@@ -60,14 +61,45 @@ public class GameManager : MonoBehaviour
     [Tooltip("Optionales Tutorial, das nach Logo/Splash noch in VR laeuft und vor dem Passthrough-Fade abgeschlossen werden muss.")]
     [SerializeField] private TutorialController startupTutorialController;
 
+    [Header("User Testing Setup")]
+    [Tooltip("Aktiv = beide Thumbsticks gleichzeitig klicken schaltet den Vorbereitungsmodus fuer User Tests.")]
+    [SerializeField] private bool enableUserTestingShortcut = true;
+
+    [Tooltip("Zeitfenster, in dem beide Thumbstick-Klicks als gemeinsamer Shortcut gelten.")]
+    [SerializeField] private float userTestingShortcutWindow = 0.3f;
+
+    [Tooltip("Wenn leer, werden die normalen StartupOnlyObjects als Logo im User-Testing-Modus verwendet.")]
+    [SerializeField] private GameObject[] userTestingLogoObjects;
+
+    [Tooltip("Wartezeit nach dem zweiten Thumbstick-Klick, damit der Passthrough-Dissolve nach VR sichtbar abschliessen kann.")]
+    [SerializeField] private float userTestingVrDissolveDuration = 1.2f;
+
+    [Tooltip("Objekte, die im User-Testing-Modus aktiv bleiben muessen. Kamera-Rig, GameManager und Passthrough werden automatisch geschuetzt.")]
+    [SerializeField] private GameObject[] userTestingEssentialObjects;
+
     public GameState CurrentState { get; private set; }
     public bool IsStartupSequenceActive => _isStartupSequenceActive;
+    public bool IsUserTestingSetupActive => _isUserTestingSetupActive;
 
     private GameState _startButtonReturnState = GameState.WORLD;
     private bool _hasStartButtonReturnState;
     private bool[] _panelVisibilityBeforeMainMenu;
     private bool _hasStoredExtraPanelVisibility;
     private bool _isStartupSequenceActive;
+    private bool _isUserTestingSetupActive;
+    private bool _isUserTestingStartTransitionActive;
+    private float _lastLeftThumbstickClickTime = -999f;
+    private float _lastRightThumbstickClickTime = -999f;
+    private Coroutine _startupSequenceCoroutine;
+    private Coroutine _userTestingStartCoroutine;
+    private readonly Dictionary<GameObject, bool> _userTestingRootVisibility = new Dictionary<GameObject, bool>();
+    private readonly Dictionary<AudioSource, UserTestingAudioState> _userTestingAudioStates = new Dictionary<AudioSource, UserTestingAudioState>();
+
+    private struct UserTestingAudioState
+    {
+        public bool WasPlaying;
+        public bool WasMuted;
+    }
 
     void Awake()
     {
@@ -88,7 +120,7 @@ public class GameManager : MonoBehaviour
 
         if (playStartupSequence)
         {
-            StartCoroutine(RunStartupSequence());
+            StartStartupSequence();
             return;
         }
 
@@ -98,6 +130,11 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
+        if (TryHandleUserTestingShortcut())
+        {
+            return;
+        }
+
         if (_isStartupSequenceActive) return;
         if (OVRInput.GetDown(OVRInput.Button.Start) == false) return;
 
@@ -200,7 +237,282 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(Mathf.Max(0f, mainMenuSpawnDelay));
 
         _isStartupSequenceActive = false;
+        _startupSequenceCoroutine = null;
         SetState(GameState.MAIN_MENU);
+    }
+
+    private void StartStartupSequence()
+    {
+        if (_startupSequenceCoroutine != null)
+        {
+            StopCoroutine(_startupSequenceCoroutine);
+        }
+
+        _startupSequenceCoroutine = StartCoroutine(RunStartupSequence());
+    }
+
+    private bool TryHandleUserTestingShortcut()
+    {
+        if (enableUserTestingShortcut == false) return false;
+        if (_isUserTestingStartTransitionActive) return true;
+
+        bool isLeftClicked = OVRInput.GetDown(OVRInput.RawButton.LThumbstick);
+        bool isRightClicked = OVRInput.GetDown(OVRInput.RawButton.RThumbstick);
+
+        if (isLeftClicked)
+        {
+            _lastLeftThumbstickClickTime = Time.unscaledTime;
+        }
+
+        if (isRightClicked)
+        {
+            _lastRightThumbstickClickTime = Time.unscaledTime;
+        }
+
+        bool isLeftPressed = OVRInput.Get(OVRInput.RawButton.LThumbstick);
+        bool isRightPressed = OVRInput.Get(OVRInput.RawButton.RThumbstick);
+        bool isClickInWindow = Mathf.Abs(_lastLeftThumbstickClickTime - _lastRightThumbstickClickTime) <= userTestingShortcutWindow;
+        bool isShortcut = (isLeftClicked || isRightClicked) && isLeftPressed && isRightPressed && isClickInWindow;
+
+        if (isShortcut == false) return false;
+
+        if (_isUserTestingSetupActive)
+        {
+            StartGameFromUserTestingSetup();
+        }
+        else
+        {
+            EnterUserTestingSetup();
+        }
+
+        _lastLeftThumbstickClickTime = -999f;
+        _lastRightThumbstickClickTime = -999f;
+        return true;
+    }
+
+    private void EnterUserTestingSetup()
+    {
+        if (_startupSequenceCoroutine != null)
+        {
+            StopCoroutine(_startupSequenceCoroutine);
+            _startupSequenceCoroutine = null;
+        }
+
+        _isStartupSequenceActive = false;
+        _isUserTestingSetupActive = true;
+
+        StoreAndMuteUserTestingAudio();
+        ResetUserTestingMinigames();
+        SetStartupParticlesPlaying(false);
+        StoreAndHideUserTestingRoots();
+        SetPassthroughImmediate(true);
+        SetUserTestingLogoVisible(true);
+        PlanetFactsVisibility.ClearSelection();
+
+        Debug.Log("GameManager: User-Testing-Setup aktiv. Nochmal beide Thumbsticks klicken startet Logo und Tutorial neu.");
+    }
+
+    private void StartGameFromUserTestingSetup()
+    {
+        if (_userTestingStartCoroutine != null) return;
+
+        _userTestingStartCoroutine = StartCoroutine(StartGameFromUserTestingSetupRoutine());
+    }
+
+    private IEnumerator StartGameFromUserTestingSetupRoutine()
+    {
+        _isUserTestingStartTransitionActive = true;
+        _isUserTestingSetupActive = false;
+
+        SetUserTestingLogoVisible(false);
+        ResetUserTestingMinigames();
+        SetPassthroughWithMenuSync(false);
+
+        yield return new WaitForSecondsRealtime(Mathf.Max(0f, userTestingVrDissolveDuration));
+
+        RestoreUserTestingRoots();
+        RestoreUserTestingAudio();
+        _isUserTestingStartTransitionActive = false;
+        _userTestingStartCoroutine = null;
+
+        if (playStartupSequence)
+        {
+            StartStartupSequence();
+            yield break;
+        }
+
+        SetPassthroughWithMenuSync(true);
+        SetState(GameState.MAIN_MENU);
+    }
+
+    private void ResetUserTestingMinigames()
+    {
+        MinigameManager manager = MinigameManager.Instance;
+        if (manager == null) return;
+
+        if (manager.HasActiveMinigame)
+        {
+            manager.EndMinigame();
+        }
+
+        manager.ResetQuizProgress();
+    }
+
+    private void StoreAndMuteUserTestingAudio()
+    {
+        _userTestingAudioStates.Clear();
+
+        AudioSource[] audioSources = FindObjectsByType<AudioSource>(
+            FindObjectsInactive.Include,
+            FindObjectsSortMode.None);
+
+        for (int i = 0; i < audioSources.Length; i++)
+        {
+            AudioSource audioSource = audioSources[i];
+            if (audioSource == null) continue;
+
+            _userTestingAudioStates[audioSource] = new UserTestingAudioState
+            {
+                WasPlaying = audioSource.isPlaying,
+                WasMuted = audioSource.mute
+            };
+
+            audioSource.mute = true;
+            if (audioSource.isPlaying)
+            {
+                audioSource.Pause();
+            }
+        }
+    }
+
+    private void RestoreUserTestingAudio()
+    {
+        foreach (KeyValuePair<AudioSource, UserTestingAudioState> entry in _userTestingAudioStates)
+        {
+            AudioSource audioSource = entry.Key;
+            if (audioSource == null) continue;
+
+            audioSource.mute = entry.Value.WasMuted;
+            if (entry.Value.WasPlaying)
+            {
+                audioSource.UnPause();
+            }
+        }
+
+        _userTestingAudioStates.Clear();
+    }
+
+    private void StoreAndHideUserTestingRoots()
+    {
+        _userTestingRootVisibility.Clear();
+
+        GameObject[] roots = gameObject.scene.GetRootGameObjects();
+        for (int i = 0; i < roots.Length; i++)
+        {
+            GameObject root = roots[i];
+            if (root == null) continue;
+
+            _userTestingRootVisibility[root] = root.activeSelf;
+
+            if (IsUserTestingRootEssential(root))
+            {
+                continue;
+            }
+
+            root.SetActive(false);
+        }
+    }
+
+    private void RestoreUserTestingRoots()
+    {
+        foreach (KeyValuePair<GameObject, bool> entry in _userTestingRootVisibility)
+        {
+            if (entry.Key != null)
+            {
+                entry.Key.SetActive(entry.Value);
+            }
+        }
+
+        _userTestingRootVisibility.Clear();
+    }
+
+    private bool IsUserTestingRootEssential(GameObject root)
+    {
+        if (root == null) return false;
+        if (root == transform.root.gameObject) return true;
+
+        Camera mainCamera = Camera.main;
+        if (mainCamera != null && root == mainCamera.transform.root.gameObject) return true;
+
+        PassthroughDissolver dissolver = GetStartupPassthroughDissolver();
+        if (dissolver != null && root == dissolver.transform.root.gameObject) return true;
+
+        if (IsPassthroughLayerRoot(root)) return true;
+        if (OVRManager.instance != null && root == OVRManager.instance.transform.root.gameObject) return true;
+        if (IsRootInList(root, userTestingEssentialObjects)) return true;
+        if (IsRootInList(root, GetUserTestingLogoObjects())) return true;
+
+        return false;
+    }
+
+    private bool IsPassthroughLayerRoot(GameObject root)
+    {
+        if (root == null) return false;
+
+        OVRPassthroughLayer[] passthroughLayers = FindObjectsByType<OVRPassthroughLayer>(
+            FindObjectsInactive.Include,
+            FindObjectsSortMode.None);
+
+        for (int i = 0; i < passthroughLayers.Length; i++)
+        {
+            OVRPassthroughLayer layer = passthroughLayers[i];
+            if (layer != null && layer.transform.root.gameObject == root)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool IsRootInList(GameObject root, GameObject[] objects)
+    {
+        if (root == null || objects == null) return false;
+
+        for (int i = 0; i < objects.Length; i++)
+        {
+            GameObject candidate = objects[i];
+            if (candidate != null && candidate.transform.root.gameObject == root)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private void SetUserTestingLogoVisible(bool isVisible)
+    {
+        GameObject[] logoObjects = GetUserTestingLogoObjects();
+        if (logoObjects == null) return;
+
+        for (int i = 0; i < logoObjects.Length; i++)
+        {
+            if (logoObjects[i] != null)
+            {
+                logoObjects[i].SetActive(isVisible);
+            }
+        }
+    }
+
+    private GameObject[] GetUserTestingLogoObjects()
+    {
+        if (userTestingLogoObjects != null && userTestingLogoObjects.Length > 0)
+        {
+            return userTestingLogoObjects;
+        }
+
+        return startupOnlyObjects;
     }
 
     private void SetStartupOnlyObjectsVisible(bool isVisible)
@@ -256,11 +568,31 @@ public class GameManager : MonoBehaviour
     private void SetPassthroughImmediate(bool isActive)
     {
         PassthroughDissolver dissolver = GetStartupPassthroughDissolver();
-        if (dissolver == null) return;
+        if (dissolver == null)
+        {
+            SetPassthroughLayersEnabled(isActive);
+            return;
+        }
 
         dissolver.SetPassthroughActiveImmediate(isActive);
+        SetPassthroughLayersEnabled(isActive);
         PlanetFactsVisibility.Refresh();
         PlanetLabelVisibility.Refresh();
+    }
+
+    private void SetPassthroughLayersEnabled(bool isEnabled)
+    {
+        OVRPassthroughLayer[] passthroughLayers = FindObjectsByType<OVRPassthroughLayer>(
+            FindObjectsInactive.Include,
+            FindObjectsSortMode.None);
+
+        for (int i = 0; i < passthroughLayers.Length; i++)
+        {
+            if (passthroughLayers[i] != null)
+            {
+                passthroughLayers[i].enabled = isEnabled;
+            }
+        }
     }
 
     private void SetPassthroughWithMenuSync(bool isActive)
