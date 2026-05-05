@@ -130,6 +130,16 @@ public class MainMenuController : MonoBehaviour
     private Transform _startExperiencePanelRoot;
     private Transform _planetSizeModeRoot;
 
+    private void OnEnable()
+    {
+        GameManager.StateChanged += HandleGameStateChanged;
+    }
+
+    private void OnDisable()
+    {
+        GameManager.StateChanged -= HandleGameStateChanged;
+    }
+
     void Start()
     {
         AutoBindMenuRoot();
@@ -251,7 +261,7 @@ public class MainMenuController : MonoBehaviour
         }
 
         ShowStartExperienceButton();
-        SetActionButtonText("Discover " + data.planetName);
+        RefreshActionButtonText();
     }
 
     // Wird vom Sonnensystem-Button/Tab aufgerufen.
@@ -284,7 +294,7 @@ public class MainMenuController : MonoBehaviour
         }
 
         ShowStartExperienceButton();
-        SetActionButtonText("Discover Solar System");
+        RefreshActionButtonText();
     }
 
     private void AutoBindMenuRoot()
@@ -905,6 +915,13 @@ public class MainMenuController : MonoBehaviour
 
         if (_currentSelection == ExperienceSelection.Planet && _currentPlanet != null)
         {
+            if (placementManager.HasPlacedPlanet(_currentPlanet))
+            {
+                placementManager.RemovePlacedPlanet(_currentPlanet);
+                RefreshActionButtonText();
+                return;
+            }
+
             placementManager.SelectPlanet(_currentPlanet);
             StartPlacementState();
             return;
@@ -1136,6 +1153,29 @@ public class MainMenuController : MonoBehaviour
         if (targetText != null)
         {
             targetText.text = newText;
+        }
+    }
+
+    private void RefreshActionButtonText()
+    {
+        if (_currentSelection == ExperienceSelection.Planet && _currentPlanet != null)
+        {
+            bool hasPlacedPlanet = placementManager != null && placementManager.HasPlacedPlanet(_currentPlanet);
+            SetActionButtonText(hasPlacedPlanet ? "Remove Planet" : "Discover " + _currentPlanet.planetName);
+            return;
+        }
+
+        if (_currentSelection == ExperienceSelection.SolarSystem)
+        {
+            SetActionButtonText("Discover Solar System");
+        }
+    }
+
+    private void HandleGameStateChanged(GameState newState)
+    {
+        if (newState == GameState.MAIN_MENU)
+        {
+            RefreshActionButtonText();
         }
     }
 

@@ -234,6 +234,8 @@ public class PlacementManager : MonoBehaviour
 
     public void SetPlacedPlanetsVisible(bool isVisible)
     {
+        RemoveMissingPlacedPlanetReferences();
+
         for (int i = 0; i < _placedPlanetObjects.Count; i++)
         {
             if (_placedPlanetObjects[i] != null)
@@ -241,6 +243,57 @@ public class PlacementManager : MonoBehaviour
                 _placedPlanetObjects[i].SetActive(isVisible);
             }
         }
+    }
+
+    public bool HasPlacedPlanet(PlanetData data)
+    {
+        if (data == null) return false;
+
+        RemoveMissingPlacedPlanetReferences();
+
+        for (int i = 0; i < _placedPlanetObjects.Count; i++)
+        {
+            if (GetPlanetDataFromPlacedObject(_placedPlanetObjects[i]) == data)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public void RemovePlacedPlanet(PlanetData data)
+    {
+        if (data == null) return;
+
+        for (int i = _placedPlanetObjects.Count - 1; i >= 0; i--)
+        {
+            GameObject placedPlanet = _placedPlanetObjects[i];
+            if (placedPlanet == null)
+            {
+                _placedPlanetObjects.RemoveAt(i);
+                continue;
+            }
+
+            if (GetPlanetDataFromPlacedObject(placedPlanet) != data) continue;
+
+            _placedPlanetObjects.RemoveAt(i);
+            Destroy(placedPlanet);
+        }
+
+        if (_placedPlanetObjects.Count == 0)
+        {
+            DeactivatePlanetSun();
+        }
+
+        if (planetInfoPanelManager != null)
+        {
+            planetInfoPanelManager.HidePanel();
+        }
+
+        PlanetFactsVisibility.ClearSelection();
+        PlanetFactsVisibility.Refresh();
+        PlanetLabelVisibility.Refresh();
     }
 
     public void SetWorldPanelsHiddenByMainMenu(bool isHidden)
@@ -275,6 +328,35 @@ public class PlacementManager : MonoBehaviour
         {
             planetInfoPanelManager.HidePanel();
         }
+    }
+
+    private void RemoveMissingPlacedPlanetReferences()
+    {
+        for (int i = _placedPlanetObjects.Count - 1; i >= 0; i--)
+        {
+            if (_placedPlanetObjects[i] == null)
+            {
+                _placedPlanetObjects.RemoveAt(i);
+            }
+        }
+    }
+
+    private PlanetData GetPlanetDataFromPlacedObject(GameObject placedPlanet)
+    {
+        if (placedPlanet == null) return null;
+
+        PlanetSelectable selectable = placedPlanet.GetComponentInChildren<PlanetSelectable>(true);
+        if (selectable != null)
+        {
+            PlanetData selectableData = selectable.GetPlanetData();
+            if (selectableData != null)
+            {
+                return selectableData;
+            }
+        }
+
+        InteractablePlanetVisual visual = placedPlanet.GetComponentInChildren<InteractablePlanetVisual>(true);
+        return visual != null ? visual.PlanetData : null;
     }
 
     private void ClearPlacedSolarSystem()
