@@ -57,6 +57,9 @@ public class GameManager : MonoBehaviour
     [Tooltip("MainMenuController, damit der Passthrough-Toggle nach der Startsequenz korrekt synchronisiert ist.")]
     [SerializeField] private MainMenuController mainMenuController;
 
+    [Tooltip("Optionales Tutorial, das nach Logo/Splash noch in VR laeuft und vor dem Passthrough-Fade abgeschlossen werden muss.")]
+    [SerializeField] private TutorialController startupTutorialController;
+
     public GameState CurrentState { get; private set; }
     public bool IsStartupSequenceActive => _isStartupSequenceActive;
 
@@ -184,6 +187,14 @@ public class GameManager : MonoBehaviour
         yield return new WaitForSeconds(Mathf.Max(0f, startupDuration));
 
         SetStartupOnlyObjectsVisible(false);
+        SetStartupParticlesPlaying(false);
+
+        TutorialController tutorialController = GetStartupTutorialController();
+        if (tutorialController != null && tutorialController.HasSteps)
+        {
+            yield return tutorialController.RunTutorial();
+        }
+
         SetPassthroughWithMenuSync(true);
 
         yield return new WaitForSeconds(Mathf.Max(0f, mainMenuSpawnDelay));
@@ -293,6 +304,18 @@ public class GameManager : MonoBehaviour
 
         mainMenuController = controllers.Length > 0 ? controllers[0] : null;
         return mainMenuController;
+    }
+
+    private TutorialController GetStartupTutorialController()
+    {
+        if (startupTutorialController != null) return startupTutorialController;
+
+        TutorialController[] controllers = FindObjectsByType<TutorialController>(
+            FindObjectsInactive.Include,
+            FindObjectsSortMode.None);
+
+        startupTutorialController = controllers.Length > 0 ? controllers[0] : null;
+        return startupTutorialController;
     }
 
     private void OpenMainMenuWithStartButton()
