@@ -10,6 +10,7 @@ public class PlanetInfoPanelManager : MonoBehaviour
 
     [Header("Immersive Mode")]
     [SerializeField] private ImmersiveModeController immersiveModeController;
+    [SerializeField] private PlacementManager placementManager;
 
     [Header("Position")]
     [Tooltip("Wenn leer, wird Camera.main benutzt.")]
@@ -149,17 +150,19 @@ public class PlanetInfoPanelManager : MonoBehaviour
 
         if (infoPanel != null)
         {
-            infoPanel.gameObject.SetActive(true);
             infoPanel.Bind(targetData);
             infoPanel.SetImmersiveModeActive(true);
-            PositionPanelNextToUser();
+            infoPanel.gameObject.SetActive(false);
         }
 
+        SetPlacedPlanetsVisible(false);
         return true;
     }
 
     public void NotifyImmersiveModeClosed()
     {
+        SetPlacedPlanetsVisible(true);
+
         if (infoPanel != null)
         {
             infoPanel.SetImmersiveModeActive(false);
@@ -234,5 +237,21 @@ public class PlanetInfoPanelManager : MonoBehaviour
         GameObject controllerObject = new GameObject("ImmersiveModeController");
         immersiveModeController = controllerObject.AddComponent<ImmersiveModeController>();
         return immersiveModeController;
+    }
+
+    private void SetPlacedPlanetsVisible(bool isVisible)
+    {
+        PlacementManager manager = GetPlacementManager();
+        if (manager == null) return;
+
+        manager.SetPlacedPlanetsVisible(isVisible);
+    }
+
+    private PlacementManager GetPlacementManager()
+    {
+        if (placementManager != null) return placementManager;
+
+        placementManager = FindFirstObjectByType<PlacementManager>();
+        return placementManager;
     }
 }

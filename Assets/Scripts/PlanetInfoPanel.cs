@@ -8,6 +8,7 @@ public class PlanetInfoPanel : MonoBehaviour
 {
     private struct DetailCard
     {
+        public Transform root;
         public TMP_Text categoryText;
         public TMP_Text categoryDescriptionText;
         public TMP_Text valueText;
@@ -140,6 +141,7 @@ public class PlanetInfoPanel : MonoBehaviour
         DetailCard card = new DetailCard();
         if (cardRoot == null) return card;
 
+        card.root = cardRoot;
         card.categoryText = FindText(FindDirectChild(cardRoot, "Category"), null);
         card.categoryDescriptionText = FindText(FindDirectChild(cardRoot, "Category Description"), null);
         card.valueText = FindText(FindDirectChild(cardRoot, "Value"), null);
@@ -172,10 +174,34 @@ public class PlanetInfoPanel : MonoBehaviour
 
     private void SetCard(DetailCard card, string category, string categoryDescription, string value, string infoText)
     {
+        if (IsImmersiveModeCard(card))
+        {
+            return;
+        }
+
         SetText(card.categoryText, category);
         SetText(card.categoryDescriptionText, categoryDescription);
         SetText(card.valueText, value);
         SetText(card.infoText, GetDetailInfoText(infoText));
+    }
+
+    private bool IsImmersiveModeCard(DetailCard card)
+    {
+        if (card.root == null) return false;
+
+        if (card.categoryText != null && ContainsImmersiveModeText(card.categoryText.text))
+        {
+            return true;
+        }
+
+        Button button = card.root.GetComponent<Button>();
+        if (button != null && ContainsImmersiveModeText(GetCombinedText(card.root)))
+        {
+            return true;
+        }
+
+        Toggle toggle = card.root.GetComponent<Toggle>();
+        return toggle != null && ContainsImmersiveModeText(GetCombinedText(card.root));
     }
 
     private void SetText(TMP_Text textField, string value)
@@ -407,6 +433,13 @@ public class PlanetInfoPanel : MonoBehaviour
             return;
         }
 
+        immersiveModeButton = FindImmersiveModeButton();
+        if (immersiveModeButton != null)
+        {
+            immersiveModeButtonText = immersiveModeButton.GetComponentInChildren<TMP_Text>(true);
+            return;
+        }
+
         if (FindDeepChild(transform, "PlanetDetailCanvas") != null)
         {
             return;
@@ -491,6 +524,51 @@ public class PlanetInfoPanel : MonoBehaviour
         }
 
         return null;
+    }
+
+    private Button FindImmersiveModeButton()
+    {
+        Button[] buttons = GetComponentsInChildren<Button>(true);
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            Button button = buttons[i];
+            if (button == null) continue;
+
+            string buttonName = button.name.ToLowerInvariant();
+            if (buttonName.Contains("immersive"))
+            {
+                return button;
+            }
+
+            if (ContainsImmersiveModeText(GetCombinedText(button.transform)))
+            {
+                return button;
+            }
+        }
+
+        return null;
+    }
+
+    private string GetCombinedText(Transform root)
+    {
+        if (root == null) return "";
+
+        TMP_Text[] texts = root.GetComponentsInChildren<TMP_Text>(true);
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < texts.Length; i++)
+        {
+            if (texts[i] == null) continue;
+            builder.Append(' ');
+            builder.Append(texts[i].text);
+        }
+
+        return builder.ToString();
+    }
+
+    private bool ContainsImmersiveModeText(string value)
+    {
+        return string.IsNullOrWhiteSpace(value) == false
+            && value.ToLowerInvariant().Contains("immersive");
     }
 
     private void BindImmersiveControlIfNeeded()

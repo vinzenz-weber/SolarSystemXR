@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 
 // Schaltet den vorbereiteten ImmersiveMode in der Szene ein und aus.
-// Das Planet-Detail-Panel bleibt dabei sichtbar; es wird nur der Passthrough-Fade genutzt.
+// Detail-Panel und platzierte Planeten werden vom PlanetInfoPanelManager passend ein- und ausgeblendet.
 public class ImmersiveModeController : MonoBehaviour
 {
     [Header("Szene")]

@@ -215,13 +215,7 @@ public class PlacementManager : MonoBehaviour
 
     public void SetPlacedContentVisible(bool isVisible)
     {
-        for (int i = 0; i < _placedPlanetObjects.Count; i++)
-        {
-            if (_placedPlanetObjects[i] != null)
-            {
-                _placedPlanetObjects[i].SetActive(isVisible);
-            }
-        }
+        SetPlacedPlanetsVisible(isVisible);
 
         if (_placedSolarSystemObject != null)
         {
@@ -231,6 +225,17 @@ public class PlacementManager : MonoBehaviour
         if (_currentSonnensystemUI != null)
         {
             _currentSonnensystemUI.gameObject.SetActive(isVisible);
+        }
+    }
+
+    public void SetPlacedPlanetsVisible(bool isVisible)
+    {
+        for (int i = 0; i < _placedPlanetObjects.Count; i++)
+        {
+            if (_placedPlanetObjects[i] != null)
+            {
+                _placedPlanetObjects[i].SetActive(isVisible);
+            }
         }
     }
 
