@@ -42,8 +42,8 @@ public class PlanetInfoPanel : MonoBehaviour
     private bool _hasBoundPlanetDetailRoot;
     private bool _usesPlanetDetailRootLayout;
     private bool _hasBoundImmersiveControl;
-    private const string ImmersiveButtonLabel = "Immersive Mode";
-    private const string LeaveImmersiveButtonLabel = "Leave Immersive Mode";
+    private const string ImmersiveButtonLabel = "Immersive view";
+    private const string LeaveImmersiveButtonLabel = "Leave immersive view";
     private const string LoremIpsum = "Lorem ipsum dolor sit amet.";
     private const float EarthDiameterKm = 12742f;
     private const float JupiterDiameterKm = 142984f;
@@ -58,6 +58,7 @@ public class PlanetInfoPanel : MonoBehaviour
     {
         if (immersiveModeButton != null)
         {
+            immersiveModeButton.onClick.RemoveListener(ToggleImmersiveMode);
             immersiveModeButton.onClick.RemoveListener(OpenImmersiveMode);
         }
 
@@ -330,7 +331,7 @@ public class PlanetInfoPanel : MonoBehaviour
         return builder.ToString();
     }
 
-    private void OpenImmersiveMode()
+    public void ToggleImmersiveMode()
     {
         if (_currentPlanetData == null)
         {
@@ -345,6 +346,12 @@ public class PlanetInfoPanel : MonoBehaviour
         }
 
         PlanetInfoPanelManager.Instance.ToggleImmersiveMode(_currentPlanetData);
+    }
+
+    // Alte Button-Events koennen diese Methode noch verwenden.
+    public void OpenImmersiveMode()
+    {
+        ToggleImmersiveMode();
     }
 
     // Kann direkt im Toggle unter On Value Changed (bool) eingetragen werden.
@@ -406,6 +413,24 @@ public class PlanetInfoPanel : MonoBehaviour
     {
         if (immersiveModeToggle != null || immersiveModeButton != null) return;
 
+        Transform existingButton = FindDeepChild(transform, "Button_ImmersiveMode");
+        if (existingButton != null && HasChildButton(existingButton) == false)
+        {
+            immersiveModeButton = existingButton.GetComponent<Button>();
+            immersiveModeButtonText = existingButton.GetComponentInChildren<TMP_Text>(true);
+            if (immersiveModeButton != null)
+            {
+                return;
+            }
+        }
+
+        immersiveModeButton = FindImmersiveModeButton();
+        if (immersiveModeButton != null)
+        {
+            immersiveModeButtonText = immersiveModeButton.GetComponentInChildren<TMP_Text>(true);
+            return;
+        }
+
         Transform existingToggle = FindDeepChild(transform, "Toggle_ImmersiveMode");
         if (existingToggle == null) existingToggle = FindDeepChild(transform, "ImmersiveModeToggle");
         if (existingToggle == null) existingToggle = FindDeepChild(transform, "ToggleImmersiveMode");
@@ -422,21 +447,6 @@ public class PlanetInfoPanel : MonoBehaviour
         if (immersiveModeToggle != null)
         {
             immersiveModeButtonText = immersiveModeToggle.GetComponentInChildren<TMP_Text>(true);
-            return;
-        }
-
-        Transform existingButton = FindDeepChild(transform, "Button_ImmersiveMode");
-        if (existingButton != null)
-        {
-            immersiveModeButton = existingButton.GetComponent<Button>();
-            immersiveModeButtonText = existingButton.GetComponentInChildren<TMP_Text>(true);
-            return;
-        }
-
-        immersiveModeButton = FindImmersiveModeButton();
-        if (immersiveModeButton != null)
-        {
-            immersiveModeButtonText = immersiveModeButton.GetComponentInChildren<TMP_Text>(true);
             return;
         }
 
@@ -529,24 +539,110 @@ public class PlanetInfoPanel : MonoBehaviour
     private Button FindImmersiveModeButton()
     {
         Button[] buttons = GetComponentsInChildren<Button>(true);
+        Button bestButton = null;
+        int bestScore = int.MinValue;
+
         for (int i = 0; i < buttons.Length; i++)
         {
             Button button = buttons[i];
             if (button == null) continue;
 
-            string buttonName = button.name.ToLowerInvariant();
-            if (buttonName.Contains("immersive"))
+            int score = GetImmersiveButtonScore(button);
+            if (score > bestScore)
             {
-                return button;
-            }
-
-            if (ContainsImmersiveModeText(GetCombinedText(button.transform)))
-            {
-                return button;
+                bestButton = button;
+                bestScore = score;
             }
         }
 
-        return null;
+        return bestScore > 0 ? bestButton : null;
+    }
+
+    private int GetImmersiveButtonScore(Button button)
+    {
+        if (button == null) return 0;
+
+        string buttonName = button.name.ToLowerInvariant();
+        string combinedText = GetCombinedText(button.transform);
+        string lowerText = combinedText.ToLowerInvariant();
+        int score = 0;
+
+        if (buttonName.Contains("immersive"))
+        {
+            score += 20;
+        }
+
+        if (ContainsImmersiveModeText(combinedText))
+        {
+            score += 30;
+        }
+
+        if (lowerText.Contains("immersive view"))
+        {
+            score += 50;
+        }
+
+        if (HasPlayIcon(button.transform))
+        {
+            score += 20;
+        }
+
+        if (HasChildButton(button.transform))
+        {
+            score -= 100;
+        }
+
+        score += GetTransformDepth(button.transform);
+        return score;
+    }
+
+    private bool HasPlayIcon(Transform root)
+    {
+        if (root == null) return false;
+
+        Transform[] children = root.GetComponentsInChildren<Transform>(true);
+        for (int i = 0; i < children.Length; i++)
+        {
+            if (children[i] == null) continue;
+
+            string childName = children[i].name.ToLowerInvariant();
+            if (childName.Contains("play"))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private bool HasChildButton(Transform root)
+    {
+        if (root == null) return false;
+
+        Button[] buttons = root.GetComponentsInChildren<Button>(true);
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            if (buttons[i] != null && buttons[i].transform != root)
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    private int GetTransformDepth(Transform target)
+    {
+        int depth = 0;
+        Transform current = target;
+
+        while (current != null && current != transform)
+        {
+            depth++;
+            current = current.parent;
+        }
+
+        return depth;
     }
 
     private string GetCombinedText(Transform root)
@@ -588,14 +684,45 @@ public class PlanetInfoPanel : MonoBehaviour
 
         if (immersiveModeButton != null)
         {
+            RemoveImmersiveListenersFromOtherButtons();
+            ConfigureImmersiveButtonClickArea();
+            immersiveModeButton.onClick.RemoveListener(ToggleImmersiveMode);
             immersiveModeButton.onClick.RemoveListener(OpenImmersiveMode);
-            immersiveModeButton.onClick.AddListener(OpenImmersiveMode);
+            immersiveModeButton.onClick.AddListener(ToggleImmersiveMode);
             _hasBoundImmersiveControl = true;
             Debug.Log("PlanetInfoPanel: Immersive-Mode-Button verbunden: " + immersiveModeButton.name);
             return;
         }
 
         Debug.LogWarning("PlanetInfoPanel: Kein Immersive-Mode-Toggle oder Button im PlanetDetailRoot gefunden.");
+    }
+
+    private void RemoveImmersiveListenersFromOtherButtons()
+    {
+        Button[] buttons = GetComponentsInChildren<Button>(true);
+        for (int i = 0; i < buttons.Length; i++)
+        {
+            Button button = buttons[i];
+            if (button == null || button == immersiveModeButton) continue;
+
+            if (ContainsImmersiveModeText(GetCombinedText(button.transform)))
+            {
+                button.onClick.RemoveListener(ToggleImmersiveMode);
+                button.onClick.RemoveListener(OpenImmersiveMode);
+            }
+        }
+    }
+
+    private void ConfigureImmersiveButtonClickArea()
+    {
+        if (immersiveModeButton == null) return;
+
+        Graphic buttonGraphic = immersiveModeButton.GetComponent<Graphic>();
+        if (buttonGraphic != null)
+        {
+            // Der echte Button soll vollflaechig klickbar sein.
+            buttonGraphic.raycastTarget = true;
+        }
     }
 
     private void SetLayerRecursive(GameObject targetObject, int layer)
