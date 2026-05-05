@@ -198,8 +198,12 @@ public class PlacementManager : MonoBehaviour
     // Zerstoert alle bisher platzierten Objekte, wenn das Menue einen kompletten Reset braucht.
     public void ClearPlacedObjects()
     {
+        ClearPreview();
         ClearPlacedPlanets();
         ClearPlacedSolarSystem();
+        currentPlanetData = null;
+        _currentSolarSystemPrefab = null;
+        _isSolarSystemMode = false;
 
         if (planetInfoPanelManager != null)
         {
@@ -294,7 +298,10 @@ public class PlacementManager : MonoBehaviour
         if (visualizerInstance != null) Destroy(visualizerInstance);
         previewInstance = null;
         visualizerInstance = null;
-        lineRenderer.enabled = false;
+        if (lineRenderer != null)
+        {
+            lineRenderer.enabled = false;
+        }
     }
 
     void Update()

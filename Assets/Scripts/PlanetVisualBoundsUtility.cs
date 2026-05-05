@@ -2,7 +2,7 @@ using TMPro;
 using UnityEngine;
 
 // Gemeinsame Bounds-Hilfe fuer Planet-Visuals.
-// Wichtig: Lern-Facts, Linien, Text und Ringe duerfen die Planetengroesse nicht beeinflussen.
+// Wichtig: Lern-Facts, Linien, Text, Ringe und Partikel duerfen die Planetengroesse nicht beeinflussen.
 public static class PlanetVisualBoundsUtility
 {
     private const string FactsObjectName = "Facts";
@@ -45,6 +45,11 @@ public static class PlanetVisualBoundsUtility
         if (renderer == null) return true;
 
         if (renderer is LineRenderer)
+        {
+            return true;
+        }
+
+        if (renderer is ParticleSystemRenderer)
         {
             return true;
         }

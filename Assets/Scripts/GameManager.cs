@@ -24,6 +24,7 @@ public class GameManager : MonoBehaviour
 {
     // Globaler Zugriffspunkt - andere Scripts rufen GameManager.Instance.SetState(...)
     public static GameManager Instance;
+    public static event System.Action<GameState> StateChanged;
 
     [Header("Canvas-Referenz")]
     [Tooltip("Hauptmenue-Canvas: sichtbar in MAIN_MENU, in PLACEMENT/WORLD/TEST ausgeblendet")]
@@ -210,6 +211,7 @@ public class GameManager : MonoBehaviour
 
         PlanetFactsVisibility.Refresh();
         PlanetLabelVisibility.Refresh();
+        StateChanged?.Invoke(newState);
         Debug.Log("GameState: " + newState);
     }
 
@@ -303,6 +305,7 @@ public class GameManager : MonoBehaviour
 
         StoreAndMuteUserTestingAudio();
         ResetUserTestingMinigames();
+        ResetUserTestingSceneContent();
         SetStartupParticlesPlaying(false);
         StoreAndHideUserTestingRoots();
         SetPassthroughImmediate(true);
@@ -356,6 +359,17 @@ public class GameManager : MonoBehaviour
         }
 
         manager.ResetQuizProgress();
+    }
+
+    private void ResetUserTestingSceneContent()
+    {
+        PlacementManager manager = GetPlacementManager();
+        if (manager != null)
+        {
+            manager.ClearPlacedObjects();
+        }
+
+        PlanetFactsVisibility.ClearSelection();
     }
 
     private void StoreAndMuteUserTestingAudio()
