@@ -118,8 +118,8 @@ Material:
     - _AddPrecomputedVelocity: 0
     - _AlphaClip: 0
     - _AlphaToMask: 0
-    - _Atmos_finetune: 0
-    - _Atmosphere_Bleed: 1.3
+    - _Atmos_finetune: 3.17
+    - _Atmosphere_Bleed: 0.837
     - _Blend: 0
     - _BlendModePreserveSpecular: 1
     - _BumpScale: 1
@@ -138,7 +138,7 @@ Material:
     - _EmissionIntensity: 2
     - _EnvironmentDepthBias: 0
     - _EnvironmentReflections: 1
-    - _Fresnel_Strength: 7.67
+    - _Fresnel_Strength: 3.97
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -150,7 +150,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Rim: 3.76
+    - _Rim: 0.89
     - _Show_Atmosphere: 1
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
@@ -160,7 +160,7 @@ Material:
     - _Surface: 0
     - _Use_Cloud_Depth: 0
     - _Use_Normal_Map: 0
-    - _Verlauf: 0
+    - _Verlauf: 0.103
     - _Wolkentiefe: 12.22
     - _WorkflowMode: 1
     - _XRMotionVectorsPass: 1
@@ -168,11 +168,11 @@ Material:
     - _aTMOSPHERE_oPACITY: 1
     m_Colors:
     - _Atmosphere_Inner: {r: 0, g: 0.9496855, b: 0.92582625, a: 1}
-    - _Atmosphere_Outer: {r: 1, g: 1, b: 1, a: 1}
+    - _Atmosphere_Outer: {r: 0.6761006, g: 0.9427986, b: 1, a: 1}
     - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _SunPosition: {r: 1.06, g: 0.85196, b: -4.4, a: 0}
+    - _SunPosition: {r: -92.6, g: 124.6, b: -51.3, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

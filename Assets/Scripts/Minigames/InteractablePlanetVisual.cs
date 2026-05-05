@@ -130,10 +130,7 @@ public class InteractablePlanetVisual : MonoBehaviour
     {
         if (child == null) return;
 
-        Transform retiredRoot = GetOrCreateRetiredVisualRoot();
-
-        child.SetActive(false);
-        child.transform.SetParent(retiredRoot, false);
+        Destroy(child);
     }
 
     private Transform GetOrCreateRetiredVisualRoot()

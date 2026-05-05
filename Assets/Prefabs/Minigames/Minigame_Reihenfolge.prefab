@@ -13577,7 +13577,7 @@ MonoBehaviour:
   DisableVisualColliders: 1
   DisableVisualRigidbodies: 1
   FitVisualToTargetSize: 1
-  TargetVisualSize: 0.04
+  TargetVisualSize: 0.0285
 --- !u!114 &244925388914674613
 MonoBehaviour:
   m_ObjectHideFlags: 0

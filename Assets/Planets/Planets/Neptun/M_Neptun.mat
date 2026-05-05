@@ -126,7 +126,7 @@ Material:
     - _EmissionIntensity: 4.25
     - _EnvironmentDepthBias: 0
     - _EnvironmentReflections: 1
-    - _Fresnel_Strength: 1.09
+    - _Fresnel_Strength: 5.9
     - _GlossMapScale: 0
     - _Glossiness: 0
     - _GlossyReflections: 0
@@ -138,7 +138,7 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _Rim: 1.08
+    - _Rim: 2.79
     - _Show_Atmosphere: 1
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
@@ -148,7 +148,7 @@ Material:
     - _Surface: 0
     - _Use_Cloud_Depth: 0
     - _Use_Normal_Map: 0
-    - _Verlauf: -0
+    - _Verlauf: 0.086
     - _Wolkentiefe: 0
     - _WorkflowMode: 1
     - _XRMotionVectorsPass: 1
@@ -162,7 +162,7 @@ Material:
     - _EmissionColor: {r: 0, g: 0, b: 0, a: 1}
     - _Finetuning_cloud: {r: -51, g: 41.5, b: 81.67, a: 0}
     - _SpecColor: {r: 0.19999996, g: 0.19999996, b: 0.19999996, a: 1}
-    - _SunPosition: {r: 1.06, g: 0.85196, b: -4.4, a: 0}
+    - _SunPosition: {r: -92.6, g: 124.6, b: -51.3, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &5011088759347078597

@@ -545,7 +545,10 @@ public class SizeChecker : MonoBehaviour
     {
         if (root == null) return 0f;
 
-        if (PlanetVisualBoundsUtility.TryGetPlanetVisualBounds(root, true, out Bounds bounds) == false)
+        // Fuer die Groessenlogik zaehlen nur die aktuell sichtbaren Planet-Renderer.
+        // Alte Refresh-Visuals koennen kurzzeitig deaktiviert existieren und wuerden sonst
+        // einzelne Planeten nach einem vorherigen Minispiel falsch skalieren.
+        if (PlanetVisualBoundsUtility.TryGetPlanetVisualBounds(root, false, out Bounds bounds) == false)
         {
             return 0f;
         }

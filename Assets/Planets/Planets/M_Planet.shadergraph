@@ -2937,8 +2937,8 @@
     "m_ObjectId": "0500f755197d41538279b0b19e20b061",
     "m_Title": "Depth Occlusion",
     "m_Position": {
-        "x": -3978.6669921875,
-        "y": -7516.66748046875
+        "x": -3978.66650390625,
+        "y": -7516.6669921875
     }
 }
 
@@ -4287,8 +4287,8 @@
     "m_ObjectId": "19b58edd8d2d4a149487fb8bd6e05719",
     "m_Title": "Add Fresnel",
     "m_Position": {
-        "x": 5202.00048828125,
-        "y": -3722.6669921875
+        "x": 5202.0,
+        "y": -3722.666748046875
     }
 }
 
@@ -5763,8 +5763,8 @@
     "m_ObjectId": "31ba493e2f304f638c4953cdb19e50b5",
     "m_Title": "Add Cloud Depth",
     "m_Position": {
-        "x": 3792.000732421875,
-        "y": -3610.667236328125
+        "x": 3792.000244140625,
+        "y": -3610.666748046875
     }
 }
 
@@ -7708,8 +7708,8 @@
     "m_ObjectId": "52b1d004f5b94b70ad41f43944d0f78e",
     "m_Title": "Generate Cloud Depth",
     "m_Position": {
-        "x": 615.3338012695313,
-        "y": -5743.333984375
+        "x": 615.33349609375,
+        "y": -5743.33349609375
     }
 }
 
@@ -8492,7 +8492,7 @@
         "HLSL"
     ],
     "m_Precision": 0,
-    "m_PreviewExpanded": false,
+    "m_PreviewExpanded": true,
     "m_DismissedVersion": 0,
     "m_PreviewMode": 0,
     "m_CustomColors": {
@@ -8502,7 +8502,7 @@
     "m_FunctionName": "SphereUV",
     "m_FunctionSource": "",
     "m_FunctionSourceUsePragmas": true,
-    "m_FunctionBody": "float3 n = normalize(positionOS);\r\nfloat u = atan2(n.x, n.z) / 6.28318530 + 0.5;\r\nfloat v = n.y * 0.5 + 0.5;\r\n\r\nfloat du = ddx(u);\r\nif (abs(du) > 0.4) {\r\n    if (u < 0.5) u += 1.0;\r\n}\r\n\r\nuv = float2(u, v);"
+    "m_FunctionBody": "float3 n = normalize(positionOS);\r\nfloat u = atan2(n.x, n.z) / 6.28318530 + 0.5;\r\nfloat v = n.y * 0.5 + 0.5;\r\n\r\n// Horizontal spiegeln\r\nu = 1.0 - u;\r\n\r\nfloat du = ddx(u);\r\nif (abs(du) > 0.4) {\r\n    if (u < 0.5) u += 1.0;\r\n}\r\n\r\nuv = float2(u, v);\r\n"
 }
 
 {
@@ -9132,8 +9132,8 @@
     "m_ObjectId": "62f95925e3cc45b39eb8d3977ca6cd68",
     "m_Title": "Normal Map Texture",
     "m_Position": {
-        "x": 3594.00048828125,
-        "y": -6189.333984375
+        "x": 3594.000244140625,
+        "y": -6189.33349609375
     }
 }
 
@@ -9522,8 +9522,8 @@
     "m_ObjectId": "6ad6332dec6542cd9c76feed44599825",
     "m_Title": "Atmosphäre",
     "m_Position": {
-        "x": 2937.333984375,
-        "y": -6958.00146484375
+        "x": 2937.333251953125,
+        "y": -6958.00048828125
     }
 }
 
@@ -10383,8 +10383,8 @@
     "m_ObjectId": "7858492e1d9c4430a12e08f6d9f45733",
     "m_Title": "Add Normal Texture",
     "m_Position": {
-        "x": 4461.99951171875,
-        "y": -3616.000244140625
+        "x": 4462.0,
+        "y": -3616.0
     }
 }
 
@@ -11423,7 +11423,7 @@
     "m_Title": "UVs Berechnen",
     "m_Position": {
         "x": -6100.6669921875,
-        "y": -6237.333984375
+        "y": -6237.33349609375
     }
 }
 
@@ -12140,8 +12140,8 @@
     "m_ObjectId": "9717bcd382a14874bc95fa9f15a56570",
     "m_Title": "Lichtberechnung",
     "m_Position": {
-        "x": 1197.33349609375,
-        "y": -7729.33447265625
+        "x": 1197.333251953125,
+        "y": -7729.33349609375
     }
 }
 
@@ -14997,8 +14997,8 @@
     "m_ObjectId": "c512ad17bba94cd0a3d6e307db376518",
     "m_Title": "Main Texture",
     "m_Position": {
-        "x": -1741.33349609375,
-        "y": -6709.333984375
+        "x": -1741.333251953125,
+        "y": -6709.33349609375
     }
 }
 
@@ -15375,8 +15375,8 @@
     "m_ObjectId": "ce09acce7084418e8244874873b80422",
     "m_Title": "Wolken",
     "m_Position": {
-        "x": -2486.6669921875,
-        "y": -5559.333984375
+        "x": -2486.66650390625,
+        "y": -5559.33349609375
     }
 }
 
@@ -15731,8 +15731,8 @@
     "m_ObjectId": "d294fc36c3e34becb22f0650835befad",
     "m_Title": "Atmosphärenfarbe",
     "m_Position": {
-        "x": 4026.667724609375,
-        "y": -7010.66748046875
+        "x": 4026.666748046875,
+        "y": -7010.6669921875
     }
 }
 
@@ -15991,8 +15991,8 @@
     "m_ObjectId": "d5826102b4d642b2a3ba3f38b8c70d44",
     "m_Title": "Add Emission",
     "m_Position": {
-        "x": 2525.333740234375,
-        "y": -3630.000244140625
+        "x": 2525.333251953125,
+        "y": -3630.0
     }
 }
 

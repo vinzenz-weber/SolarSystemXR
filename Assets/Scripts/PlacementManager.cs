@@ -17,6 +17,16 @@ public class PlacementManager : MonoBehaviour
 
     public GameObject placementVisualizerPrefab;
 
+    [Header("Placement-Ray Visual")]
+    [Tooltip("Farbe fuer gueltige Placement-Treffer. Cyan wirkt naeher an den Meta Interaction Rays als Gruen.")]
+    [SerializeField] private Color _validRayColor = new Color(0.08f, 0.72f, 1f, 0.82f);
+
+    [Tooltip("Farbe fuer ungueltige Placement-Treffer, z.B. zu schraege Flaechen.")]
+    [SerializeField] private Color _invalidRayColor = new Color(1f, 0.22f, 0.14f, 0.82f);
+
+    [Tooltip("Breite der Placement-Ray-Linie in Metern.")]
+    [SerializeField] private float _rayWidth = 0.006f;
+
     [Header("Einzelplanet Prefabs")]
     [Tooltip("Generisches Interactable-Prefab mit InteractablePlanetVisual/VisualRoot. Leer = PlanetData.planetPrefab wird direkt platziert.")]
     public GameObject interactablePlanetPrefab;
@@ -129,6 +139,7 @@ public class PlacementManager : MonoBehaviour
     private Transform _resolvedRayOrigin;
     private bool _wasRightIndexPinching;
     private bool _wasLeftIndexPinching;
+    private Material _runtimeRayMaterial;
 
     private void Awake()
     {
@@ -139,6 +150,7 @@ public class PlacementManager : MonoBehaviour
     private void Start()
     {
         _useRelativePlanetSizes = true;
+        ConfigurePlacementRayVisual();
         PrepareSunObject();
         ApplyEnvironmentRaycastManagerState();
     }
@@ -146,7 +158,16 @@ public class PlacementManager : MonoBehaviour
     private void OnValidate()
     {
         _useRelativePlanetSizes = true;
+        _rayWidth = Mathf.Max(0.001f, _rayWidth);
         ApplyEnvironmentRaycastManagerState();
+    }
+
+    private void OnDestroy()
+    {
+        if (_runtimeRayMaterial != null)
+        {
+            Destroy(_runtimeRayMaterial);
+        }
     }
 
     // ----------- AUSWAHL: einzelner Planet -----------
@@ -411,13 +432,11 @@ public class PlacementManager : MonoBehaviour
 
             if (canPlace == true)
             {
-                lineRenderer.startColor = Color.green;
-                lineRenderer.endColor = Color.green;
+                ApplyPlacementRayColor(_validRayColor);
             }
             else
             {
-                lineRenderer.startColor = Color.red;
-                lineRenderer.endColor = Color.red;
+                ApplyPlacementRayColor(_invalidRayColor);
             }
 
             previewInstance.SetActive(true);
@@ -511,6 +530,52 @@ public class PlacementManager : MonoBehaviour
             return true;
         }
         return false;
+    }
+
+    private void ConfigurePlacementRayVisual()
+    {
+        if (lineRenderer == null) return;
+
+        lineRenderer.widthMultiplier = _rayWidth;
+        lineRenderer.numCapVertices = 8;
+        lineRenderer.numCornerVertices = 8;
+        lineRenderer.useWorldSpace = true;
+
+        if (_runtimeRayMaterial == null)
+        {
+            Shader shader = Shader.Find("Universal Render Pipeline/Unlit");
+            if (shader == null)
+            {
+                shader = Shader.Find("Sprites/Default");
+            }
+
+            _runtimeRayMaterial = new Material(shader);
+            _runtimeRayMaterial.name = "Runtime_PlacementRay";
+        }
+
+        lineRenderer.sharedMaterial = _runtimeRayMaterial;
+        ApplyPlacementRayColor(_validRayColor);
+    }
+
+    private void ApplyPlacementRayColor(Color color)
+    {
+        if (lineRenderer == null) return;
+
+        lineRenderer.startColor = color;
+        lineRenderer.endColor = color;
+        lineRenderer.widthMultiplier = _rayWidth;
+
+        Material material = lineRenderer.sharedMaterial;
+        if (material == null) return;
+
+        if (material.HasProperty("_BaseColor"))
+        {
+            material.SetColor("_BaseColor", color);
+        }
+        else if (material.HasProperty("_Color"))
+        {
+            material.SetColor("_Color", color);
+        }
     }
 
     private bool HasPlaceInputDown()

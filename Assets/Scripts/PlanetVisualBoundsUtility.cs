@@ -6,6 +6,7 @@ using UnityEngine;
 public static class PlanetVisualBoundsUtility
 {
     private const string FactsObjectName = "Facts";
+    private const string RetiredVisualRootName = "RuntimeRetiredVisuals";
     private const string RingNamePart = "ring";
 
     public static bool TryGetPlanetVisualBounds(Transform root, bool includeInactive, out Bounds bounds)
@@ -65,6 +66,7 @@ public static class PlanetVisualBoundsUtility
         }
 
         return HasParentNamed(renderer.transform, FactsObjectName)
+            || HasParentNamed(renderer.transform, RetiredVisualRootName)
             || HasParentNamePart(renderer.transform, RingNamePart);
     }
 
