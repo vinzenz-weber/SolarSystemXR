@@ -1,6 +1,6 @@
 # Dokumentation: Sonnensystem XR
 
-> **Letzte Aktualisierung:** 2026-04-30
+> **Letzte Aktualisierung:** 2026-05-14
 
 ---
 
@@ -28,6 +28,30 @@
 - Zusatzmodus fuer Phase 3 ist in Umsetzung: Immersive Mode zeigt den ausgewaehlten Planeten in einer VR-Natur-/Nachtszene am Mond-Ort.
 - Phase 4 ist erledigt: Test-Tab startet Minigame-Prefabs, Abschliessen/Beenden funktionieren, Quiz-Fortschritt kann im Main Menu zurueckgesetzt werden.
 - Phase 6 ist in Umsetzung: `Size` nutzt jetzt einen eigenen Manager, Prefab-World-Layout, Live-Auswertung und planetenspezifisches Groessen-Feedback.
+> [NEU 2026-05-14 - START: Tutorial und User-Testing-Vorbereitungsmodus]
+- Startsequenz wurde erweitert: Nach Logo/Splash kann ein kurzes Tutorial mit Erklaervideos laufen, bevor ins Passthrough-Hauptmenue gewechselt wird.
+- Fuer die Testsituation gibt es einen User-Testing-Vorbereitungsmodus: Beide Controller-Thumbsticks gleichzeitig klicken schaltet in eine ruhige Passthrough-Ansicht, damit die Testperson zuerst ihre reale Umgebung sieht und die Brille ohne inhaltliche Ueberforderung angepasst werden kann.
+> [NEU 2026-05-14 - ENDE]
+
+## User Testing / Evaluation
+
+- **Status:** Vorbereitung aktualisiert; finaler Test-Build und Headset-Durchlauf noch offen.
+- **Zentrale Forschungsfrage fuer die Evaluation:** Wie kann eine XR-Lernanwendung zum Sonnensystem gestaltet werden, um astronomische Massstabsverhaeltnisse fachlich nachvollziehbar, raeumlich erfahrbar und spielerisch motivierend zu vermitteln?
+- **Dokumente:**
+  - `.claude/UserTesting.md`: deutschsprachige Arbeitsdatei fuer Studienlogik, Hypothesen, Aufgaben, Beobachtung und Auswertung.
+  - `.claude/UserTesting_EN.md`: englische teilnehmer:innennahe Texte fuer Durchfuehrung, Aufgaben und Fragebogenmaterial.
+- **Evaluationslogik:** Explorative Prototyp-Evaluation mit Pre-/Post-Fragebogen, App-Aufgaben, Beobachtung und kurzem Interview. Die Auswertung soll keine starke Kausalitaet behaupten, sondern Hinweise auf Verstaendlichkeit, raeumlichen XR-Mehrwert und Motivation liefern.
+- **Fokus der Hypothesen:**
+  - H1: Fachliche Nachvollziehbarkeit von astronomischen Massstabsverhaeltnissen verbessert sich nach der Nutzung.
+  - H2: Raeumliche Erfahrbarkeit von Groessen-, Distanz- und Orbitverhaeltnissen wird nach der Nutzung hoeher eingeschaetzt.
+  - H3: Spielerische Aufgaben werden als motivierend, verstaendlich und lernunterstuetzend wahrgenommen.
+  - H4: Bedienbarkeit soll ausreichend stabil sein, damit Lern- und Motivationsurteile nicht hauptsaechlich durch technische Reibung verzerrt werden.
+- **Aktuelle App-Aufgaben im Testing:** Planet aus Home platzieren, Detailinformationen fachlich einordnen, Planetengroessen vergleichen, Sonnensystem raeumlich betrachten, Massstabs-/Orbit-Controls nutzen, optional Immersive Mode pruefen, Reihenfolge-Minispiel, Groessen-Minispiel, unmittelbare Abschlussreflexion.
+- **Qualitative Codes:** `Fachlich nachvollziehbar`, `Raeumlich erfahrbar`, `Spielerisch motivierend`.
+- **Wichtig fuer finalen Build:** Vor dem Testing entscheiden, ob der Immersive Mode stabil genug fuer die Pflichtaufgabe ist oder im Testplan als optional/uebersprungen markiert wird.
+> [NEU 2026-05-14 - START: User-Testing-Setup in der Durchfuehrung]
+- **User-Testing-Setup:** Vor Beginn der eigentlichen App-Nutzung kann per gleichzeitigem Klick auf beide Controller-Thumbsticks ein Vorbereitungsmodus aktiviert werden. In diesem Zustand bleibt Passthrough sichtbar, die eigentlichen App-Inhalte werden ausgeblendet bzw. zurueckgesetzt und Audio wird pausiert. Ziel ist, die Brille in Ruhe anzupassen, Orientierung im echten Raum zu geben und die kognitive Belastung vor dem eigentlichen Teststart gering zu halten. Ein erneuter gleichzeitiger Thumbstick-Klick startet die App-Sequenz wieder mit Logo/Tutorial.
+> [NEU 2026-05-14 - ENDE]
 
 ---
 
@@ -111,6 +135,33 @@
   - `IMMERSIVE`: Hauptmenue ausgeblendet, Immersive-Root aktiv; Options-Taste verlaesst den Immersive Mode sauber.
   - `TEST_*`: Hauptmenue ausgeblendet, aktives Minigame-Prefab ist sichtbar; Options-Taste beendet das Minigame und fuehrt ins Test-Menue zurueck.
 - **Hinweis:** `PlanetRaySelector` reagiert nur im `WORLD`-State, damit er nicht mit dem Placement-Trigger kollidiert.
+
+> [NEU 2026-05-14 - START: Startsequenz und Tutorial]
+### Startsequenz / Tutorial
+
+- **Status:** Code umgesetzt; finale Tutorial-Step-Prefabs, Videos und Headset-Verifikation pruefen.
+- **Beschreibung:** Die App kann vor dem Hauptmenue eine kurze Startsequenz zeigen. Nach Logo/Splash laeuft optional ein Tutorial mit kurzen Erklaervideos und einfachen Interaktionsschritten. Erst danach wird ins Passthrough-Hauptmenue gewechselt.
+- **Umsetzung:**
+  - `GameManager.cs` startet bei `playStartupSequence` die Startsequenz, blendet Passthrough zunaechst aus und zeigt `startupOnlyObjects` bzw. Partikel.
+  - `TutorialController.cs` verwaltet eine Reihenfolge von Step-Prefabs, platziert sie einmalig vor dem User und wartet pro Schritt auf ein Abschlusssignal.
+  - `TutorialStepSignal.cs` startet vorhandene `VideoPlayer` im Loop und bietet Methoden fuer Button-, Grab- oder Unselect-Events (`CompleteStep()`, `OnGrabStart()`, `OnGrabEnd()`).
+  - `TutorialMenuGestureDetector.cs` erkennt fuer den Menue-Schritt optional die Start/Menu-Taste oder eine einfache Handpose als Fallback.
+- **Didaktischer Zweck:** Das Tutorial soll die wichtigsten XR-Bedienhandlungen niedrigschwellig vorbereiten, damit die eigentliche Lern- und Testphase weniger durch Unsicherheit bei Controller, Menue oder Objektinteraktion belastet wird.
+> [NEU 2026-05-14 - ENDE]
+
+> [NEU 2026-05-14 - START: User-Testing-Vorbereitungsmodus]
+### User-Testing-Vorbereitungsmodus
+
+- **Status:** Code umgesetzt; im finalen Test-Build im Headset pruefen.
+- **Beschreibung:** Fuer die Testsituation gibt es einen versteckten Vorbereitungsmodus. Wenn beide Controller-Thumbsticks innerhalb eines kurzen Zeitfensters gleichzeitig gedrueckt werden, wechselt die App in eine ruhige Passthrough-Ansicht. Die Testperson sieht zuerst ihre reale Umgebung durch die Brille, waehrend die Testleitung Sitz, Headset-Position, IPD/Tragekomfort und Orientierung pruefen kann.
+- **Umsetzung:**
+  - `GameManager.cs` enthaelt den Bereich `User Testing Setup`.
+  - `enableUserTestingShortcut` aktiviert/deaktiviert den Shortcut.
+  - `userTestingShortcutWindow` definiert das Zeitfenster fuer den gemeinsamen Thumbstick-Klick.
+  - `EnterUserTestingSetup()` stoppt die Startsequenz, setzt Minigame-Fortschritt und platzierte Inhalte zurueck, pausiert Audio, blendet nicht essenzielle Root-Objekte aus, aktiviert Passthrough sofort und zeigt optional Logo-Objekte.
+  - Ein erneuter Shortcut ruft `StartGameFromUserTestingSetup()` auf: Logo wird ausgeblendet, Passthrough kurz nach VR gedissolved, Root-Objekte und Audio werden wiederhergestellt und anschliessend startet die normale Startsequenz bzw. das Hauptmenue.
+- **Warum:** Der Modus reduziert kognitive Belastung vor dem eigentlichen Test. Die Person muss nicht gleichzeitig die Brille ausrichten, die reale Umgebung verstehen, Controller finden und bereits App-Inhalte verarbeiten. Fuer die Evaluation ist das wichtig, weil Bedien- und Startstress sonst die Wahrnehmung von Lernwirkung, Motivation und Usability verzerren koennte.
+> [NEU 2026-05-14 - ENDE]
 
 ### Passthrough / VR Toggle
 
@@ -240,6 +291,10 @@
 | Immersive Mode | Kein Scene-Loading; Immersive-Environment bleibt Teil der MainScene und wird ueber Root-GameObject + Dissolve aktiviert. |
 | Immersive Spawn | Planet wird am referenzierten SpawnPoint angezeigt; bei grosser Distanz berechnet `ImmersiveModeController` die Mond-Scheingroesse aus dem Spawn-Abstand. |
 | Passthrough Toggle | Der AR/VR-Toggle im Main Menu steuert den `PassthroughDissolver` (MR Motifs). Das Toggle-Objekt in `MenuRoot` heisst "Passthrough". Der Startzustand ist per `_isPassthroughOnAtStart` im Inspector steuerbar. |
+| **NEU 2026-05-14 START** | Konventionen Tutorial/User Testing |
+| Startup-Tutorial | Kurze Erklaervideos und Interaktionsschritte laufen optional in der Startsequenz ueber `TutorialController`; Step-Prefabs melden ihren Abschluss ueber `TutorialStepSignal`. |
+| User-Testing-Setup | Beide Controller-Thumbsticks gleichzeitig schalten in eine Passthrough-Vorbereitungsansicht; der Modus dient nur Testleitung/Onboarding und ist kein regulaeres Lernfeature. |
+| **NEU 2026-05-14 ENDE** | Konventionen Tutorial/User Testing |
 | Einzelplanet-Groessenmodus | Einzelplaneten werden immer relativ zur echten Planetengroesse skaliert. Der fruehere Main-Menu-Toggle fuer gleich grosse 50-cm-Planeten ist verworfen und wird im Code ignoriert/ausgeblendet. |
 | Sonnensystem-UI | Das Slider-Panel referenziert den `SolarSystemManager` nicht im Prefab, sondern bekommt ihn nach Placement ueber `Bind(SolarSystemManager)`. |
 | Depth API fuer Platzierung | Im Quest-Build liefert `EnvironmentRaycastManager.Raycast(Ray, out hit)` Position und Normal aus dem Depth-Mesh. |
@@ -286,6 +341,11 @@
 | 2026-04-30 | Placement-Input akzeptiert beide Controller-Trigger | Ghost war sichtbar, Placement konnte aber je nach Hand/Rig am falschen Trigger-Button haengen bleiben |
 | 2026-04-30 | Einzelplanet-Placement nutzt generisches `planetInteractable.prefab` | Meta-Interactable-Komponenten bleiben zentral im Wrapper; das eigentliche Planet-Visual wird datenbasiert aus `PlanetData.planetPrefab` geladen |
 | 2026-05-05 | Relative Einzelplanet-Groessen sind immer aktiv | Wissenschaftlich korrekte Groessenvergleiche sind fuer die Lernziele wichtiger als ein vereinfachter Gleichgroessen-Modus; alte Toggle-Events duerfen den Modus nach Immersive-Rueckkehr nicht mehr deaktivieren |
+| 2026-05-06 | User Testing auf Massstabsverhaeltnisse fokussiert | Die Evaluation richtet sich jetzt explizit auf fachliche Nachvollziehbarkeit, raeumliche Erfahrbarkeit und spielerische Motivation statt auf allgemeinen Wissenszuwachs allein |
+| **NEU 2026-05-14 START** | Entscheidungen Tutorial/User Testing | |
+| 2026-05-14 | Startup-Tutorial mit kurzen Erklaervideos vor dem Hauptmenue | Bedienhandlungen sollen vor der eigentlichen Exploration kurz vorbereitet werden, ohne die Lernphase mit langen Erklaertexten zu ueberladen |
+| 2026-05-14 | User-Testing-Vorbereitungsmodus per Doppel-Thumbstick | Testpersonen sollen zuerst Passthrough und reale Umgebung sehen; Brillenanpassung und Orientierung passieren vor dem eigentlichen Test, um kognitive Belastung und Startstress zu reduzieren |
+| **NEU 2026-05-14 ENDE** | Entscheidungen Tutorial/User Testing | |
 
 ---
 
@@ -320,6 +380,13 @@
 | Headset-Test: Erde platzieren -> InfoPanel sichtbar und lesbar | Offen |
 | Headset-Test: Venus/Planet platzieren -> Ghost sichtbar -> beide Trigger platzieren korrekt | Offen |
 | Headset-Test: Sonnensystem platzieren -> Slider sichtbar und wirksam | Offen |
+| Finaler User-Testing-Build: Home-/Planet-Flow, Sonnensystem-Controls, Learn-/Test-Tab und Rueckwege einmal komplett im Headset durchlaufen | Offen |
+| User Testing: Immersive Mode vorab testen und als Pflicht- oder optionale Aufgabe festlegen | Offen |
+| **NEU 2026-05-14 START** | Offene Aufgaben Tutorial/User Testing |
+| Tutorial-Step-Prefabs und Erklaervideos im Headset pruefen: Position, Lesbarkeit, Ton/Loop, Abschluss-Signale | Offen |
+| User-Testing-Shortcut im finalen Build pruefen: beide Thumbsticks -> Passthrough-Setup, erneuter Shortcut -> Logo/Tutorial/Appstart | Offen |
+| User-Testing-Setup pruefen: App-Inhalte, Minigames, Audio und platzierte Objekte werden sauber zurueckgesetzt bzw. wiederhergestellt | Offen |
+| **NEU 2026-05-14 ENDE** | Offene Aufgaben Tutorial/User Testing |
 | Collider/Layer auf `planetInteractable.prefab` pruefen, damit `PlanetRaySelector` sie treffen kann | Code-Fallback vorhanden; Prefab-Layer im Headset trotzdem pruefen |
 | `StartPhase.cs`, `SpielerBewegung.cs`, `InfoPunkt.cs` auf Altlasten pruefen | Offen |
 

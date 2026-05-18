@@ -196,6 +196,7 @@ Beim Ergänzen von Kapiteln gilt:
 - Fachliche Behauptungen, astronomische Daten und didaktische Aussagen möglichst mit Quellenhinweisen oder TODO-Quellenmarkierungen versehen.
 - Keine veralteten Projektannahmen aus `DOKU.md` übernehmen, ohne sie gegen den aktuellen Stand zu prüfen.
 - `DOKU.md` beschreibt den aktuellen Projektstand, `ARCHIV.md` die Entwicklungsgeschichte, `WERKSTÜCK.md` den ausformulierten bzw. vorzubereitenden Projekt- und Prozessbericht der Masterarbeit.
+- Stil in Reflexion/Ausblick: mechanische Gegensatzformeln vermeiden. Nicht ständig nach dem Muster "nicht X, sondern Y" oder "keine willkürliche Limitierung, sondern bewusste Entscheidung" schreiben; stattdessen direkter, abwechslungsreicher und weniger formelhaft formulieren.
 
 Wenn der User sagt, dass ein Kapitel oder Unterkapitel **"ausformuliert"** werden soll:
 - Bei inhaltlichen Unklarheiten zuerst gezielt nachfragen, bevor Text ergänzt wird. Das gilt z.B., wenn unklar ist, ob ein Aspekt ins Kapitel gehört, wie stark ein Thema gewichtet werden soll, ob ein Feature aktuell oder verworfen ist, oder ob ein Punkt eher in Theorie, Projektbeschreibung, Reflexion oder Archiv gehört.

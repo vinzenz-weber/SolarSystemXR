@@ -2,7 +2,7 @@
 
 > Participant-facing English materials for the user testing session.
 > The master thesis can still describe the methodology in German; this file contains the English texts used during the actual test.
-> Date: 2026-05-04
+> Date: 2026-05-06
 
 ---
 
@@ -10,7 +10,7 @@
 
 Thank you for taking part in this user test.
 
-In this session, you will try a prototype of an XR application about the solar system. The application is part of a master's thesis and explores how immersive technologies can support learning about planets, distances, sizes, and orbital movement.
+In this session, you will try a prototype of an XR application about the solar system. The application is part of a master's thesis and explores how XR can make astronomical scale relationships understandable, spatially experienceable, and motivating through interactive learning tasks.
 
 This is not a test of your personal knowledge or ability. The goal is to evaluate the prototype: what is understandable, what supports learning, what is motivating, and what should be improved.
 
@@ -146,21 +146,21 @@ Scale: 1 = strongly disagree, 5 = strongly agree.
 
 The following task texts can be read aloud or shown to the participant.
 
-### Task 1 - Start the Learning Mode
+### Task 1 - Start the Planet View
 
-> Start the learning section of the application and choose one planet that interests you.
+> Start a planet view from the home area, choose one planet that interests you, and place it in the room.
 
 ### Task 2 - Explore Planet Details
 
-> Open the detailed information for one planet and find one fact or feature that stands out to you.
+> Open the detailed information for this planet and find one fact or feature that helps you understand the planet better.
 
 Follow-up question:
 
 > Which fact or feature did you notice?
 
-### Task 3 - Open the Menu and Add More Planets
+### Task 3 - Compare Planet Sizes and Features
 
-> Open the menu again, add more planets, and explore them on your own. Try to notice differences between the planets, especially their size, appearance, position, and the information shown in the detail panel.
+> Open the menu again, choose at least one more planet, and compare it with the first one. Try to notice differences between the planets, especially their size, appearance, and the information shown in the detail panel.
 
 Follow-up questions:
 
@@ -168,37 +168,51 @@ Follow-up questions:
 
 > What differences did you notice?
 
-### Task 4 - Place and Observe the Solar System
+### Task 4 - Place and Observe the Solar System Spatially
 
-> Place the solar system in the room and look at the arrangement of the planets.
+> Place the whole solar system in the room and look at the planets, orbit lines, and distances from different angles.
 
 Follow-up question:
 
-> What do you notice about the arrangement of the planets?
+> What do you notice about the arrangement, distances, or orbits?
 
-### Task 5 - Use the Scaling Controls
+### Task 5 - Use the Scale and Orbit Controls
 
-> Change the visualization so that it becomes easier for you to see how sizes and distances differ.
+> Change the visualization with the controls so that it becomes easier for you to see how planet sizes, distances, or orbital movement differ.
 
 Follow-up questions:
 
 > What changed when you used the controls?
 
-> Did the controls help you understand the solar system better?
+> Did the controls help you understand why solar system visualizations often need to be scaled or simplified?
 
-### Task 6 - Planet Order Minigame
+### Task 6 - Immersive View and Sense of Scale
+
+> If available, switch to the immersive view of a planet and describe how your impression of size or distance changes.
+
+Follow-up questions:
+
+> Did the immersive view change your sense of scale?
+
+> Was it clear how to leave the immersive view?
+
+Note for the facilitator:
+
+- If the immersive view is not stable in the final test build, skip this task and mark it as optional/not tested.
+
+### Task 7 - Planet Order Minigame
 
 > Solve the planet order minigame. Arrange the planets from the Sun outward.
 
-### Task 7 - Planet Size Minigame
+### Task 8 - Planet Size Minigame
 
 > Solve the planet size minigame. Compare or arrange the planets by their size.
 
-### Task 8 - Immediate Reflection
+### Task 9 - Immediate Reflection
 
 Ask directly after the XR session, before the post-test questionnaire:
 
-> What did you learn or understand better about the solar system that was less clear to you before?
+> What did you learn or understand better about sizes, distances, orbits, or the visualization of the solar system that was less clear to you before?
 
 ---
 
@@ -208,13 +222,20 @@ This part is for the test facilitator, not for the participant.
 
 | Participant ID | Task | Successful? | Time | Errors/Corrections | Help | Observation/Comment |
 |---|---|---:|---:|---:|---|---|
-| P01 | Start learning mode | | | | | |
-| P01 | Read planet details | | | | | |
-| P01 | Add/explore more planets | | | | | |
-| P01 | Place solar system | | | | | |
-| P01 | Use scaling controls | | | | | |
+| P01 | Start/place planet view | | | | | |
+| P01 | Read and explain planet details | | | | | |
+| P01 | Compare planet sizes/features | | | | | |
+| P01 | Observe solar system spatially | | | | | |
+| P01 | Use scale/orbit controls | | | | | |
+| P01 | Immersive view/sense of scale | | | | | |
 | P01 | Planet order minigame | | | | | |
 | P01 | Planet size minigame | | | | | |
+
+Additional qualitative codes for the research question:
+
+- `Scientifically understandable`: participant can explain scaling, size differences, or the distance problem correctly.
+- `Spatially experienceable`: participant uses perspective changes, movement in the room, or immersive view to understand the model.
+- `Playfully motivating`: participant appears activated by the task, feedback, or challenge rather than only reading information.
 
 Help coding:
 
@@ -311,7 +332,6 @@ Scale: 1 = strongly disagree, 5 = strongly agree.
 
 Suggested spreadsheet columns:
 
-| ID | Age | XR_Experience | Prior_Knowledge_Self | Knowledge_Pre | Knowledge_Post | Knowledge_Delta | Spatial_Pre | Spatial_Post | Spatial_Delta | OrderTask_Time | OrderTask_Errors | SizeTask_Time | SizeTask_Errors | XR_Value_Mean | Gamification_Mean | Usability_Mean |
-|---|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| P01 | | | | | | | | | | | | | | | | |
-
+| ID | Age | XR_Experience | Prior_Knowledge_Self | Knowledge_Pre | Knowledge_Post | Knowledge_Delta | Spatial_Pre | Spatial_Post | Spatial_Delta | ScaleExplanation | SpatialBehavior | OrderTask_Time | OrderTask_Errors | SizeTask_Time | SizeTask_Errors | XR_Value_Mean | Gamification_Mean | Usability_Mean |
+|---|---:|---|---:|---:|---:|---:|---:|---:|---:|---|---|---:|---:|---:|---:|---:|---:|---:|
+| P01 | | | | | | | | | | | | | | | | | | |

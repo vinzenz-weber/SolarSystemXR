@@ -32,6 +32,14 @@
 
 ## Iterationen & Änderungen
 
+### User Testing: allgemeiner Wissenszuwachs -> Massstabsfokus
+
+- **Datum:** 2026-05-06
+- **Vorher:** Die User-Testing-Logik war breiter auf Wissensvermittlung, XR-Erfahrung und Gamification ausgerichtet. Der Wissenszuwachs stand relativ allgemein im Zentrum, z.B. ueber Planetenreihenfolge, Groessenverhaeltnisse, Distanzen und Umlaufbewegungen.
+- **Nachher:** Die Evaluation fokussiert die Forschungsfrage expliziter auf astronomische Massstabsverhaeltnisse: fachliche Nachvollziehbarkeit, raeumliche Erfahrbarkeit und spielerische Motivation. Die App-Aufgaben wurden entsprechend auf Home-/Planet-Flow, Planetendetails, Groessenvergleich, Sonnensystem-Placement, Massstabs-/Orbit-Controls, optionalen Immersive Mode sowie Reihenfolge- und Groessen-Minigame ausgerichtet.
+- **Grund:** Der Prototyp hat sich inhaltlich und technisch staerker auf Massstab, raeumliche Darstellung und didaktisch steuerbare Skalierung zugespitzt. Die Evaluation soll deshalb nicht nur fragen, ob Teilnehmende mehr wissen, sondern ob sie die Notwendigkeit und Wirkung von Skalierung in XR nachvollziehen koennen.
+- **Erkenntnisse:** Eine passende Evaluation muss den tatsaechlichen Prototyp-Stand widerspiegeln. Bei XR-Lernanwendungen ist Bedienbarkeit nicht nur Usability-Beiwert, sondern Voraussetzung dafuer, dass fachliche Nachvollziehbarkeit und Motivation ueberhaupt sinnvoll beurteilt werden koennen.
+
 ### Einzelplanet-Placement: direktes Planet-Prefab -> generischer Interactable-Wrapper
 
 - **Datum:** 2026-04-30

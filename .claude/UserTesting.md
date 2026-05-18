@@ -1,7 +1,7 @@
 # User Testing - Sonnensystem XR
 
 > Arbeitsdatei fuer die Vorbereitung, Durchfuehrung und Auswertung des User Testings zur Masterarbeit.
-> Stand: 2026-05-04
+> Stand: 2026-05-14
 > Englische Materialien fuer die tatsaechliche Durchfuehrung mit internationalen Teilnehmer:innen liegen in `.claude/UserTesting_EN.md`.
 
 ---
@@ -10,13 +10,13 @@
 
 Das User Testing soll nicht nur pruefen, ob der Prototyp technisch bedienbar ist, sondern gezielt Material fuer die Beantwortung der Forschungsfrage liefern:
 
-> Wie laesst sich eine immersive XR-Anwendung so gestalten, dass sie wissenschaftliche Genauigkeit mit spielerischen, interaktiven Elementen verbindet, die ein unterhaltsames Lernerlebnis schaffen - wobei astronomische Daten und die Physik des Sonnensystems korrekt dargestellt werden und gleichzeitig das Engagement und Verstaendnis der Nutzer:innen gefoerdert werden?
+> Wie kann eine XR-Lernanwendung zum Sonnensystem gestaltet werden, um astronomische Massstabsverhaeltnisse fachlich nachvollziehbar, raeumlich erfahrbar und spielerisch motivierend zu vermitteln?
 
 Das Testing untersucht deshalb drei Ebenen:
 
-- **Wissensvermittlung:** Verbessert sich das Wissen bzw. das Verstaendnis ueber Planeten, Reihenfolge, Groessenverhaeltnisse, Distanzen und Umlaufbewegungen nach der Nutzung?
-- **XR-Erfahrung:** Hilft die raeumliche Darstellung dabei, abstrakte astronomische Zusammenhaenge besser zu verstehen?
-- **Gamification und Interaktion:** Werden die interaktiven Elemente und Minigames als motivierend, verstaendlich und sinnvoll fuer das Lernen wahrgenommen?
+- **Fachliche Nachvollziehbarkeit:** Verstehen die Teilnehmer:innen, dass Groessen, Distanzen, Orbitgeschwindigkeiten und Darstellungsparameter im Prototyp bewusst skaliert bzw. didaktisch vereinfacht werden muessen?
+- **Raeumliche Erfahrbarkeit:** Hilft die Platzierung im Raum dabei, Massstabsverhaeltnisse, Anordnung, Abstaende und Umlaufbahnen koerperlich bzw. perspektivisch besser zu erfassen als in einer flachen Darstellung?
+- **Spielerische Motivation:** Werden die Minigames und direkten Rueckmeldungen als motivierend erlebt und unterstuetzen sie das aktive Anwenden von Wissen zu Reihenfolge und Groessenverhaeltnissen?
 
 Die Studie ist als **praxisorientierte, explorative Prototyp-Evaluation** angelegt. Sie muss keine grosse, allgemein repraesentative Wirkung nachweisen, sondern soll zeigen, ob der entwickelte Prototyp Hinweise auf Lernfoerderung, Motivation und geeignete Gestaltungskriterien liefert.
 
@@ -63,10 +63,41 @@ Geplanter Ablauf:
 | Begruessung und Einwilligung | Studienziel, Datenschutz, Abbruchmoeglichkeit | 3-5 min |
 | Pre-Fragebogen | Demografie, Vorwissen, Wissensfragen | 5-8 min |
 | Einweisung | Controller, Sicherheit, kurze Bedienhinweise | 3-5 min |
-| App-Aufgaben | Learn-Flow, Sonnensystem, Planetendetails, Minigames | 15-25 min |
+| App-Aufgaben | Home-/Planet-Flow, Sonnensystem, Massstabs-Controls, Minigames | 15-25 min |
 | Post-Fragebogen | Wissensfragen, UX, Motivation, Selbsteinschaetzung | 8-12 min |
 | Kurzes Interview | Auffaelligkeiten, Verbesserungsvorschlaege | 5-10 min |
 | Gesamt | | ca. 40-60 min |
+
+> [NEU 2026-05-14 - START: Praktischer Headset-Setup-Modus]
+>
+> ### 2.4 Headset-Setup vor dem eigentlichen Teststart
+>
+> Vor der eigentlichen App-Nutzung kann ein technischer Vorbereitungsmodus genutzt werden. Die Testleitung aktiviert ihn durch gleichzeitiges Druecken beider Controller-Thumbsticks. Die App wechselt dann in Passthrough, sodass die Testperson ihre reale Umgebung sieht. Gleichzeitig werden App-Inhalte ausgeblendet bzw. zurueckgesetzt und Audio pausiert.
+>
+> Ziel fuer die Durchfuehrung:
+>
+> - Brille ruhig anpassen, bevor digitale Inhalte Aufmerksamkeit binden.
+> - Testperson kurz im realen Raum orientieren lassen.
+> - Controllerposition, Sitzkomfort und Sichtfeld pruefen.
+> - Kognitive Belastung am Anfang senken: Die Person muss nicht gleichzeitig Headset, Umgebung, Controller und App-Inhalte verarbeiten.
+> - Erst nach diesem Setup die eigentliche Startsequenz mit Logo/Tutorial und Hauptmenue beginnen.
+>
+> Ablauf fuer die Testleitung:
+>
+> 1. Nach Einwilligung und Pre-Fragebogen Headset aufsetzen lassen.
+> 2. User-Testing-Setup per Doppel-Thumbstick aktivieren, falls es nicht bereits aktiv ist.
+> 3. Brille anpassen, kurz nach Komfort/Schaerfe/Orientierung fragen.
+> 4. Controller in die Haende geben und nur die noetigsten Sicherheitshinweise geben.
+> 5. Mit erneutem Doppel-Thumbstick die App-Sequenz starten.
+> 6. Beobachten und notieren, ob trotz Setup noch Unsicherheit, Ueberforderung oder Orientierungsprobleme auftreten.
+>
+> Methodischer Grund:
+>
+> - Der Vorbereitungsmodus soll verhindern, dass die ersten App-Minuten durch vermeidbaren Startstress verzerrt werden.
+> - Fuer die Auswertung kann vermerkt werden, dass die technische Headset-Anpassung bewusst vor die eigentliche Testaufgabe ausgelagert wurde.
+> - Hilfestellung waehrend dieser Setup-Phase sollte getrennt von Hilfestellung innerhalb der App-Aufgaben notiert werden.
+>
+> [NEU 2026-05-14 - ENDE]
 
 ---
 
@@ -74,29 +105,29 @@ Geplanter Ablauf:
 
 Da die Arbeit eher gestalterisch-praktisch ausgerichtet ist, koennen statt starker kausaler Hypothesen auch **evaluative Annahmen** formuliert werden. Fuer die Auswertung sind trotzdem testbare Hypothesen hilfreich.
 
-### H1 - Wissenszuwachs
+### H1 - Fachliche Nachvollziehbarkeit
 
-**Hypothese:** Nach der Nutzung von Sonnensystem XR erzielen die Teilnehmer:innen im Wissensfragebogen einen hoeheren Score als vor der Nutzung.
+**Hypothese:** Nach der Nutzung von Sonnensystem XR koennen die Teilnehmer:innen astronomische Massstabsverhaeltnisse fachlich besser einordnen als vor der Nutzung.
 
 - Messung: Pre-Score vs. Post-Score, z.B. 0-10 Punkte.
 - Auswertung: Wilcoxon-Vorzeichen-Rang-Test bei kleiner Stichprobe oder nicht normalverteilten Differenzen; alternativ gepaarter t-Test, wenn die Differenzen annaehend normalverteilt sind.
-- Bezug zur Forschungsfrage: Stuetzt den Aspekt der Wissensvermittlung.
+- Bezug zur Forschungsfrage: Stuetzt den Aspekt der fachlichen Nachvollziehbarkeit. Besonders relevant sind Fragen zu Planetengroessen, Reihenfolge, Gas-/Eisriesen, Umlaufzeit und der Schwierigkeit massstabsgetreuer Sonnensystemdarstellungen.
 
-### H2 - Raeumliches Verstaendnis
+### H2 - Raeumliche Erfahrbarkeit
 
-**Hypothese:** Nach der Nutzung schaetzen die Teilnehmer:innen ihr Verstaendnis fuer Groessen- und Distanzverhaeltnisse im Sonnensystem hoeher ein als vor der Nutzung.
+**Hypothese:** Nach der Nutzung schaetzen die Teilnehmer:innen ihr Verstaendnis fuer raeumliche Groessen-, Distanz- und Orbitverhaeltnisse im Sonnensystem hoeher ein als vor der Nutzung.
 
 - Messung: Likert-Items vor/nach der Nutzung, z.B. 1 = stimme gar nicht zu bis 5 = stimme voll zu.
 - Auswertung: Wilcoxon-Vorzeichen-Rang-Test fuer gepaarte ordinalskalierte Daten; zusaetzlich Median und Interquartilsabstand berichten.
-- Bezug zur Forschungsfrage: Stuetzt den XR-spezifischen Mehrwert der raeumlichen Darstellung.
+- Bezug zur Forschungsfrage: Stuetzt den Aspekt der raeumlichen Erfahrbarkeit. Zusaetzlich werden Beobachtungen aus Platzierung, Perspektivwechsel, Sonnensystem-Slidern und Immersive Mode qualitativ ausgewertet.
 
-### H3 - Motivation durch Interaktion und Gamification
+### H3 - Spielerische Motivation
 
-**Hypothese:** Die spielerischen Aufgaben werden von den Teilnehmer:innen als motivierend und lernunterstuetzend wahrgenommen.
+**Hypothese:** Die spielerischen Aufgaben werden von den Teilnehmer:innen als motivierend, verstaendlich und lernunterstuetzend wahrgenommen.
 
 - Messung: Post-Fragebogen mit Likert-Items zu Motivation, Spass, Feedback und Lernwert der Minigames.
 - Auswertung: Deskriptiv, z.B. Median, Mittelwert, Verteilung; keine Pre-Post-Statistik noetig, da nur nach der Nutzung erhoben.
-- Bezug zur Forschungsfrage: Stuetzt den Gamification-Aspekt.
+- Bezug zur Forschungsfrage: Stuetzt den Aspekt der spielerisch motivierenden Vermittlung.
 
 ### H4 - Bedienbarkeit
 
@@ -253,57 +284,79 @@ Skala: 1 = stimme gar nicht zu, 5 = stimme voll zu.
 
 ## 6. Aufgaben in der App
 
-Die Aufgaben sollten den zentralen App-Flow abdecken, aber nicht zu viele Sonderfaelle enthalten. Wichtig ist, dass die Aufgaben zu den drei Forschungsschwerpunkten passen: Wissensvermittlung, XR, Gamification.
+Die Aufgaben sollen den aktuellen App-Flow abdecken, aber nicht zu viele Sonderfaelle enthalten. Wichtig ist, dass sie direkt auf die Forschungsfrage einzahlen: astronomische Massstabsverhaeltnisse sollen fachlich nachvollziehbar, raeumlich erfahrbar und spielerisch motivierend vermittelt werden.
 
-### Aufgabe 1 - App starten und Modus auswaehlen
+> [NEU 2026-05-14 - START: Tutorial vor den Aufgaben]
+>
+> Vor Aufgabe 1 kann die kurze Tutorial-Sequenz durchlaufen werden. Sie zaehlt nicht als eigene Lernaufgabe zum Sonnensystem, sondern als Bedien-Onboarding. Beobachtet werden kann trotzdem, ob die Person die gezeigten Bedienhandlungen versteht und ob die Erklaervideos die erste Orientierung erleichtern.
+>
+> Kurz notieren:
+>
+> - Tutorial vollstaendig durchlaufen: ja/nein
+> - Verstandene Bedienhandlung: Button/Ray, Menue, Greifen oder sonstige
+> - Auffaelligkeiten: Video unklar, Panel schlecht positioniert, Schritt nicht abgeschlossen, Hilfe noetig
+>
+> [NEU 2026-05-14 - ENDE]
+
+### Aufgabe 1 - Home-Bereich starten und einen Planeten platzieren
 
 Aufgabe fuer Teilnehmer:in:
 
-> Starte den Lernbereich der Anwendung und waehle einen Planeten aus, der dich interessiert.
+> Starte im Home-Bereich eine Planeten-Ansicht, waehle einen Planeten aus und platziere ihn im Raum.
 
 Beobachtung:
 
-- Findet die Person den Learn-Bereich?
+- Findet die Person den Home-/Planet-Bereich?
 - Versteht sie die Menuefuehrung?
 - Braucht sie Hilfe bei Controller-Ray oder Buttons?
+- Ist die Platzierung im Raum nachvollziehbar?
 
 Erfolgskriterium:
 
-- Planet wird ohne oder mit maximal kleiner Hilfestellung ausgewaehlt.
+- Planet wird ohne oder mit maximal kleiner Hilfestellung ausgewaehlt und im Raum platziert.
 
-### Aufgabe 2 - Planetendetails erkunden
+Bezug zur Forschungsfrage:
+
+- Einstieg in die raeumliche Erfahrbarkeit: Der Planet wird nicht als flaches Bild, sondern als Objekt im eigenen Raum betrachtet.
+
+### Aufgabe 2 - Planetendetails fachlich einordnen
 
 Aufgabe:
 
-> Oeffne die Detailinformationen zu einem Planeten und finde heraus, welche besondere Eigenschaft oder welcher Fakt dir auffaellt.
+> Oeffne die Detailinformationen zu diesem Planeten und finde eine Information, die dir hilft, den Planeten fachlich einzuordnen.
 
 Beobachtung:
 
 - Wird das InfoPanel gefunden und gelesen?
 - Sind die Texte lesbar?
 - Wird die raeumliche Position des Panels als angenehm empfunden?
+- Kann die Person einen fachlichen Fakt wiedergeben, ohne nur UI-Text wortwoertlich abzulesen?
 
 Erfolgskriterium:
 
 - Teilnehmer:in kann nach der Aufgabe einen Fakt zum Planeten nennen.
 
-### Aufgabe 3 - Menue oeffnen und weitere Planeten hinzufuegen
+Bezug zur Forschungsfrage:
+
+- Fachliche Nachvollziehbarkeit: Planetendaten und kurze Infotexte sollen als verstaendliche Orientierung dienen.
+
+### Aufgabe 3 - Groessenvergleich zwischen Planeten
 
 Aufgabe:
 
-> Oeffne erneut das Menue, fuege weitere Planeten hinzu und erkunde selbststaendig, welche Unterschiede dir zwischen den Planeten auffallen. Achte besonders auf Groesse, Aussehen, Position und Informationen im Detailpanel.
+> Oeffne erneut das Menue, waehle mindestens einen weiteren Planeten aus und vergleiche ihn mit dem ersten. Achte besonders auf Groesse, Aussehen und Informationen im Detailpanel.
 
 Beobachtung:
 
 - Findet die Person selbststaendig zurueck ins Menue?
-- Versteht sie, dass weitere Planeten hinzugefuegt oder ausgewaehlt werden koennen?
+- Versteht sie, dass weitere Planeten ausgewaehlt und miteinander verglichen werden koennen?
 - Vergleicht sie Planeten aktiv miteinander oder betrachtet sie nur einzelne Objekte isoliert?
 - Werden Groessenverhaeltnisse, visuelle Unterschiede oder Planetendaten spontan angesprochen?
 - Entsteht ein exploratives Verhalten, also eigenes Nachfragen, Ausprobieren oder Vergleichen?
 
 Erfolgskriterium:
 
-- Teilnehmer:in fuegt mindestens einen weiteren Planeten hinzu oder waehlt ihn aus.
+- Teilnehmer:in waehlt mindestens einen weiteren Planeten aus.
 - Teilnehmer:in nennt mindestens einen beobachteten Unterschied zwischen zwei Planeten, z.B. Groesse, Farbe, Entfernung, Kategorie oder einen Fakt aus dem InfoPanel.
 
 Messwerte:
@@ -313,39 +366,86 @@ Messwerte:
 - Hilfestellung: keine / klein / deutlich
 - Besonders genannte Unterschiede oder Aha-Momente
 
-### Aufgabe 4 - Sonnensystem platzieren und betrachten
+Bezug zur Forschungsfrage:
+
+- Fachliche Nachvollziehbarkeit von Massstab: Die Person soll Unterschiede zwischen Planeten nicht nur auswendig nennen, sondern anhand der Darstellung und Daten begruenden.
+
+### Aufgabe 4 - Sonnensystem platzieren und raeumlich betrachten
 
 Aufgabe:
 
-> Platziere das Sonnensystem im Raum und betrachte die Planeten in ihrer Anordnung.
+> Platziere das gesamte Sonnensystem im Raum und betrachte die Planeten, Orbitlinien und Abstaende aus verschiedenen Blickwinkeln.
 
 Beobachtung:
 
 - Funktioniert die Platzierung intuitiv?
 - Wird die raeumliche Darstellung verstanden?
 - Gibt es Probleme mit Blickrichtung, Distanz, Lesbarkeit oder Groesse?
+- Bewegt sich die Person um das Modell oder bleibt sie an einer Position?
+- Werden Anordnung, Umlaufbahnen oder Abstaende spontan kommentiert?
 
 Erfolgskriterium:
 
-- Sonnensystem wird platziert und mindestens drei Planeten werden bewusst betrachtet.
+- Sonnensystem wird platziert und mindestens drei Planeten oder Orbitbereiche werden bewusst betrachtet.
 
-### Aufgabe 5 - Skalierungs-/Slider-UI verwenden
+Bezug zur Forschungsfrage:
+
+- Raeumliche Erfahrbarkeit: Die Anordnung soll als Raumstruktur erfahrbar werden, nicht nur als schematische Liste.
+
+### Aufgabe 5 - Massstabs- und Orbit-Controls verwenden
 
 Aufgabe:
 
-> Veraendere die Darstellung so, dass du besser erkennen kannst, wie sich Groessen und Distanzen unterscheiden.
+> Veraendere die Darstellung mit den Steuerungen so, dass du besser erkennen kannst, wie sich Planetengroessen, Abstaende, Umlaufbahnen oder Bewegungen unterscheiden.
 
 Beobachtung:
 
-- Werden die Slider verstanden?
-- Erkennen die Teilnehmer:innen, dass Groesse und Distanz getrennt skaliert werden koennen?
+- Werden die Slider bzw. Steuerungen verstanden?
+- Erkennen die Teilnehmer:innen, dass Groesse, Abstand, Orbitdarstellung und Bewegung didaktisch angepasst werden koennen?
 - Verstaerkt die Interaktion das Verstaendnis oder fuehrt sie zu Verwirrung?
+- Wird verstanden, dass eine XR-Darstellung des Sonnensystems nicht im echten Massstab in einen Raum passt?
 
 Erfolgskriterium:
 
-- Teilnehmer:in kann erklaeren, dass eine Darstellung des Sonnensystems oft skaliert oder vereinfacht werden muss.
+- Teilnehmer:in kann erklaeren, dass eine Darstellung des Sonnensystems oft skaliert oder vereinfacht werden muss, weil echte Distanzen im Vergleich zu Planetengroessen extrem gross sind.
 
-### Aufgabe 6 - Reihenfolge-Minispiel
+Messwerte:
+
+- Welche Controls wurden genutzt?
+- Konnte die Person die Wirkung der Controls beschreiben?
+- Aussage zur Skalierung: korrekt / teilweise korrekt / unklar
+- Hilfestellung: keine / klein / deutlich
+
+Bezug zur Forschungsfrage:
+
+- Kernaufgabe fuer fachliche Nachvollziehbarkeit und raeumliche Erfahrbarkeit von Massstabsverhaeltnissen.
+
+### Aufgabe 6 - Immersive Mode / Massstabseindruck pruefen
+
+Aufgabe:
+
+> Wechsle, falls verfuegbar, in die immersive Ansicht eines Planeten und beschreibe, wie sich dein Eindruck von Groesse oder Entfernung veraendert.
+
+Beobachtung:
+
+- Wird der Immersive Mode gefunden und wieder verlassen?
+- Veraendert sich der wahrgenommene Massstab gegenueber der normalen Planet-Ansicht?
+- Wirkt die grosse Entfernung bzw. Groessendarstellung beeindruckend, nachvollziehbar oder verwirrend?
+- Bleibt die Orientierung erhalten?
+
+Erfolgskriterium:
+
+- Teilnehmer:in kann beschreiben, ob die immersive Ansicht den Massstabseindruck veraendert hat.
+
+Hinweis:
+
+- Falls der Immersive Mode im finalen Test-Build noch nicht stabil nutzbar ist, diese Aufgabe ueberspringen und als optional markieren.
+
+Bezug zur Forschungsfrage:
+
+- Raeumliche Erfahrbarkeit von Massstab: Die Aufgabe prueft, ob XR einen anderen Eindruck erzeugt als die normale Modellansicht.
+
+### Aufgabe 7 - Reihenfolge-Minispiel
 
 Aufgabe:
 
@@ -364,7 +464,11 @@ Messwerte:
 - Benoetigte Zeit
 - Hilfestellung: keine / klein / deutlich
 
-### Aufgabe 7 - Groessen-Minispiel
+Bezug zur Forschungsfrage:
+
+- Spielerisch motivierende Vermittlung: Die Reihenfolge wird nicht als Multiple Choice, sondern als raeumliche Grab-/Snap-Aufgabe geloest.
+
+### Aufgabe 8 - Groessen-Minispiel
 
 Aufgabe:
 
@@ -383,16 +487,20 @@ Messwerte:
 - Benoetigte Zeit
 - Hilfestellung: keine / klein / deutlich
 
-### Aufgabe 8 - Abschlussfrage direkt nach XR-Nutzung
+Bezug zur Forschungsfrage:
+
+- Direkte Pruefung des zentralen Massstabsthemas in spielerischer Form.
+
+### Aufgabe 9 - Abschlussfrage direkt nach XR-Nutzung
 
 Direkt im Anschluss, bevor der Post-Fragebogen beginnt:
 
-> Was hast du ueber das Sonnensystem gelernt oder besser verstanden, was dir vorher weniger klar war?
+> Was hast du ueber Groessen, Abstaende, Umlaufbahnen oder die Darstellung des Sonnensystems gelernt oder besser verstanden, was dir vorher weniger klar war?
 
 Notieren:
 
 - Spontane Antwort als qualitative Aussage.
-- Besonders interessant sind Aussagen zu Groessen, Distanzen, Umlaufbahnen, Reihenfolge und Planetenvergleich.
+- Besonders interessant sind Aussagen zu Groessen, Distanzen, Umlaufbahnen, Skalierung, Reihenfolge, Planetenvergleich und Motivation durch die Aufgaben.
 
 ---
 
@@ -400,13 +508,33 @@ Notieren:
 
 | Teilnehmer-ID | Aufgabe | Erfolgreich? | Zeit | Fehler/Korrekturen | Hilfe | Beobachtung/Kommentar |
 |---|---|---:|---:|---:|---|---|
-| P01 | Learn-Modus starten | | | | | |
-| P01 | Planetendetails lesen | | | | | |
-| P01 | Weitere Planeten hinzufuegen/erkunden | | | | | |
-| P01 | Sonnensystem platzieren | | | | | |
-| P01 | Slider verwenden | | | | | |
+| P01 | Home/Planet starten und platzieren | | | | | |
+| P01 | Planetendetails fachlich einordnen | | | | | |
+| P01 | Groessenvergleich zwischen Planeten | | | | | |
+| P01 | Sonnensystem raeumlich betrachten | | | | | |
+| P01 | Massstabs-/Orbit-Controls verwenden | | | | | |
+| P01 | Immersive Mode/Massstabseindruck | | | | | |
 | P01 | Reihenfolge-Minispiel | | | | | |
 | P01 | Groessen-Minispiel | | | | | |
+
+> [NEU 2026-05-14 - START: Zusatzbeobachtung Setup/Tutorial]
+>
+> Zusatzzeilen fuer Setup und Tutorial:
+>
+> | Teilnehmer-ID | Phase | Erfolgreich? | Hilfe | Beobachtung/Kommentar |
+> |---|---|---:|---|---|
+> | P01 | Headset-Setup im Passthrough-Vorbereitungsmodus | | | |
+> | P01 | Tutorial mit Erklaervideos | | | |
+>
+> Bei der Auswertung Setup-Hilfe und App-Hilfe getrennt betrachten. Hilfe beim Brillensitz ist kein Bedienproblem der App, kann aber als Hinweis auf die praktische Testsituation dokumentiert werden.
+>
+> [NEU 2026-05-14 - ENDE]
+
+Zusaetzliche qualitative Codes fuer die Forschungsfrage:
+
+- `Fachlich nachvollziehbar`: Person kann Skalierung, Groessenunterschiede oder Abstandsproblem korrekt erklaeren.
+- `Raeumlich erfahrbar`: Person nutzt Perspektivwechsel, Bewegung im Raum oder immersive Ansicht, um das Modell zu verstehen.
+- `Spielerisch motivierend`: Person wirkt durch Aufgabe, Feedback oder Herausforderung aktiviert statt nur durch das InfoPanel informiert.
 
 Kodierung fuer Hilfe:
 
@@ -524,9 +652,9 @@ Skala: 1 = stimme gar nicht zu, 5 = stimme voll zu.
 
 Eine Zeile pro Teilnehmer:in.
 
-| ID | Alter | XR_Erfahrung | Vorwissen_Selbsteinschaetzung | Knowledge_Pre | Knowledge_Post | Knowledge_Delta | Spatial_Pre | Spatial_Post | Spatial_Delta | OrderTask_Time | OrderTask_Errors | SizeTask_Time | SizeTask_Errors | XR_Mehrwert_Mean | Gamification_Mean | Usability_Mean |
-|---|---:|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| P01 | | | | | | | | | | | | | | | | |
+| ID | Alter | XR_Erfahrung | Vorwissen_Selbsteinschaetzung | Knowledge_Pre | Knowledge_Post | Knowledge_Delta | Spatial_Pre | Spatial_Post | Spatial_Delta | ScaleExplanation | SpatialBehavior | OrderTask_Time | OrderTask_Errors | SizeTask_Time | SizeTask_Errors | XR_Mehrwert_Mean | Gamification_Mean | Usability_Mean |
+|---|---:|---|---:|---:|---:|---:|---:|---:|---:|---|---|---:|---:|---:|---:|---:|---:|---:|
+| P01 | | | | | | | | | | | | | | | | | | |
 
 Metriken:
 
@@ -535,17 +663,20 @@ Metriken:
 - `Knowledge_Delta`: Differenz.
 - `Spatial_Pre`: Mittelwert oder Median aus den Selbsteinschaetzungsitems zu Groesse, Distanz, Umlaufbahn.
 - `Spatial_Post`: gleicher Wert nach Nutzung.
+- `ScaleExplanation`: qualitative Kodierung der Abschluss- und Task-Aussagen: korrekt / teilweise korrekt / unklar.
+- `SpatialBehavior`: qualitative Beobachtung, ob die Person den Raum aktiv nutzt: keine Bewegung / leichter Perspektivwechsel / aktives Umgehen oder Annahern.
 - `XR_Mehrwert_Mean`: Mittelwert der XR-Mehrwert-Items.
 - `Gamification_Mean`: Mittelwert der Gamification-Items.
 - `Usability_Mean`: Mittelwert der eigenen Usability-Items oder separater SUS-/UEQ-S-Score.
 
 ### 9.2 Statistische Auswertung
 
-#### Fuer H1: Wissenszuwachs
+#### Fuer H1: Fachliche Nachvollziehbarkeit
 
 Primaere Analyse:
 
 - Vergleich `Knowledge_Pre` vs. `Knowledge_Post`.
+- Besonderer Fokus auf Items, die direkt mit Massstabsverhaeltnissen zusammenhaengen: Planetengroessen, groesster/kleinster Planet, Jupiter-Erde-Vergleich und Schwierigkeit echter Skalierung.
 - Bei kleiner Stichprobe und nicht sicher normalverteilten Differenzen: **Wilcoxon-Vorzeichen-Rang-Test**.
 - Gerichtete Hypothese moeglich: Post > Pre.
 - Nullhypothese: Es gibt keinen systematischen Unterschied zwischen Pre- und Post-Wissensscore.
@@ -562,19 +693,25 @@ Berichten:
 
 Interpretation:
 
-- Wenn p < .05 und Post > Pre: Hinweis auf Wissenszuwachs.
+- Wenn p < .05 und Post > Pre: Hinweis auf fachlichen Wissenszuwachs.
 - Wenn p nicht signifikant, aber viele Personen besser werden: vorsichtig als Tendenz beschreiben.
 - Keine starke Kausalitaet behaupten, da es keinen Kontrollgruppenvergleich gibt.
+- Zusaetzlich die qualitativen `ScaleExplanation`-Aussagen aus Aufgabe 5 und Aufgabe 9 nutzen, um zu zeigen, ob die Teilnehmer:innen die Notwendigkeit von Skalierung wirklich verstanden haben.
 
-#### Fuer H2: Raeumliches Verstaendnis
+#### Fuer H2: Raeumliche Erfahrbarkeit
 
 Analyse:
 
 - Vergleich der Pre-/Post-Selbsteinschaetzung zu Groesse, Distanz und Umlaufbahn.
 - Wegen Likert-Skalen: Wilcoxon-Vorzeichen-Rang-Test pro Item oder fuer einen zusammengefassten Skalenwert.
 - Bei wenigen Teilnehmenden lieber Median/IQR plus qualitative Aussagen berichten.
+- Beobachtungsdaten aus Aufgabe 4, 5 und 6 ergaenzen:
+  - Hat die Person das Sonnensystem nur frontal betrachtet oder aktiv den Raum genutzt?
+  - Konnte sie die Wirkung der Massstabs-/Orbit-Controls beschreiben?
+  - Hat der Immersive Mode, falls genutzt, den Massstabseindruck veraendert?
+  - Gab es Hinweise, dass die XR-Darstellung Abstaende und Groessen klarer machte oder eher verwirrte?
 
-#### Fuer H3: Gamification
+#### Fuer H3: Spielerische Motivation
 
 Analyse:
 
@@ -589,6 +726,8 @@ Analyse:
   - Motivation durch direktes Feedback
   - Frustration durch Bedienung
   - Lernen durch Ausprobieren
+- Die Groessen-Aufgabe besonders gewichten, weil sie das zentrale Massstabsthema direkt spielerisch prueft.
+- Das Reihenfolge-Minispiel getrennt berichten, weil es eher Ordnungswissen und raeumliche Zuordnung prueft.
 
 #### Fuer H4: Bedienbarkeit
 
@@ -625,11 +764,11 @@ Zusaetzliche Option:
 
 Moegliche Formulierung als Arbeitsgrundlage:
 
-- Zur Evaluation des Prototyps wurde ein User Testing mit einem Pre-Post-Design durchgefuehrt. Ziel war es, sowohl Hinweise auf einen moeglichen Wissenszuwachs als auch Einschaetzungen zur Bedienbarkeit, Motivation und zum wahrgenommenen Mehrwert der XR-Darstellung zu erfassen.
-- Vor der Nutzung beantworteten die Teilnehmer:innen einen Fragebogen zu Vorerfahrung, Selbsteinschaetzung und Grundlagenwissen ueber das Sonnensystem. Anschliessend bearbeiteten sie mehrere Aufgaben innerhalb der XR-Anwendung, die zentrale Funktionen des Prototyps abdeckten: Auswahl eines Planeten, Betrachtung von Planetendetails, Platzierung des Sonnensystems, Anpassung der Darstellung sowie die Nutzung der Minigames zur Planetenreihenfolge und zu Groessenverhaeltnissen.
-- Nach der Nutzung wurde der Wissensfragebogen erneut erhoben. Ergaenzend wurden Items zu raeumlichem Verstaendnis, Motivation, Gamification, Usability und fachlicher Glaubwuerdigkeit abgefragt. Dadurch verbindet die Evaluation quantitative und qualitative Daten und orientiert sich direkt an den drei Schwerpunkten der Arbeit: Wissensvermittlung in XR, Gamification und wissenschaftlich korrekte Darstellung.
+- Zur Evaluation des Prototyps wurde ein User Testing mit einem Pre-Post-Design durchgefuehrt. Ziel war es, Hinweise darauf zu gewinnen, ob eine XR-Lernanwendung zum Sonnensystem astronomische Massstabsverhaeltnisse fachlich nachvollziehbar, raeumlich erfahrbar und spielerisch motivierend vermitteln kann.
+- Vor der Nutzung beantworteten die Teilnehmer:innen einen Fragebogen zu Vorerfahrung, Selbsteinschaetzung und Grundlagenwissen ueber das Sonnensystem. Anschliessend bearbeiteten sie mehrere Aufgaben innerhalb der XR-Anwendung, die zentrale Funktionen des aktuellen Prototyps abdeckten: Auswahl und Platzierung eines Planeten, Betrachtung von Planetendetails, Vergleich mehrerer Planeten, Platzierung des Sonnensystems, Anpassung von Massstabs- und Orbitparametern sowie die Nutzung der Minigames zur Planetenreihenfolge und zu Groessenverhaeltnissen.
+- Nach der Nutzung wurde der Wissensfragebogen erneut erhoben. Ergaenzend wurden Items zu raeumlichem Verstaendnis, Motivation, Gamification, Usability und fachlicher Glaubwuerdigkeit abgefragt. Dadurch verbindet die Evaluation quantitative und qualitative Daten und orientiert sich direkt an den drei Teilaspekten der Forschungsfrage: fachliche Nachvollziehbarkeit, raeumliche Erfahrbarkeit und spielerische Motivation.
 - Die Veraenderung des Wissensscores wurde aufgrund der gepaarten Messung und der voraussichtlich kleinen Stichprobe mit dem Wilcoxon-Vorzeichen-Rang-Test ausgewertet. Die Ergebnisse wurden nicht als allgemeingueltiger Wirkungsnachweis interpretiert, sondern als empirischer Hinweis darauf, ob der Prototyp das Verstaendnis der Teilnehmer:innen im Rahmen der Testsituation unterstuetzen konnte.
-- Die offenen Antworten und Beobachtungsdaten wurden genutzt, um die quantitativen Ergebnisse einzuordnen. Besonders relevant waren dabei Aussagen dazu, ob die raeumliche Darstellung abstrakte Groessen- und Distanzverhaeltnisse anschaulicher machte und ob die spielerischen Aufgaben als motivierend oder lernfoerderlich erlebt wurden.
+- Die offenen Antworten und Beobachtungsdaten wurden genutzt, um die quantitativen Ergebnisse einzuordnen. Besonders relevant waren dabei Aussagen dazu, ob die Teilnehmer:innen die Notwendigkeit didaktischer Skalierung verstanden, ob sie Groessen- und Distanzverhaeltnisse durch die XR-Darstellung raeumlich erfassen konnten und ob die spielerischen Aufgaben das aktive Anwenden dieses Wissens motivierend unterstuetzten.
 
 ---
 
@@ -637,12 +776,27 @@ Moegliche Formulierung als Arbeitsgrundlage:
 
 ### App/Unity
 
+> [NEU 2026-05-14 - START: Checkliste Setup/Tutorial]
+>
+> - User-Testing-Shortcut im finalen Build pruefen: beide Thumbsticks gleichzeitig -> Passthrough-Vorbereitungsmodus.
+> - Erneuter Doppel-Thumbstick pruefen: App startet sauber mit Logo/Tutorial/Hauptmenue.
+> - Pruefen, ob Passthrough im Setup wirklich sichtbar ist und keine App-Inhalte ablenken.
+> - Pruefen, ob Audio im Setup pausiert und beim Appstart korrekt wiederhergestellt wird.
+> - Tutorial-Videos im Headset pruefen: Loop, Lesbarkeit, Position, Ton falls vorhanden.
+> - Tutorial-Abschlusssignale pruefen: Button/Menu/Geste/Grab-Schritt fuehrt zum naechsten Schritt.
+> - Beobachtungsbogen um Setup/Tutorial-Notizen vorbereiten.
+>
+> [NEU 2026-05-14 - ENDE]
+
 - Build auf Meta Quest 3 installieren.
 - Controller-Ray, Buttons und Panels im Headset testen.
-- Learn-Flow pruefen.
+- Home-/Planet-Flow pruefen.
 - Planetenauswahl pruefen.
+- Planetendetail-Panel pruefen.
 - Sonnensystem-Placement pruefen.
-- Slider-UI pruefen.
+- Massstabs-/Orbit-Slider pruefen.
+- Optionalen Immersive Mode pruefen und vor dem Testing entscheiden, ob Aufgabe 6 genutzt oder uebersprungen wird.
+- Learn-/Test-Tab pruefen.
 - Reihenfolge-Minispiel pruefen.
 - Groessen-Minispiel pruefen.
 - Rueckkehr ins Hauptmenue pruefen.
